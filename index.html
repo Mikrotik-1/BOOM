@@ -1603,6 +1603,7 @@ document.addEventListener('click',function(e){
   }
 });
 </script>
+<base target="_blank">
 </head>
 <body>
 <div id="gameContainer">
@@ -2624,13 +2625,42 @@ function startGame() {
 }
 
 function restartGame() {
+  // Hide game over screen
   gameOverScreen.classList.remove('visible');
   document.getElementById('newRecordBadge').classList.remove('show');
   document.getElementById('nameInputWrap').classList.remove('show');
   document.getElementById('playerNameInput').value='';
   document.getElementById('submitScore').textContent='سجّل النتيجة';
   document.getElementById('submitScore').disabled=false;
-  startGame();
+
+  // Reset game state directly without going through start screen
+  gameRunning=true; gamePaused=false;
+  score=0; level=1; combo=0; maxCombo=0;
+  perfectStreak=0; shieldActive=false; shieldLeft=0;
+  doublePoints=false; doubleEnd=0; levelHeartGiven=false;
+
+  const d=DIFF[difficulty];
+  health=d.hp; maxHealth=d.hp;
+  speed=d.speed; spawnRate=d.rate; orbRadius=d.orb;
+
+  orbs=[]; bonusOrbs=[]; dangerOrbs=[]; particles=[]; rings=[];
+  lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
+  totalHits=0; totalAttempts=0;
+  shakeAmt=0; globalPulse=0;
+
+  shieldOverlay.classList.remove('active');
+  shieldTimerEl.classList.remove('show');
+
+  scoreEl.textContent='0';
+  levelNumEl.textContent='1';
+  progressFill.style.width='0%';
+  renderHearts(); renderStreak();
+  comboCont.classList.remove('show');
+  instructions.style.display='block';
+  setTimeout(()=>{ instructions.style.display='none'; },6000);
+
+  startMusic();
+  requestAnimationFrame(loop);
 }
 
 function showMenu() {
@@ -2660,7 +2690,22 @@ function gameOver() {
 function checkHit() {
   if(!gameRunning||gamePaused) return;
 
-  // Bonus orb check first
+  // Danger orb check first (can destroy it before it explodes)
+  for(let i=dangerOrbs.length-1;i>=0;i--){
+    const d=dangerOrbs[i];
+    const dist=Math.hypot(d.x-CX,d.y-CY);
+    if(dist<90){
+      dangerOrbs.splice(i,1);
+      explode(d.x,d.y,'#ff4400','perfect');
+      rings.push(new Ring('#ff4400',35,'perfect'));
+      shakeAmt=typeof S!=="undefined"&&!S.shake?0:6; playSound('perfect');
+      showFB('💥 DESTROYED!','perfect');
+      score+=50; scoreEl.textContent=score;
+      return;
+    }
+  }
+
+  // Bonus orb check
   for(let i=bonusOrbs.length-1;i>=0;i--){
     const bo=bonusOrbs[i];
     const dist=Math.hypot(bo.x-CX,bo.y-CY);
@@ -2813,9 +2858,9 @@ function loop(ts) {
 
   // Draw danger orbs
   dangerOrbs=dangerOrbs.filter(d=>{
+    if(!d || !d.active) return false;
     const r=d.update();
     if(r==='exploded'){
-      // penalty: subtract points, shake
       const pen = Math.min(score, 30);
       score = Math.max(0, score - pen);
       scoreEl.textContent=score;
@@ -3205,7 +3250,6 @@ let lastDangerSpawn = 0;
 
 class DangerOrb {
   constructor() {
-    // Spawn on edge but not from center direction
     const angle = Math.random() * Math.PI * 2;
     const dist = Math.max(W, H) * 0.65;
     this.x = CX + Math.cos(angle) * dist;
@@ -3217,16 +3261,17 @@ class DangerOrb {
     this.pulse = Math.random() * Math.PI * 2;
     this.active = true;
     this.trail = [];
-    // Countdown: how long before it explodes (in ms) once it reaches center
-    this.warningRadius = 80; // warn player when orb is this close to center
+    this.warningRadius = 80;
     this.warned = false;
     this.penaltyPts = 30;
+    this.currentR = this.r;
   }
 
   update() {
     this.pulse += 0.1;
-    this.trail.push({ x: this.x, y: this.y, alpha: 1, r: this.r });
+    this.currentR = this.r + Math.sin(this.pulse) * 2.5;
     if (this.trail.length > 10) this.trail.shift();
+    this.trail.push({ x: this.x, y: this.y, alpha: 1, r: this.currentR });
     this.trail.forEach((t, i) => { t.alpha = (i / this.trail.length) * 0.5; });
     this.x += this.vx; this.y += this.vy;
     const dist = Math.hypot(this.x - CX, this.y - CY);
@@ -3242,10 +3287,9 @@ class DangerOrb {
   }
 
   draw() {
-    const r = this.r + Math.sin(this.pulse) * 2.5;
+    const r = this.currentR;
     const urgency = Math.max(0, 1 - Math.hypot(this.x - CX, this.y - CY) / (Math.max(W,H) * 0.5));
 
-    // Pulsing danger glow
     const gAlpha = 0.3 + 0.4 * Math.abs(Math.sin(this.pulse * 2));
     ctx.beginPath(); ctx.arc(this.x, this.y, r * 3, 0, Math.PI * 2);
     const og = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 3);
@@ -3254,7 +3298,6 @@ class DangerOrb {
     og.addColorStop(1, 'transparent');
     ctx.fillStyle = og; ctx.globalAlpha = 1; ctx.fill();
 
-    // Danger trail
     this.trail.forEach((t, i) => {
       const tr = r * (0.3 + (i / this.trail.length) * 0.7);
       ctx.beginPath(); ctx.arc(t.x, t.y, tr, 0, Math.PI * 2);
@@ -3264,7 +3307,6 @@ class DangerOrb {
     });
     ctx.globalAlpha = 1;
 
-    // Main sphere — red/orange
     const sg = ctx.createRadialGradient(this.x - r*.35, this.y - r*.35, 0, this.x, this.y, r);
     sg.addColorStop(0, '#fff0e0');
     sg.addColorStop(0.15, '#ff6600');
@@ -3277,14 +3319,12 @@ class DangerOrb {
     ctx.shadowColor = '#ff4400';
     ctx.fill(); ctx.shadowBlur = 0;
 
-    // Skull icon
     ctx.font = `${r * 0.95}px serif`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.globalAlpha = 0.9;
     ctx.fillText('💀', this.x, this.y);
     ctx.globalAlpha = 1;
 
-    // Warning ring when close
     if (urgency > 0.4) {
       ctx.beginPath(); ctx.arc(this.x, this.y, r * 1.8 + Math.sin(this.pulse*3)*4, 0, Math.PI*2);
       ctx.strokeStyle = `rgba(255,80,0,${urgency * 0.8})`;
@@ -3301,6 +3341,10 @@ let localHighScore = 0;
 let isNewRecord = false;
 
 async function loadLeaderboard() {
+  if(!window.storage) {
+    document.getElementById('lb-list').innerHTML = '<div class="lb-empty">Leaderboard not available</div>';
+    return;
+  }
   try {
     const res = await window.storage.list(LB_KEY + ':');
     if (!res || !res.keys || res.keys.length === 0) {
@@ -3354,6 +3398,10 @@ function diffLabel(d) {
 // toggleLB removed — leaderboard always visible
 
 async function submitToLeaderboard() {
+  if(!window.storage) {
+    showTopNotif('⚠️', 'Leaderboard not available', 'info');
+    return;
+  }
   const nameEl = document.getElementById('playerNameInput');
   const name = nameEl.value.trim() || 'مجهول';
   const btn = document.getElementById('submitScore');
@@ -3378,6 +3426,7 @@ async function submitToLeaderboard() {
 }
 
 async function trimLeaderboard() {
+  if(!window.storage) return;
   try {
     const res = await window.storage.list(LB_KEY + ':');
     if (!res || !res.keys || res.keys.length <= LB_MAX) return;

@@ -28,7 +28,7 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-user-select:none; }
-#canvas { touch-action:none; }
+#canvas { touch-action: manipulation; }
 
 body {
   background: var(--bg-deep);
@@ -269,6 +269,7 @@ body {
   color: var(--cyan);
   text-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,200,232,0.3);
   line-height: 1;
+  min-width: 60px;  /* Prevent layout shift */
 }
 
 #comboText {
@@ -1958,9 +1959,15 @@ document.addEventListener('click',function(e){
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
+/* ══════════════════════ GLOBAL VARIABLES (FIXED) ══════════════════════ */
+let dangerOrbs = [];
+let lastDangerSpawn = 0;
+let beatCount = 0;
+let doubleNotified = false;  // Prevent spam notifications
+
 function playSound(type) {
-  if (typeof S!=='undefined' && !S.sfx) return;
-  const _vol=(typeof S!=='undefined')?S.volume:1;
+  if (typeof S !== 'undefined' && !S.sfx) return;
+  const _vol=(typeof S !== 'undefined')?S.volume:1;
   if (audioCtx.state === 'suspended') audioCtx.resume();
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
@@ -2079,7 +2086,7 @@ const POWERUPS = [
   },
   {
     id:'double', icon:'⚡', title:'نقاط مضاعفة', desc:'النقاط ×٢ لمدة ١٠ ثواني', color:'#ffaa00',
-    apply() { doublePoints=true; doubleEnd=Date.now()+10000; showTopNotif('⚡', t('doubleNotif'), 'double'); }
+    apply() { doublePoints=true; doubleEnd=Date.now()+10000; doubleNotified=false; showTopNotif('⚡', t('doubleNotif'), 'double'); }
   }
 ];
 
@@ -2116,10 +2123,11 @@ function renderStreak() {
 /* ══════════════════════ TOAST ══════════════════════ */
 let toastTimer = null;
 function showToast(pw) {
-  document.getElementById('toastIcon').textContent  = pw.icon;
-  document.getElementById('toastTitle').textContent = pw.title;
-  document.getElementById('toastDesc').textContent  = pw.desc;
-  powerupToast.style.borderColor = pw.color + 'aa';
+  if(!pw) return;  // Safety check
+  document.getElementById('toastIcon').textContent  = pw.icon || '⭐';
+  document.getElementById('toastTitle').textContent = pw.title || 'Bonus';
+  document.getElementById('toastDesc').textContent  = pw.desc || '';
+  powerupToast.style.borderColor = (pw.color || '#d4a843') + 'aa';
   powerupToast.style.boxShadow = `0 0 60px ${pw.color}44, inset 0 0 40px ${pw.color}08`;
   powerupToast.classList.add('show');
   clearTimeout(toastTimer);
@@ -2148,6 +2156,26 @@ function resize() {
   H = canvas.height = canvas.offsetHeight;
   CX = W/2; CY = H/2;
   buildBG();
+  // Update all active orb positions to stay relative to new center
+  orbs.forEach(o => {
+    if (o.active) {
+      // Keep relative position to center
+      o.x = CX + (o.x - CX) * (W / (W || 1));
+      o.y = CY + (o.y - CY) * (H / (H || 1));
+    }
+  });
+  bonusOrbs.forEach(bo => {
+    if (bo.active) {
+      bo.x = CX + (bo.x - CX) * (W / (W || 1));
+      bo.y = CY + (bo.y - CY) * (H / (H || 1));
+    }
+  });
+  dangerOrbs.forEach(d => {
+    if (d && d.active) {
+      d.x = CX + (d.x - CX) * (W / (W || 1));
+      d.y = CY + (d.y - CY) * (H / (H || 1));
+    }
+  });
 }
 window.addEventListener('resize', resize);
 
@@ -2532,7 +2560,7 @@ class Ring {
 }
 
 function explode(x,y,color,type='normal'){
-  if(typeof S!=='undefined'&&!S.particles) return;
+  if(typeof S !== 'undefined'&&!S.particles) return;
   const cnt=type==='bonus'?45:type==='perfect'?28:16;
   for(let i=0;i<cnt;i++) particles.push(new Particle(x,y,color,type));
 }
@@ -2561,6 +2589,7 @@ function checkLevel() {
 
 function continueGame() {
   levelUpScreen.classList.remove('visible');
+  levelUpScreen.style.display = 'none';  // Ensure it's hidden
   gamePaused=false; lastSpawn=Date.now();
   requestAnimationFrame(loop);
 }
@@ -2605,7 +2634,7 @@ function startGame() {
   setTimeout(()=>{ instructions.style.display='none'; },6000);
 
   lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
-  beatCount=0; startMusic();
+  beatCount = 0; startMusic();
   loadLeaderboard();
   requestAnimationFrame(loop);
 }
@@ -2628,7 +2657,7 @@ function restartGame() {
   gameRunning=true; gamePaused=false;
   score=0; level=1; combo=0; maxCombo=0;
   perfectStreak=0; shieldActive=false; shieldLeft=0;
-  doublePoints=false; doubleEnd=0; levelHeartGiven=false;
+  doublePoints=false; doubleEnd=0; doubleNotified=false; levelHeartGiven=false;
 
   const d=DIFF[difficulty];
   health=d.hp; maxHealth=d.hp;
@@ -2650,6 +2679,7 @@ function restartGame() {
   instructions.style.display='block';
   setTimeout(()=>{ instructions.style.display='none'; },6000);
 
+  beatCount = 0;  // Reset music beat counter
   startMusic();
   requestAnimationFrame(loop);
 }
@@ -2693,7 +2723,7 @@ function checkHit() {
     const d = dangerOrbs[i];
     if (!d || !d.active) continue;
     const dist = Math.hypot(d.x - CX, d.y - CY);
-    if (dist < 90) {
+    if (dist < 45) {  // Fixed: was 90, too large
       dangerOrbs.splice(i, 1);
       // Limited explosion
       if (typeof S === "undefined" || S.particles !== false) {
@@ -2714,15 +2744,18 @@ function checkHit() {
   // Bonus orb check
   for(let i=bonusOrbs.length-1;i>=0;i--){
     const bo=bonusOrbs[i];
+    if(!bo || !bo.active) continue;  // Safety check
     const dist=Math.hypot(bo.x-CX,bo.y-CY);
     if(dist<100){
       bonusOrbs.splice(i,1);
-      bo.powerup.apply();
+      if(bo.powerup && typeof bo.powerup.apply === 'function') {
+        bo.powerup.apply();
+      }
       explode(bo.x,bo.y,'#d4a843','bonus');
       rings.push(new Ring('#f5cc6a',40,'bonus'));
       rings.push(new Ring('#d4a843',40,'bonus'));
       rings.push(new Ring('#fff8e0',40,'bonus'));
-      shakeAmt=typeof S!=="undefined"&&!S.shake?0:5; playSound('bonus');
+      shakeAmt=typeof S !== "undefined"&&!S.shake?0:5; playSound('bonus');
       showFB('⭐ BONUS!','bonus');
       showToast(bo.powerup);
       return;
@@ -2748,7 +2781,7 @@ function checkHit() {
     explode(closest.x,closest.y,closest.col.main,'perfect');
     rings.push(new Ring(closest.col.main,35,'perfect'));
     rings.push(new Ring('#d4a843',35,'perfect'));
-    shakeAmt=typeof S!=="undefined"&&!S.shake?0:4; playSound('perfect');
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:4; playSound('perfect');
     showFB(mult===2?'PERFECT ×2':'PERFECT!','perfect');
     // score bump flash
     scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
@@ -2763,7 +2796,7 @@ function checkHit() {
     if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
     explode(closest.x,closest.y,closest.col.main,'good');
     rings.push(new Ring(closest.col.main,75,'good'));
-    shakeAmt=typeof S!=="undefined"&&!S.shake?0:2; playSound('good');
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:2; playSound('good');
     showFB(mult===2?'GOOD ×2':'GOOD!','good');
     updateProgress(); checkLevel();
 
@@ -2773,13 +2806,13 @@ function checkHit() {
     if(closestD>100){
       if(shieldActive){
         shieldLeft--;
-        shakeAmt=typeof S!=="undefined"&&!S.shake?0:3;
+        shakeAmt=typeof S !== "undefined"&&!S.shake?0:3;
         if(shieldLeft<=0){ shieldActive=false; shieldOverlay.classList.remove('active'); shieldTimerEl.classList.remove('show'); showTopNotif('🛡', t('shieldDone'), 'info'); }
         else{ shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft; showFB('🛡 محمي!','good'); showTopNotif('🛡', t('shieldHit')+' ×'+shieldLeft, 'shield'); }
         playSound('miss');
       } else {
         health--; renderHearts();
-        shakeAmt=typeof S!=="undefined"&&!S.shake?0:7; playSound('miss');
+        shakeAmt=typeof S !== "undefined"&&!S.shake?0:7; playSound('miss');
         showFB('MISS!','miss');
         if(health<=0){ setTimeout(gameOver,500); return; }
       }
@@ -2792,7 +2825,11 @@ function loop(ts) {
   if(!gameRunning||gamePaused) return;
 
   globalPulse+=0.05;
-  if(doublePoints&&Date.now()>doubleEnd){ doublePoints=false; showTopNotif('⚡', t('doubleDone'), 'double'); }
+  if(doublePoints && Date.now()>doubleEnd && !doubleNotified){ 
+    doublePoints=false; 
+    doubleNotified = false;  // Reset for next time
+    showTopNotif('⚡', t('doubleDone'), 'double'); 
+}
 
   drawBG();
 
@@ -2915,7 +2952,7 @@ function loop(ts) {
         if(shieldLeft<=0){shieldActive=false;shieldOverlay.classList.remove('active');shieldTimerEl.classList.remove('show');}
         else shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft;
       } else {
-        health--; renderHearts(); shakeAmt=typeof S!=="undefined"&&!S.shake?0:11; playSound('miss');
+        health--; renderHearts(); shakeAmt=typeof S !== "undefined"&&!S.shake?0:11; playSound('miss');
         showFB('MISS!','miss'); combo=0; comboCont.classList.remove('show');
         if(health<=0) setTimeout(gameOver,500);
       }
@@ -2926,6 +2963,8 @@ function loop(ts) {
   });
 
   updateHSBar();
+  // Limit particles to prevent memory issues
+  if(particles.length > 200) particles = particles.slice(-150);
   particles=particles.filter(p=>{const a=p.update();if(a)p.draw();return a;});
   rings=rings.filter(r=>{const a=r.update();if(a)r.draw();return a;});
 
@@ -2954,7 +2993,7 @@ let musicRunning = false;
 let musicTempo = 120; // BPM, scales with level
 
 function startMusic() {
-  if (typeof S!=='undefined' && !S.music) return;
+  if (typeof S !== 'undefined' && !S.music) return;
   if (musicRunning) return;
   if (audioCtx.state === 'suspended') audioCtx.resume();
   musicRunning = true;
@@ -2976,6 +3015,9 @@ function updateTempo() {
 let beatCount = 0;
 function scheduleBeat() {
   if (!musicRunning || !gameRunning) return;
+  // Prevent multiple overlapping schedules
+  if (scheduleBeat.scheduled) return;
+  scheduleBeat.scheduled = true;
   updateTempo();
   const interval = 60 / musicTempo; // seconds per beat
   const t = audioCtx.currentTime;
@@ -3043,7 +3085,10 @@ function scheduleBeat() {
   }
 
   beatCount++;
-  setTimeout(scheduleBeat, interval * 1000 * 0.98);
+  setTimeout(() => {
+    scheduleBeat.scheduled = false;
+    scheduleBeat();
+  }, interval * 1000 * 0.98);
 }
 
 /* ══════════════════════ BOOM ANIMATION ══════════════════════ */
@@ -3864,60 +3909,6 @@ const LANG_META = {
   en: { label: 'English', flag: '🇬🇧' },
   fr: { label: 'FR',      flag: '🇫🇷' },
   es: { label: 'ES',      flag: '🇪🇸' },
-  zh: {
-    dir: 'ltr',
-    subtitle: 'BOOM · 太空',
-    startBtn: '开始游戏',
-    easy: '简单', normal: '普通', hard: '困难',
-    bestPlayers: '最佳玩家',
-    score: '分数',
-    best: '最高',
-    tapHint: '当球到达圆圈时点击',
-    shieldActive: '🛡 护盾激活',
-    gameOver: '游戏结束',
-    newRecord: '🏆 新纪录！',
-    namePlaceholder: '输入你的名字...',
-    submitScore: '提交分数',
-    retry: '再试一次',
-    menu: '菜单',
-    level: '关卡',
-    accuracy: '准确率',
-    reachedLevel: '你到达了',
-    newLevel: '新关卡 🚀',
-    levelSub: '速度更快 · 球更小',
-    continueBtn: '继续',
-    howToPlay: '如何游玩',
-    taps: '点击',
-    rewards: '奖励',
-    goldenOrb: '黄金球 ⭐',
-    gotIt: '明白了！',
-    fivePerf: '连续5次完美',
-    freeHeart: '免费生命 ❤️',
-    shieldNotif: '护盾激活 ×2',
-    heartNotif: '额外生命！',
-    doubleNotif: '双倍分数 ×2 — 10秒',
-    streakHeart: '免费生命！连续5次完美！',
-    lvl10Heart: '第10关 — 免费生命！',
-    shieldDone: '护盾已过期',
-    doubleDone: '双倍分数结束',
-    shieldHit: '护盾保护了你',
-    dangerWarn: '危险球！躲开！',
-    scoreSubmitted: '分数已提交！',
-    lbLoading: '加载中...',
-    lbEmpty: '暂无玩家 — 成为第一个！',
-    lbError: '加载失败',
-    shieldTitle: '护盾', shieldDesc: '防止2次失误',
-    heartTitle: '额外生命', heartDesc: '+1 生命',
-    doubleTitle: '双倍分数', doubleDesc: '×2 持续10秒',
-    perfectDesc: '点击金色圆圈 = 25分',
-    goodDesc: '点击外圈 = 12分',
-    missDesc: '失误或错误点击 = 失去生命',
-    shieldHelpDesc: '防止2次失误',
-    heartHelpDesc: '立即 +1 生命',
-    doubleHelpDesc: '×2 分数持续10秒',
-    lvl10Desc: '免费生命 💚',
-    level10Label: '第10关',
-  },
   zh: { label: '中文',    flag: '🇨🇳' },
   de: { label: 'DE',      flag: '🇩🇪' },
 };

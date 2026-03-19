@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* ... كل الـ CSS زي ما هو ... */
 :root {
   --gold: #d4a843;
   --gold-bright: #f5cc6a;
@@ -50,7 +49,6 @@ body {
 
 #canvas { display:block; width:100%; height:100%; }
 
-/* ── HUD ── */
 #ui {
   position: absolute;
   top: 0; left: 0;
@@ -68,7 +66,6 @@ body {
   align-items: flex-start;
 }
 
-/* Score block */
 #score-block {
   display: flex;
   flex-direction: column;
@@ -121,7 +118,6 @@ body {
   text-shadow: 0 0 15px var(--cyan);
 }
 
-/* Progress bar */
 #progressWrap {
   width: 110px;
   margin-top: 6px;
@@ -145,7 +141,6 @@ body {
   box-shadow: 0 0 12px var(--cyan);
 }
 
-/* Hearts */
 #healthBar {
   display: flex;
   gap: 6px;
@@ -176,7 +171,6 @@ body {
   100% { transform: scale(1) rotate(0); }
 }
 
-/* Streak dots */
 #streakBar {
   display: flex;
   gap: 5px;
@@ -198,7 +192,6 @@ body {
   box-shadow: 0 0 8px var(--gold);
 }
 
-/* Level panel (right side) */
 #level-block {
   display: flex;
   flex-direction: column;
@@ -206,7 +199,6 @@ body {
   gap: 4px;
 }
 
-/* ── CENTER FEEDBACK ── */
 #centerArea {
   position: absolute;
   top: 50%; left: 50%;
@@ -246,7 +238,6 @@ body {
 
 #bonusFeedback.show { opacity: 1; transform: translateY(0); }
 
-/* ── COMBO ── */
 #comboContainer {
   position: absolute;
   bottom: 100px; left: 50%;
@@ -269,7 +260,7 @@ body {
   color: var(--cyan);
   text-shadow: 0 0 30px var(--cyan), 0 0 60px rgba(0,200,232,0.3);
   line-height: 1;
-  min-width: 60px;  /* Prevent layout shift */
+  min-width: 60px;
 }
 
 #comboText {
@@ -279,7 +270,6 @@ body {
   margin-top: 2px;
 }
 
-/* ── SHIELD ── */
 #shieldOverlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -315,7 +305,6 @@ body {
 
 #shieldTimer.show { opacity: 1; }
 
-/* ── INSTRUCTIONS ── */
 #instructions {
   position: absolute;
   bottom: 50px; width: 100%;
@@ -332,9 +321,6 @@ body {
   50%      { opacity: 0.8; }
 }
 
-/* ══════════════════════════════════════════
-   SCREENS
-══════════════════════════════════════════ */
 .screen {
   position: absolute;
   top: 0; left: 0;
@@ -356,7 +342,6 @@ body {
     rgba(2,2,14,0.97);
 }
 
-/* Decorative top line */
 .screen::before {
   content: '';
   position: absolute;
@@ -365,7 +350,6 @@ body {
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
 }
 
-/* ── TITLE ── */
 .game-title {
   font-family: 'Cinzel', serif;
   font-size: 72px;
@@ -393,7 +377,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Orb preview */
 .orb-preview {
   width: 55px; height: 55px;
   border-radius: 50%;
@@ -408,7 +391,6 @@ body {
   50%      { transform: translateY(-8px) scale(1.06); box-shadow: 0 0 0 1px rgba(0,200,232,0.5), 0 0 50px var(--cyan), 0 0 90px rgba(0,200,232,0.4); }
 }
 
-/* Info cards */
 .card {
   width: 100%;
   max-width: 320px;
@@ -461,7 +443,6 @@ body {
 .card p .tag-streak  { color: #ff9d5c; }
 .card p .tag-shield  { color: #00ff96; }
 
-/* Difficulty selector */
 .diff-row {
   display: flex;
   gap: 10px;
@@ -472,7 +453,7 @@ body {
 
 .diffBtn {
   flex: 1;
-  padding: 0;
+  padding: 14px 8px 12px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
   border-radius: 16px;
@@ -484,7 +465,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 8px 12px;
   gap: 6px;
 }
 
@@ -499,7 +479,6 @@ body {
 
 .diffBtn:hover { transform: translateY(-2px); }
 
-/* Easy */
 .diffBtn.easy-btn { border-color: rgba(61,224,138,0.18); }
 .diffBtn.easy-btn::before { background: linear-gradient(90deg, transparent, #3de08a, transparent); }
 .diffBtn.easy-btn .diff-icon { color: #3de08a; text-shadow: 0 0 15px #3de08a; }
@@ -511,7 +490,6 @@ body {
 }
 .diffBtn.easy-btn.active::before { opacity: 1; }
 
-/* Normal */
 .diffBtn.normal-btn { border-color: rgba(0,200,232,0.18); }
 .diffBtn.normal-btn::before { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
 .diffBtn.normal-btn .diff-icon { color: var(--cyan); text-shadow: 0 0 15px var(--cyan); }
@@ -523,7 +501,6 @@ body {
 }
 .diffBtn.normal-btn.active::before { opacity: 1; }
 
-/* Hard */
 .diffBtn.hard-btn { border-color: rgba(224,54,110,0.18); }
 .diffBtn.hard-btn::before { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
 .diffBtn.hard-btn .diff-icon { color: var(--pink); text-shadow: 0 0 15px var(--pink); }
@@ -582,7 +559,6 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Main button */
 .btn-main {
   position: relative;
   padding: 17px 70px;
@@ -632,14 +608,12 @@ body {
   box-shadow: 0 0 40px rgba(224,54,110,0.35);
 }
 
-/* Divider */
 .divider {
   width: 60px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
   margin: 8px auto;
 }
 
-/* Game over screen */
 #finalScore {
   font-family: 'Cinzel', serif;
   font-size: 80px;
@@ -686,7 +660,6 @@ body {
   display: block;
 }
 
-/* Level up screen */
 .level-badge-big {
   font-family: 'Cinzel', serif;
   font-size: 90px;
@@ -733,7 +706,6 @@ body {
   min-height: 22px;
 }
 
-/* Power-up toast */
 #powerupToast {
   position: absolute;
   top: 50%; left: 50%;
@@ -764,8 +736,7 @@ body {
 #toastTitle { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold-bright); font-weight: 700; letter-spacing: 2px; }
 #toastDesc { font-size: 12px; color: #888; margin-top: 6px; letter-spacing: 1px; }
 
-
-/* ── HELP BUTTON ── */
+/* FIX: single z-index declaration for helpBtn */
 #helpBtn {
   position: absolute;
   bottom: 28px;
@@ -788,8 +759,6 @@ body {
   transition: all 0.3s;
   box-shadow: 0 0 20px rgba(0,200,232,0.2), inset 0 0 20px rgba(0,200,232,0.05);
   animation: helpPulse 3s ease-in-out infinite;
-  z-index: 50;
-  pointer-events: auto;
 }
 
 @keyframes helpPulse {
@@ -804,7 +773,6 @@ body {
   box-shadow: 0 0 40px rgba(0,200,232,0.6);
 }
 
-/* ── HELP MODAL ── */
 #helpModal {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -850,9 +818,7 @@ body {
 #helpModal-box::-webkit-scrollbar-track { background: transparent; }
 #helpModal-box::-webkit-scrollbar-thumb { background: rgba(0,200,232,0.3); border-radius: 2px; }
 
-#helpModal.show #helpModal-box {
-  transform: scale(1) translateY(0);
-}
+#helpModal.show #helpModal-box { transform: scale(1) translateY(0); }
 
 #helpModal-box::before {
   content: '';
@@ -958,7 +924,6 @@ body {
   box-shadow: 0 0 25px rgba(0,200,232,0.3);
 }
 
-/* ── TOP NOTIFICATIONS ── */
 #topNotifs {
   position: absolute;
   top: 16px;
@@ -1027,10 +992,15 @@ body {
   box-shadow: 0 0 15px rgba(0,200,232,0.1);
 }
 
+.top-notif.miss {
+  background: rgba(224,54,110,0.12);
+  border: 1px solid rgba(224,54,110,0.4);
+  color: #ff7aa8;
+  box-shadow: 0 0 20px rgba(224,54,110,0.2);
+}
+
 .notif-icon { font-size: 16px; }
 
-
-/* ── LEADERBOARD on start screen ── */
 #leaderboard-wrap {
   width: 100%;
   max-width: 320px;
@@ -1065,9 +1035,7 @@ body {
   overflow-y: auto;
 }
 
-#lb-list {
-  padding: 8px 0;
-}
+#lb-list { padding: 8px 0; }
 
 .lb-row {
   display: flex;
@@ -1142,7 +1110,6 @@ body {
   animation: breathe 1.5s ease-in-out infinite;
 }
 
-/* ── HIGH SCORE banner in-game ── */
 #hsBar {
   position: absolute;
   top: 22px;
@@ -1180,7 +1147,6 @@ body {
   50%      { transform: scale(1.12); }
 }
 
-/* ── GAME OVER - new high score ── */
 #newRecordBadge {
   display: none;
   align-items: center;
@@ -1205,7 +1171,6 @@ body {
   50%      { box-shadow: 0 0 35px rgba(212,168,67,0.5); }
 }
 
-/* name input for leaderboard */
 #nameInputWrap {
   display: none;
   flex-direction: column;
@@ -1264,7 +1229,6 @@ body {
   box-shadow: 0 0 25px rgba(212,168,67,0.3);
 }
 
-/* ── BOOM OVERLAY ── */
 #boomOverlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -1323,10 +1287,6 @@ body {
   text-shadow: 0 0 20px var(--gold);
 }
 
-/* ── DANGER ORB CSS hint (drawn on canvas, but pulse warning) ── */
-
-
-/* ── LANGUAGE SWITCHER ── */
 #langSwitcher {
   position: absolute;
   top: 18px;
@@ -1411,14 +1371,8 @@ body {
 }
 
 .lang-option:last-child { border-bottom: none; }
-
-.lang-option:hover {
-  background: rgba(0,200,232,0.1);
-}
-
-.lang-option.active {
-  background: rgba(0,200,232,0.12);
-}
+.lang-option:hover { background: rgba(0,200,232,0.1); }
+.lang-option.active { background: rgba(0,200,232,0.12); }
 
 .lang-flag { font-size: 18px; line-height: 1; }
 
@@ -1441,8 +1395,6 @@ body {
 
 .lang-option.active .lang-check { opacity: 1; }
 
-
-/* ══ SETTINGS BTN ══ */
 #settingsBtn {
   position: absolute;
   bottom: 28px; right: 22px;
@@ -1463,8 +1415,6 @@ body {
   box-shadow: 0 0 35px rgba(155,89,245,0.5);
 }
 
-
-/* ══ SETTINGS MODAL ══ */
 #settingsModal {
   position: absolute; top:0; left:0;
   width:100%; height:100%;
@@ -1517,7 +1467,6 @@ body {
 .sname { font-size:13px; font-weight:700; color:var(--text-primary); }
 .sdesc { font-size:10px; color:var(--text-dim); letter-spacing:0.5px; }
 
-/* toggle */
 .tog { position:relative; width:46px; height:25px; cursor:pointer; flex-shrink:0; }
 .tog input { opacity:0; width:0; height:0; position:absolute; }
 .tog-track {
@@ -1537,7 +1486,6 @@ body {
 }
 .tog input:checked ~ .tog-thumb { transform:translateX(21px); }
 
-/* volume */
 .vrow {
   display:flex; align-items:center; gap:10px;
   padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.05);
@@ -1566,11 +1514,120 @@ input[type=range].vslider::-webkit-slider-thumb {
 }
 #sClose:hover { background:rgba(155,89,245,0.22); box-shadow:0 0 25px rgba(155,89,245,0.35); }
 
-/* hide initially */
-#gameOverScreen, #levelUpScreen { display: none; }
-#gameOverScreen.visible, #levelUpScreen.visible { display: flex; }
+#gameOverScreen, #levelUpScreen { display: none !important; pointer-events: none; }
+#gameOverScreen.visible, #levelUpScreen.visible { display: flex !important; pointer-events: auto; }
+
+/* ══ PAUSE BUTTON ══ */
+#pauseBtn {
+  position: absolute;
+  top: 18px; left: 50%; transform: translateX(-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.18);
+  color: var(--text-primary);
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+  pointer-events: auto;
+  z-index: 30;
+  box-shadow: 0 0 15px rgba(255,255,255,0.08);
+}
+#pauseBtn:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateX(-50%) scale(1.1);
+}
+#pauseBtn.visible { display: flex; }
+
+/* ══ PAUSE MODAL ══ */
+#pauseModal {
+  position: absolute; top:0; left:0;
+  width:100%; height:100%;
+  z-index: 40; display:flex;
+  align-items:center; justify-content:center;
+  padding:20px; opacity:0;
+  pointer-events:none; transition:opacity 0.3s;
+}
+#pauseModal.show { opacity:1; pointer-events:auto; }
+#pauseModal-backdrop {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background:rgba(2,2,14,0.92); backdrop-filter:blur(20px);
+}
+#pauseModal-box {
+  position:relative; z-index:1;
+  width:100%; max-width:300px;
+  background:linear-gradient(160deg,rgba(8,6,28,0.99),rgba(12,8,32,0.99));
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:28px; padding:32px 24px 24px;
+  transform:scale(0.88) translateY(20px);
+  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 0 80px rgba(0,200,232,0.12), 0 20px 60px rgba(0,0,0,0.8);
+  text-align:center;
+}
+#pauseModal.show #pauseModal-box { transform:scale(1) translateY(0); }
+#pauseModal-box::before {
+  content:''; position:absolute; top:0; left:15%; right:15%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+}
+#pause-icon {
+  font-size:42px; margin-bottom:10px; display:block;
+  animation: pausePulse 2s ease-in-out infinite;
+}
+@keyframes pausePulse {
+  0%,100% { transform: scale(1); opacity:1; }
+  50% { transform: scale(1.08); opacity:0.8; }
+}
+#pause-title {
+  font-family:'Cinzel',serif; font-size:22px; font-weight:700;
+  color:var(--text-primary); letter-spacing:4px;
+  margin-bottom:6px;
+  text-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+#pause-sub {
+  font-size:12px; color:var(--text-dim);
+  letter-spacing:2px; margin-bottom:28px;
+}
+.pause-divider {
+  width:40px; height:1px; margin: 0 auto 24px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+}
+#resumeBtn {
+  width:100%; padding:15px;
+  background:rgba(0,200,232,0.12);
+  border:1px solid rgba(0,200,232,0.5);
+  border-radius:50px; color:var(--cyan);
+  font-family:'Tajawal',sans-serif; font-size:16px;
+  font-weight:900; letter-spacing:4px;
+  cursor:pointer; transition:all 0.3s;
+  margin-bottom:12px;
+  box-shadow: 0 0 25px rgba(0,200,232,0.15);
+}
+#resumeBtn:hover {
+  background:rgba(0,200,232,0.22);
+  box-shadow:0 0 40px rgba(0,200,232,0.4);
+  transform: translateY(-2px);
+}
+#pauseMenuBtn {
+  width:100%; padding:13px;
+  background:rgba(224,54,110,0.08);
+  border:1px solid rgba(224,54,110,0.35);
+  border-radius:50px; color:var(--pink);
+  font-family:'Tajawal',sans-serif; font-size:15px;
+  font-weight:700; letter-spacing:3px;
+  cursor:pointer; transition:all 0.3s;
+}
+#pauseMenuBtn:hover {
+  background:rgba(224,54,110,0.18);
+  box-shadow:0 0 30px rgba(224,54,110,0.3);
+}
 </style>
+
 <script>
+/* ══ LANG DROPDOWN (inline — runs before body parsed) ══ */
 function toggleLangDropdown(){
   var btn=document.getElementById('langPickerBtn');
   var dd=document.getElementById('langDropdown');
@@ -1597,15 +1654,12 @@ document.addEventListener('click',function(e){
 <div id="gameContainer">
   <canvas id="canvas"></canvas>
 
-  <!-- Shield overlay -->
   <div id="shieldOverlay"></div>
   <div id="shieldTimer" data-i18n="shieldActive">🛡 حماية نشطة</div>
 
-  <!-- HUD -->
   <div id="ui">
     <div id="hsBar"><div id="hsLabel" data-i18n="best">BEST</div><div id="hsVal">—</div></div>
     <div id="hud-top">
-      <!-- Score (right side, RTL) -->
       <div id="score-block">
         <div id="scoreLabel" data-i18n="score">النقاط</div>
         <div id="score">0</div>
@@ -1621,13 +1675,11 @@ document.addEventListener('click',function(e){
       </div>
     </div>
 
-    <!-- Center feedback -->
     <div id="centerArea">
       <div id="feedback"></div>
       <div id="bonusFeedback"></div>
     </div>
 
-    <!-- Combo -->
     <div id="comboContainer">
       <div id="combo">×1</div>
       <div id="comboText">COMBO</div>
@@ -1636,14 +1688,11 @@ document.addEventListener('click',function(e){
     <div id="instructions" data-i18n="tapHint">اضغط حين تصل الكرة إلى الدائرة</div>
   </div>
 
-  <!-- Help Modal -->
   <div id="helpModal">
     <div id="helpModal-backdrop" onclick="closeHelp()"></div>
     <div id="helpModal-box">
       <div class="hm-title" data-i18n="howToPlay">HOW TO PLAY</div>
-
       <div class="hm-section-label" data-i18n="taps">الضغطات</div>
-
       <div class="hm-row">
         <div class="hm-icon gold">🎯</div>
         <div class="hm-text">
@@ -1651,7 +1700,6 @@ document.addEventListener('click',function(e){
           <span data-i18n="perfectDesc">اضغط في القلب الذهبي = ٢٥ نقطة</span>
         </div>
       </div>
-
       <div class="hm-row">
         <div class="hm-icon cyan">⭕</div>
         <div class="hm-text">
@@ -1659,7 +1707,6 @@ document.addEventListener('click',function(e){
           <span data-i18n="goodDesc">اضغط في الدائرة الخارجية = ١٢ نقطة</span>
         </div>
       </div>
-
       <div class="hm-row">
         <div class="hm-icon pink">💔</div>
         <div class="hm-text">
@@ -1667,10 +1714,8 @@ document.addEventListener('click',function(e){
           <span data-i18n="missDesc">ضغطة خاطئة أو فوتت كرة = قلب</span>
         </div>
       </div>
-
       <div class="hm-divider"></div>
       <div class="hm-section-label" data-i18n="rewards">المكافآت</div>
-
       <div class="hm-row">
         <div class="hm-icon gold">🔥</div>
         <div class="hm-text">
@@ -1678,7 +1723,6 @@ document.addEventListener('click',function(e){
           <span data-i18n="freeHeart">قلب مجاني ❤️</span>
         </div>
       </div>
-
       <div class="hm-row">
         <div class="hm-icon green">🚀</div>
         <div class="hm-text">
@@ -1686,10 +1730,8 @@ document.addEventListener('click',function(e){
           <span data-i18n="lvl10Desc">قلب مجاني 💚</span>
         </div>
       </div>
-
       <div class="hm-divider"></div>
       <div class="hm-section-label" data-i18n="goldenOrb">الكرة الذهبية ⭐</div>
-
       <div class="hm-row">
         <div class="hm-icon green">🛡</div>
         <div class="hm-text">
@@ -1697,7 +1739,6 @@ document.addEventListener('click',function(e){
           <span data-i18n="shieldHelpDesc">تحميك من الخسارة مرتين</span>
         </div>
       </div>
-
       <div class="hm-row">
         <div class="hm-icon pink">❤️</div>
         <div class="hm-text">
@@ -1705,7 +1746,6 @@ document.addEventListener('click',function(e){
           <span data-i18n="heartHelpDesc">+١ قلب فوراً</span>
         </div>
       </div>
-
       <div class="hm-row">
         <div class="hm-icon orange">⚡</div>
         <div class="hm-text">
@@ -1713,25 +1753,18 @@ document.addEventListener('click',function(e){
           <span data-i18n="doubleHelpDesc">×٢ لمدة ١٠ ثواني</span>
         </div>
       </div>
-
       <button id="helpClose" onclick="closeHelp()" data-i18n="gotIt">فهمت!</button>
     </div>
   </div>
 
-  <!-- Top notifications (in-game) -->
   <div id="topNotifs"></div>
 
-
-  <!-- Settings Btn (start screen) -->
   <button id="settingsBtn" onclick="openSettings()">&#9881;</button>
-  
 
-  <!-- Settings Modal -->
   <div id="settingsModal">
     <div id="settingsModal-backdrop" onclick="closeSettings()"></div>
     <div id="settingsModal-box">
       <div class="sm-title">&#9881; SETTINGS</div>
-
       <div class="srow">
         <div class="srow-left">
           <div class="sico pu">&#127925;</div>
@@ -1746,7 +1779,6 @@ document.addEventListener('click',function(e){
           <div class="tog-thumb"></div>
         </label>
       </div>
-
       <div class="srow">
         <div class="srow-left">
           <div class="sico cy">&#128266;</div>
@@ -1761,7 +1793,6 @@ document.addEventListener('click',function(e){
           <div class="tog-thumb"></div>
         </label>
       </div>
-
       <div class="vrow">
         <div class="sico cy" style="margin-left:8px">&#128265;</div>
         <div class="vinfo">
@@ -1773,7 +1804,6 @@ document.addEventListener('click',function(e){
                oninput="setVolumeSetting(this.value)"
                style="-webkit-user-select:none;user-select:none;">
       </div>
-
       <div class="srow">
         <div class="srow-left">
           <div class="sico go">&#128247;</div>
@@ -1788,7 +1818,6 @@ document.addEventListener('click',function(e){
           <div class="tog-thumb"></div>
         </label>
       </div>
-
       <div class="srow">
         <div class="srow-left">
           <div class="sico pi">&#10024;</div>
@@ -1803,22 +1832,35 @@ document.addEventListener('click',function(e){
           <div class="tog-thumb"></div>
         </label>
       </div>
-
       <button id="sClose" onclick="closeSettings()" data-i18n="gotIt">حسناً</button>
     </div>
   </div>
 
-  <!-- Help Button -->
   <button id="helpBtn" onclick="openHelp()">?</button>
 
-  <!-- Power-up toast -->
+  <!-- Pause Button (in-game) -->
+  <button id="pauseBtn" onclick="pauseGame()">⏸</button>
+
+  <!-- Pause Modal -->
+  <div id="pauseModal">
+    <div id="pauseModal-backdrop"></div>
+    <div id="pauseModal-box">
+      <span id="pause-icon">⏸</span>
+      <div id="pause-title" data-i18n="paused">PAUSED</div>
+      <div id="pause-sub" data-i18n="pauseSub">اللعبة متوقفة مؤقتاً</div>
+      <div class="pause-divider"></div>
+      <button id="resumeBtn" onclick="resumeGame()" data-i18n="resume">▶ استمرار</button>
+      <button id="pauseMenuBtn" onclick="exitToMenu()" data-i18n="exitMenu">✕ الخروج للقائمة</button>
+    </div>
+  </div>
+
   <div id="powerupToast">
     <span id="toastIcon">⭐</span>
     <div id="toastTitle">بونص!</div>
     <div id="toastDesc"></div>
   </div>
 
-  <!-- ══ START SCREEN ══ -->
+  <!-- START SCREEN -->
   <div id="startScreen" class="screen screen-bg">
     <div id="langSwitcher">
       <button id="langPickerBtn" onclick="toggleLangDropdown()">
@@ -1861,7 +1903,6 @@ document.addEventListener('click',function(e){
     </div>
     <div class="game-title">BOOM</div>
     <div class="game-subtitle" data-i18n="subtitle">BOOM · SPACE</div>
-
     <div class="orb-preview"></div>
     <div id="leaderboard-wrap">
       <div id="lb-header">
@@ -1901,11 +1942,10 @@ document.addEventListener('click',function(e){
         </div>
       </button>
     </div>
-
     <button class="btn-main" onclick="startGame()" data-i18n="startBtn">ابدأ اللعب</button>
   </div>
 
-  <!-- ══ GAME OVER SCREEN ══ -->
+  <!-- GAME OVER SCREEN -->
   <div id="gameOverScreen" class="screen screen-bg">
     <div class="game-subtitle" style="margin-bottom:6px;" data-i18n="gameOver">GAME OVER</div>
     <div id="newRecordBadge" data-i18n="newRecord">🏆 رقم قياسي جديد!</div>
@@ -1933,9 +1973,8 @@ document.addEventListener('click',function(e){
     <button class="btn-main btn-danger" onclick="showMenu()" data-i18n="menu">القائمة</button>
   </div>
 
-  <!-- ══ LEVEL UP SCREEN ══ -->
+  <!-- LEVEL UP SCREEN -->
   <div id="levelUpScreen" class="screen screen-bg">
-    <!-- BOOM overlay -->
     <div id="boomOverlay">
       <div id="boom-flash"></div>
       <div id="boom-rings"></div>
@@ -1959,88 +1998,25 @@ document.addEventListener('click',function(e){
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-/* ══════════════════════ GLOBAL VARIABLES (FIXED) ══════════════════════ */
-let dangerOrbs = [];
-let lastDangerSpawn = 0;
-let beatCount = 0;
-let doubleNotified = false;  // Prevent spam notifications
-
-function playSound(type) {
-  if (typeof S !== 'undefined' && !S.sfx) return;
-  const _vol=(typeof S !== 'undefined')?S.volume:1;
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-
-  const t = audioCtx.currentTime;
-  if (type === 'perfect') {
-    o.frequency.setValueAtTime(1100, t);
-    o.frequency.exponentialRampToValueAtTime(1800, t + 0.18);
-    g.gain.setValueAtTime(0.35*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
-    o.start(t); o.stop(t + 0.18);
-  } else if (type === 'good') {
-    o.frequency.setValueAtTime(650, t);
-    o.frequency.exponentialRampToValueAtTime(920, t + 0.12);
-    g.gain.setValueAtTime(0.3*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
-    o.start(t); o.stop(t + 0.12);
-  } else if (type === 'miss') {
-    o.frequency.setValueAtTime(200, t);
-    o.frequency.exponentialRampToValueAtTime(80, t + 0.3);
-    g.gain.setValueAtTime(0.35*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  } else if (type === 'levelup') {
-    o.frequency.setValueAtTime(440, t);
-    o.frequency.exponentialRampToValueAtTime(1400, t + 0.6);
-    g.gain.setValueAtTime(0.35*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
-    o.start(t); o.stop(t + 0.6);
-  } else if (type === 'bonus') {
-    const o2 = audioCtx.createOscillator();
-    const g2 = audioCtx.createGain();
-    o2.connect(g2); g2.connect(audioCtx.destination);
-    o.frequency.setValueAtTime(900, t);
-    o.frequency.exponentialRampToValueAtTime(1800, t + 0.25);
-    g.gain.setValueAtTime(0.28*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-    o2.frequency.setValueAtTime(1200, t + 0.1);
-    o2.frequency.exponentialRampToValueAtTime(2200, t + 0.4);
-    g2.gain.setValueAtTime(0.22, t + 0.1);
-    g2.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
-    o2.start(t + 0.1); o2.stop(t + 0.4);
-  } else if (type === 'heartgain') {
-    o.frequency.setValueAtTime(500, t);
-    o.frequency.exponentialRampToValueAtTime(1100, t + 0.1);
-    o.frequency.exponentialRampToValueAtTime(800, t + 0.22);
-    g.gain.setValueAtTime(0.35*_vol, t);
-    g.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  }
-}
-
 /* ══════════════════════ REFS ══════════════════════ */
-const canvas   = document.getElementById('canvas');
-const ctx      = canvas.getContext('2d');
-const scoreEl  = document.getElementById('score');
-const levelNumEl = document.getElementById('levelNum');
+const canvas    = document.getElementById('canvas');
+const ctx       = canvas.getContext('2d');
+const scoreEl   = document.getElementById('score');
+const levelNumEl= document.getElementById('levelNum');
 const progressFill = document.getElementById('progressFill');
-const comboEl  = document.getElementById('combo');
+const comboEl   = document.getElementById('combo');
 const comboCont = document.getElementById('comboContainer');
-const feedbackEl = document.getElementById('feedback');
-const bonusFBEl  = document.getElementById('bonusFeedback');
-const healthBarEl = document.getElementById('healthBar');
-const streakBarEl = document.getElementById('streakBar');
-const shieldOverlay = document.getElementById('shieldOverlay');
-const shieldTimerEl = document.getElementById('shieldTimer');
-const powerupToast  = document.getElementById('powerupToast');
-const startScreen   = document.getElementById('startScreen');
-const gameOverScreen = document.getElementById('gameOverScreen');
-const levelUpScreen  = document.getElementById('levelUpScreen');
-const instructions   = document.getElementById('instructions');
+const feedbackEl= document.getElementById('feedback');
+const bonusFBEl = document.getElementById('bonusFeedback');
+const healthBarEl= document.getElementById('healthBar');
+const streakBarEl= document.getElementById('streakBar');
+const shieldOverlay= document.getElementById('shieldOverlay');
+const shieldTimerEl= document.getElementById('shieldTimer');
+const powerupToast = document.getElementById('powerupToast');
+const startScreen  = document.getElementById('startScreen');
+const gameOverScreen= document.getElementById('gameOverScreen');
+const levelUpScreen = document.getElementById('levelUpScreen');
+const instructions  = document.getElementById('instructions');
 
 /* ══════════════════════ STATE ══════════════════════ */
 let W, H, CX, CY;
@@ -2058,6 +2034,13 @@ let shieldActive = false, shieldLeft = 0;
 let doublePoints = false, doubleEnd = 0;
 let levelHeartGiven = false;
 let stars = [], nebulae = [], dustParts = [], meteors = [], planets = [];
+
+/* FIX 1: Single declarations for dangerOrbs vars (removed duplicate at bottom) */
+let dangerOrbs = [];
+let lastDangerSpawn = 0;
+
+/* FIX 2: doubleNotified as proper module-level variable */
+let doubleNotified = false;
 
 const STREAK_NEED = 5, LEVEL_HEART_AT = 10, MAX_HEARTS = 8;
 
@@ -2090,6 +2073,63 @@ const POWERUPS = [
   }
 ];
 
+/* ══════════════════════ SOUND ══════════════════════ */
+function playSound(type) {
+  if (typeof S !== 'undefined' && !S.sfx) return;
+  const _vol = (typeof S !== 'undefined') ? S.volume : 1;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  const t2 = audioCtx.currentTime;
+  if (type === 'perfect') {
+    o.frequency.setValueAtTime(1100, t2);
+    o.frequency.exponentialRampToValueAtTime(1800, t2+0.18);
+    g.gain.setValueAtTime(0.35*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.18);
+    o.start(t2); o.stop(t2+0.18);
+  } else if (type === 'good') {
+    o.frequency.setValueAtTime(650, t2);
+    o.frequency.exponentialRampToValueAtTime(920, t2+0.12);
+    g.gain.setValueAtTime(0.3*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.12);
+    o.start(t2); o.stop(t2+0.12);
+  } else if (type === 'miss') {
+    o.frequency.setValueAtTime(200, t2);
+    o.frequency.exponentialRampToValueAtTime(80, t2+0.3);
+    g.gain.setValueAtTime(0.35*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.3);
+    o.start(t2); o.stop(t2+0.3);
+  } else if (type === 'levelup') {
+    o.frequency.setValueAtTime(440, t2);
+    o.frequency.exponentialRampToValueAtTime(1400, t2+0.6);
+    g.gain.setValueAtTime(0.35*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.6);
+    o.start(t2); o.stop(t2+0.6);
+  } else if (type === 'bonus') {
+    const o2 = audioCtx.createOscillator();
+    const g2 = audioCtx.createGain();
+    o2.connect(g2); g2.connect(audioCtx.destination);
+    o.frequency.setValueAtTime(900, t2);
+    o.frequency.exponentialRampToValueAtTime(1800, t2+0.25);
+    g.gain.setValueAtTime(0.28*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.3);
+    o.start(t2); o.stop(t2+0.3);
+    o2.frequency.setValueAtTime(1200, t2+0.1);
+    o2.frequency.exponentialRampToValueAtTime(2200, t2+0.4);
+    g2.gain.setValueAtTime(0.22, t2+0.1);
+    g2.gain.exponentialRampToValueAtTime(0.01, t2+0.4);
+    o2.start(t2+0.1); o2.stop(t2+0.4);
+  } else if (type === 'heartgain') {
+    o.frequency.setValueAtTime(500, t2);
+    o.frequency.exponentialRampToValueAtTime(1100, t2+0.1);
+    o.frequency.exponentialRampToValueAtTime(800, t2+0.22);
+    g.gain.setValueAtTime(0.35*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.3);
+    o.start(t2); o.stop(t2+0.3);
+  }
+}
+
 /* ══════════════════════ HEARTS / STREAK ══════════════════════ */
 function renderHearts() {
   healthBarEl.innerHTML = '';
@@ -2107,7 +2147,10 @@ function gainHeart() {
   if (health > maxHealth) maxHealth = health;
   renderHearts();
   const hs = healthBarEl.querySelectorAll('.heart');
-  if (hs[health-1]) { hs[health-1].classList.add('gained'); setTimeout(() => hs[health-1]?.classList.remove('gained'), 600); }
+  if (hs[health-1]) {
+    hs[health-1].classList.add('gained');
+    setTimeout(() => hs[health-1]?.classList.remove('gained'), 600);
+  }
   playSound('heartgain');
 }
 
@@ -2120,10 +2163,24 @@ function renderStreak() {
   }
 }
 
+/* ══════════════════════ TOP NOTIF ══════════════════════ */
+function showTopNotif(icon, text, cls) {
+  const el = document.createElement('div');
+  el.className = 'top-notif ' + cls;
+  el.innerHTML = `<span class="notif-icon">${icon}</span><span>${text}</span>`;
+  const container = document.getElementById('topNotifs');
+  container.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => {
+    el.classList.add('hide');
+    setTimeout(() => el.remove(), 400);
+  }, 2500);
+}
+
 /* ══════════════════════ TOAST ══════════════════════ */
 let toastTimer = null;
 function showToast(pw) {
-  if(!pw) return;  // Safety check
+  if (!pw) return;
   document.getElementById('toastIcon').textContent  = pw.icon || '⭐';
   document.getElementById('toastTitle').textContent = pw.title || 'Bonus';
   document.getElementById('toastDesc').textContent  = pw.desc || '';
@@ -2152,29 +2209,24 @@ function showBFB(text) {
 
 /* ══════════════════════ RESIZE / BG ══════════════════════ */
 function resize() {
+  const oldW = W || 1;
+  const oldH = H || 1;
   W = canvas.width  = canvas.offsetWidth;
   H = canvas.height = canvas.offsetHeight;
   CX = W/2; CY = H/2;
   buildBG();
-  // Update all active orb positions to stay relative to new center
+
+  /* FIX 5: Correct resize position recalculation */
+  const scaleX = W / oldW;
+  const scaleY = H / oldH;
   orbs.forEach(o => {
-    if (o.active) {
-      // Keep relative position to center
-      o.x = CX + (o.x - CX) * (W / (W || 1));
-      o.y = CY + (o.y - CY) * (H / (H || 1));
-    }
+    if (o.active) { o.x *= scaleX; o.y *= scaleY; }
   });
   bonusOrbs.forEach(bo => {
-    if (bo.active) {
-      bo.x = CX + (bo.x - CX) * (W / (W || 1));
-      bo.y = CY + (bo.y - CY) * (H / (H || 1));
-    }
+    if (bo.active) { bo.x *= scaleX; bo.y *= scaleY; }
   });
   dangerOrbs.forEach(d => {
-    if (d && d.active) {
-      d.x = CX + (d.x - CX) * (W / (W || 1));
-      d.y = CY + (d.y - CY) * (H / (H || 1));
-    }
+    if (d && d.active) { d.x *= scaleX; d.y *= scaleY; }
   });
 }
 window.addEventListener('resize', resize);
@@ -2238,7 +2290,6 @@ function buildBG() {
 }
 
 function drawBG() {
-  // Deep space gradient
   const bg = ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H));
   bg.addColorStop(0,'#0b0b20');
   bg.addColorStop(0.5,'#060613');
@@ -2246,7 +2297,6 @@ function drawBG() {
   ctx.fillStyle = bg;
   ctx.fillRect(0,0,W,H);
 
-  // Nebulae
   nebulae.forEach(n => {
     n.x += n.dx; n.y += n.dy;
     if (n.x < -n.r) n.x = W+n.r;
@@ -2259,24 +2309,20 @@ function drawBG() {
     ctx.fillStyle=g; ctx.fill();
   });
 
-  // Planets
   planets.forEach(p => {
     p.orbit.a += p.orbit.s;
     p.x = p.orbit.cx + Math.cos(p.orbit.a)*p.orbit.r;
     p.y = p.orbit.cy + Math.sin(p.orbit.a)*p.orbit.r*0.28;
-    // glow
     const pg = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*1.8);
     pg.addColorStop(0,p.col); pg.addColorStop(1,'transparent');
     ctx.beginPath(); ctx.arc(p.x,p.y,p.r*1.8,0,Math.PI*2);
     ctx.fillStyle=pg; ctx.globalAlpha=0.2; ctx.fill(); ctx.globalAlpha=1;
-    // body
     const pb = ctx.createRadialGradient(p.x-p.r*.3,p.y-p.r*.3,0,p.x,p.y,p.r);
     pb.addColorStop(0,p.col); pb.addColorStop(1,'#000');
     ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle=pb; ctx.fill();
   });
 
-  // Stars
   stars.forEach(s => {
     s.tw += s.twS;
     const a = s.alpha * (0.65 + 0.35*Math.sin(s.tw));
@@ -2288,7 +2334,6 @@ function drawBG() {
     ctx.fill(); ctx.shadowBlur=0;
   });
 
-  // Dust
   dustParts.forEach(d => {
     d.x+=d.vx; d.y+=d.vy;
     if(d.x<0)d.x=W; if(d.x>W)d.x=0;
@@ -2297,7 +2342,6 @@ function drawBG() {
     ctx.fillStyle=`rgba(180,180,255,${d.a})`; ctx.fill();
   });
 
-  // Meteors
   if (Math.random()<0.008) {
     meteors.push({x:Math.random()*W,y:-50,vx:(Math.random()-.5)*1.5,vy:4+Math.random()*3,life:1});
   }
@@ -2348,13 +2392,11 @@ class Orb {
   draw() {
     const r = this.br + Math.sin(this.pulse)*2;
 
-    // outer soft glow
     const og = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,r*2.8);
     og.addColorStop(0,this.col.glow); og.addColorStop(1,'transparent');
     ctx.beginPath(); ctx.arc(this.x,this.y,r*2.8,0,Math.PI*2);
     ctx.fillStyle=og; ctx.globalAlpha=0.35; ctx.fill(); ctx.globalAlpha=1;
 
-    // trail
     this.trail.forEach((t,i)=>{
       const tr=t.r*(0.35+(i/this.trail.length)*0.65);
       const tg=ctx.createRadialGradient(t.x,t.y,0,t.x,t.y,tr);
@@ -2364,7 +2406,6 @@ class Orb {
     });
     ctx.globalAlpha=1;
 
-    // sphere
     const sg=ctx.createRadialGradient(this.x-r*.38,this.y-r*.38,0,this.x,this.y,r);
     sg.addColorStop(0,'#ffffff');
     sg.addColorStop(0.12,this.col.main);
@@ -2376,14 +2417,12 @@ class Orb {
     ctx.shadowBlur=28; ctx.shadowColor=this.col.glow;
     ctx.fill(); ctx.shadowBlur=0;
 
-    // specular
     ctx.beginPath();
     ctx.ellipse(this.x-r*.32,this.y-r*.32,r*.26,r*.16,Math.PI/4,0,Math.PI*2);
     ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.fill();
     ctx.beginPath(); ctx.arc(this.x+r*.22,this.y+r*.22,r*.1,0,Math.PI*2);
     ctx.fillStyle='rgba(255,255,255,0.38)'; ctx.fill();
 
-    // thin rim
     ctx.beginPath(); ctx.arc(this.x,this.y,r*.9,0,Math.PI*2);
     ctx.strokeStyle=this.col.main; ctx.lineWidth=.8;
     ctx.globalAlpha=0.25; ctx.stroke(); ctx.globalAlpha=1;
@@ -2408,30 +2447,18 @@ class BonusOrb {
     this.powerup = POWERUPS[Math.floor(Math.random() * POWERUPS.length)];
     this.born = Date.now();
     this.ttl = 5000;
-    this.currentR = this.br; // ← أضفنا متغير للـ radius الحالي
+    this.currentR = this.br;
   }
 
   update() {
     this.pulse += 0.13;
     this.starA += 0.05;
-    this.currentR = this.br + Math.sin(this.pulse) * 3; // ← نحفظ الـ r
-    
-    // نضيف الـ trail بالـ r الصحيح
-    this.trail.push({ 
-      x: this.x, 
-      y: this.y, 
-      alpha: 1, 
-      r: this.currentR // ← نستخدم الـ currentR
-    });
-    
+    this.currentR = this.br + Math.sin(this.pulse) * 3;
+    this.trail.push({ x: this.x, y: this.y, alpha: 1, r: this.currentR });
     if (this.trail.length > 16) this.trail.shift();
-    this.trail.forEach((t, i) => { 
-      t.alpha = (i / this.trail.length) * 0.55; 
-    });
-    
+    this.trail.forEach((t, i) => { t.alpha = (i / this.trail.length) * 0.55; });
     this.x += this.vx;
     this.y += this.vy;
-    
     const dist = Math.hypot(this.x - CX, this.y - CY);
     if (dist < 28 || Date.now() - this.born > this.ttl) {
       this.active = false;
@@ -2441,9 +2468,8 @@ class BonusOrb {
   }
 
   draw() {
-    const r = this.currentR; // ← نستخدم الـ currentR المحفوظ
+    const r = this.currentR;
 
-    // rotating star corona
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.starA);
@@ -2462,7 +2488,6 @@ class BonusOrb {
     }
     ctx.restore();
 
-    // big outer glow
     const og = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 3.5);
     og.addColorStop(0, 'rgba(212,168,67,0.55)');
     og.addColorStop(0.4, 'rgba(200,120,0,0.18)');
@@ -2474,9 +2499,8 @@ class BonusOrb {
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    // golden trail - دلوقتي r معرف صح
     this.trail.forEach((t, i) => {
-      const tr = r * (0.25 + (i / this.trail.length) * 0.75); // ← r معرف!
+      const tr = r * (0.25 + (i / this.trail.length) * 0.75);
       const tg = ctx.createRadialGradient(t.x, t.y, 0, t.x, t.y, tr);
       tg.addColorStop(0, '#f5cc6a');
       tg.addColorStop(1, 'transparent');
@@ -2488,7 +2512,6 @@ class BonusOrb {
     });
     ctx.globalAlpha = 1;
 
-    // golden sphere
     const sg = ctx.createRadialGradient(this.x - r * 0.36, this.y - r * 0.36, 0, this.x, this.y, r);
     sg.addColorStop(0, '#fffdf0');
     sg.addColorStop(0.15, '#f5cc6a');
@@ -2503,13 +2526,11 @@ class BonusOrb {
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // specular
     ctx.beginPath();
     ctx.ellipse(this.x - r * 0.32, this.y - r * 0.32, r * 0.3, r * 0.18, Math.PI / 4, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
     ctx.fill();
 
-    // icon
     ctx.font = `${r * 0.95}px serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -2519,801 +2540,7 @@ class BonusOrb {
   }
 }
 
-/* ══════════════════════ PARTICLE / RING ══════════════════════ */
-class Particle {
-  constructor(x,y,color,type='normal'){
-    this.x=x; this.y=y;
-    const a=Math.random()*Math.PI*2;
-    const sp=type==='bonus'?Math.random()*9+4:type==='perfect'?Math.random()*6+3:Math.random()*4+2;
-    this.vx=Math.cos(a)*sp; this.vy=Math.sin(a)*sp;
-    this.life=1;
-    this.decay=type==='perfect'?Math.random()*.025+.015:Math.random()*.02+.01;
-    this.color=color;
-    this.size=type==='bonus'?Math.random()*7+3:type==='perfect'?Math.random()*5+3:Math.random()*4+2;
-  }
-  update(){ this.x+=this.vx; this.y+=this.vy; this.vx*=.97; this.vy*=.97; this.life-=this.decay; return this.life>0; }
-  draw(){
-    const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size);
-    g.addColorStop(0,this.color); g.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fillStyle=g; ctx.globalAlpha=this.life; ctx.fill(); ctx.globalAlpha=1;
-  }
-}
-
-class Ring {
-  constructor(color,radius,type='normal'){
-    this.r=radius; this.alpha=1;
-    this.decay=type==='bonus'?.014:type==='perfect'?.018:.022;
-    this.color=color;
-    this.lw=type==='bonus'?5:type==='perfect'?4:3;
-    this.type=type;
-  }
-  update(){ this.r+=this.type==='bonus'?4.5:this.type==='perfect'?3.5:2.8; this.alpha-=this.decay; this.lw*=.96; return this.alpha>0; }
-  draw(){
-    ctx.beginPath(); ctx.arc(CX,CY,this.r,0,Math.PI*2);
-    ctx.strokeStyle=this.color; ctx.globalAlpha=this.alpha*.7;
-    ctx.lineWidth=this.lw;
-    ctx.shadowBlur=this.type==='bonus'?45:this.type==='perfect'?30:20;
-    ctx.shadowColor=this.color;
-    ctx.stroke(); ctx.shadowBlur=0; ctx.globalAlpha=1;
-  }
-}
-
-function explode(x,y,color,type='normal'){
-  if(typeof S !== 'undefined'&&!S.particles) return;
-  const cnt=type==='bonus'?45:type==='perfect'?28:16;
-  for(let i=0;i<cnt;i++) particles.push(new Particle(x,y,color,type));
-}
-
-/* ══════════════════════ PROGRESS ══════════════════════ */
-function updateProgress() {
-  progressFill.style.width = ((score%100)/100*100)+'%';
-}
-
-/* ══════════════════════ LEVEL UP ══════════════════════ */
-function checkLevel() {
-  const nl = Math.floor(score/100)+1;
-  if (nl>level) {
-    level=nl; levelNumEl.textContent=level;
-    speed+=0.25; spawnRate=Math.max(700,spawnRate-120); orbRadius=Math.max(14,orbRadius-0.8);
-    let bonus='';
-    if(level>=LEVEL_HEART_AT&&!levelHeartGiven){ levelHeartGiven=true; gainHeart(); bonus='🎁 '+t('lvl10Heart'); showTopNotif('💚', t('lvl10Heart'), 'heart'); }
-    document.getElementById('levelUpBonus').textContent=bonus;
-    playSound('levelup');
-    gamePaused=true;
-    document.getElementById('newLevel').textContent=level;
-    levelUpScreen.classList.add('visible');
-    setTimeout(triggerBoom, 80);
-  }
-}
-
-function continueGame() {
-  levelUpScreen.classList.remove('visible');
-  levelUpScreen.style.display = 'none';  // Ensure it's hidden
-  gamePaused=false; lastSpawn=Date.now();
-  requestAnimationFrame(loop);
-}
-
-/* ══════════════════════ GAME FLOW ══════════════════════ */
-function setDifficulty(d, el) {
-  difficulty=d;
-  document.querySelectorAll('.diffBtn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function startGame() {
-  document.getElementById('helpBtn').style.display='none';
-  startScreen.style.display='none';
-  gameOverScreen.classList.remove('visible');
-  levelUpScreen.classList.remove('visible');
-
-  gameRunning=true; gamePaused=false;
-  score=0; level=1; combo=0; maxCombo=0;
-  perfectStreak=0; shieldActive=false; shieldLeft=0;
-  doublePoints=false; doubleEnd=0; levelHeartGiven=false;
-
-  const d=DIFF[difficulty];
-  health=d.hp; maxHealth=d.hp;
-  speed=d.speed; spawnRate=d.rate; orbRadius=d.orb;
-
-  orbs=[]; bonusOrbs=[]; dangerOrbs=[]; particles=[]; rings=[];
-  lastDangerSpawn=Date.now();
-  totalHits=0; totalAttempts=0;
-  shakeAmt=0; globalPulse=0;
-
-  shieldOverlay.classList.remove('active');
-  shieldTimerEl.classList.remove('show');
-
-  scoreEl.textContent='0';
-  levelNumEl.textContent='1';
-  progressFill.style.width='0%';
-  renderHearts(); renderStreak();
-  comboCont.classList.remove('show');
-  instructions.style.display='block'; instructions.textContent=t('tapHint');
-
-  setTimeout(()=>{ instructions.style.display='none'; },6000);
-
-  lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
-  beatCount = 0; startMusic();
-  loadLeaderboard();
-  requestAnimationFrame(loop);
-}
-
-function restartGame() {
-  // Properly hide game over screen - both class and display
-  gameOverScreen.classList.remove('visible');
-  gameOverScreen.style.display = 'none';
-
-  // Reset all game over elements
-  document.getElementById('newRecordBadge').classList.remove('show');
-  document.getElementById('newRecordBadge').style.display = 'none';
-  document.getElementById('nameInputWrap').classList.remove('show');
-  document.getElementById('nameInputWrap').style.display = 'none';
-  document.getElementById('playerNameInput').value='';
-  document.getElementById('submitScore').textContent='سجّل النتيجة';
-  document.getElementById('submitScore').disabled=false;
-
-  // Reset game state
-  gameRunning=true; gamePaused=false;
-  score=0; level=1; combo=0; maxCombo=0;
-  perfectStreak=0; shieldActive=false; shieldLeft=0;
-  doublePoints=false; doubleEnd=0; doubleNotified=false; levelHeartGiven=false;
-
-  const d=DIFF[difficulty];
-  health=d.hp; maxHealth=d.hp;
-  speed=d.speed; spawnRate=d.rate; orbRadius=d.orb;
-
-  orbs=[]; bonusOrbs=[]; dangerOrbs=[]; particles=[]; rings=[];
-  lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
-  totalHits=0; totalAttempts=0;
-  shakeAmt=0; globalPulse=0;
-
-  shieldOverlay.classList.remove('active');
-  shieldTimerEl.classList.remove('show');
-
-  scoreEl.textContent='0';
-  levelNumEl.textContent='1';
-  progressFill.style.width='0%';
-  renderHearts(); renderStreak();
-  comboCont.classList.remove('show');
-  instructions.style.display='block';
-  setTimeout(()=>{ instructions.style.display='none'; },6000);
-
-  beatCount = 0;  // Reset music beat counter
-  startMusic();
-  requestAnimationFrame(loop);
-}
-
-function showMenu() {
-  document.getElementById('helpBtn').style.display='flex';
-
-  stopMusic();
-  gameRunning=false; gamePaused=false;
-  startScreen.style.display='flex';
-  gameOverScreen.classList.remove('visible');
-  gameOverScreen.style.display = 'none';
-  levelUpScreen.classList.remove('visible');
-  levelUpScreen.style.display = 'none';
-  document.getElementById('newRecordBadge').classList.remove('show');
-  document.getElementById('newRecordBadge').style.display = 'none';
-  document.getElementById('nameInputWrap').classList.remove('show');
-  document.getElementById('nameInputWrap').style.display = 'none';
-  loadLeaderboard();
-}
-
-function gameOver() {
-  gameRunning=false;
-  stopMusic();
-  checkNewRecord();
-  const acc = totalAttempts>0 ? Math.round(totalHits/totalAttempts*100) : 0;
-  document.getElementById('finalScore').textContent=score;
-  document.getElementById('maxCombo').textContent=maxCombo;
-  document.getElementById('finalLevel').textContent=level;
-  document.getElementById('accuracy').textContent=acc+'%';
-  gameOverScreen.style.display = 'flex';
-  gameOverScreen.classList.add('visible');
-}
-
-/* ══════════════════════ HIT CHECK ══════════════════════ */
-function checkHit() {
-  if(!gameRunning||gamePaused) return;
-
-  // Danger orb check first (can destroy it before it explodes)
-  for (let i = dangerOrbs.length - 1; i >= 0; i--) {
-    const d = dangerOrbs[i];
-    if (!d || !d.active) continue;
-    const dist = Math.hypot(d.x - CX, d.y - CY);
-    if (dist < 45) {  // Fixed: was 90, too large
-      dangerOrbs.splice(i, 1);
-      // Limited explosion
-      if (typeof S === "undefined" || S.particles !== false) {
-        for (let k = 0; k < 15; k++) {
-          particles.push(new Particle(d.x, d.y, '#ff4400', 'good'));
-        }
-      }
-      rings.push(new Ring('#ff4400', 35, 'good'));
-      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 6;
-      playSound('perfect');
-      showFB('💥 DESTROYED!', 'perfect');
-      score += 50;
-      scoreEl.textContent = score;
-      return;
-    }
-  }
-
-  // Bonus orb check
-  for(let i=bonusOrbs.length-1;i>=0;i--){
-    const bo=bonusOrbs[i];
-    if(!bo || !bo.active) continue;  // Safety check
-    const dist=Math.hypot(bo.x-CX,bo.y-CY);
-    if(dist<100){
-      bonusOrbs.splice(i,1);
-      if(bo.powerup && typeof bo.powerup.apply === 'function') {
-        bo.powerup.apply();
-      }
-      explode(bo.x,bo.y,'#d4a843','bonus');
-      rings.push(new Ring('#f5cc6a',40,'bonus'));
-      rings.push(new Ring('#d4a843',40,'bonus'));
-      rings.push(new Ring('#fff8e0',40,'bonus'));
-      shakeAmt=typeof S !== "undefined"&&!S.shake?0:5; playSound('bonus');
-      showFB('⭐ BONUS!','bonus');
-      showToast(bo.powerup);
-      return;
-    }
-  }
-
-  totalAttempts++;
-  let closest=null, closestD=Infinity;
-  orbs.forEach(o=>{ const d=Math.hypot(o.x-CX,o.y-CY); if(d<closestD){closestD=d;closest=o;} });
-  if(!closest) return;
-
-  const mult=doublePoints?2:1;
-
-  if(closestD<35){
-    closest.active=false; totalHits++;
-    perfectStreak++;
-    const pts=25*(1+Math.floor(combo/10))*mult;
-    score+=pts; scoreEl.textContent=score;
-    combo++; if(combo>maxCombo)maxCombo=combo;
-    if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
-    if(perfectStreak>=STREAK_NEED){ perfectStreak=0; gainHeart(); showTopNotif('❤️', t('streakHeart'), 'heart'); }
-    renderStreak();
-    explode(closest.x,closest.y,closest.col.main,'perfect');
-    rings.push(new Ring(closest.col.main,35,'perfect'));
-    rings.push(new Ring('#d4a843',35,'perfect'));
-    shakeAmt=typeof S !== "undefined"&&!S.shake?0:4; playSound('perfect');
-    showFB(mult===2?'PERFECT ×2':'PERFECT!','perfect');
-    // score bump flash
-    scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
-    updateProgress(); checkLevel();
-
-  } else if(closestD<75){
-    closest.active=false; totalHits++;
-    perfectStreak=0; renderStreak();
-    const pts=12*(1+Math.floor(combo/10))*mult;
-    score+=pts; scoreEl.textContent=score;
-    combo++; if(combo>maxCombo)maxCombo=combo;
-    if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
-    explode(closest.x,closest.y,closest.col.main,'good');
-    rings.push(new Ring(closest.col.main,75,'good'));
-    shakeAmt=typeof S !== "undefined"&&!S.shake?0:2; playSound('good');
-    showFB(mult===2?'GOOD ×2':'GOOD!','good');
-    updateProgress(); checkLevel();
-
-  } else {
-    combo=0; perfectStreak=0;
-    comboCont.classList.remove('show'); renderStreak();
-    if(closestD>100){
-      if(shieldActive){
-        shieldLeft--;
-        shakeAmt=typeof S !== "undefined"&&!S.shake?0:3;
-        if(shieldLeft<=0){ shieldActive=false; shieldOverlay.classList.remove('active'); shieldTimerEl.classList.remove('show'); showTopNotif('🛡', t('shieldDone'), 'info'); }
-        else{ shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft; showFB('🛡 محمي!','good'); showTopNotif('🛡', t('shieldHit')+' ×'+shieldLeft, 'shield'); }
-        playSound('miss');
-      } else {
-        health--; renderHearts();
-        shakeAmt=typeof S !== "undefined"&&!S.shake?0:7; playSound('miss');
-        showFB('MISS!','miss');
-        if(health<=0){ setTimeout(gameOver,500); return; }
-      }
-    }
-  }
-}
-
-/* ══════════════════════ MAIN LOOP ══════════════════════ */
-function loop(ts) {
-  if(!gameRunning||gamePaused) return;
-
-  globalPulse+=0.05;
-  if(doublePoints && Date.now()>doubleEnd && !doubleNotified){ 
-    doublePoints=false; 
-    doubleNotified = false;  // Reset for next time
-    showTopNotif('⚡', t('doubleDone'), 'double'); 
-}
-
-  drawBG();
-
-  // double-points vignette
-  if(doublePoints){
-    const va=0.12+0.05*Math.sin(globalPulse*3);
-    const vg=ctx.createLinearGradient(0,0,W,0);
-    vg.addColorStop(0,`rgba(255,170,0,${va})`);
-    vg.addColorStop(0.1,'transparent'); vg.addColorStop(0.9,'transparent');
-    vg.addColorStop(1,`rgba(255,170,0,${va})`);
-    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-    const vg2=ctx.createLinearGradient(0,0,0,H);
-    vg2.addColorStop(0,`rgba(255,170,0,${va})`);
-    vg2.addColorStop(0.08,'transparent'); vg2.addColorStop(0.92,'transparent');
-    vg2.addColorStop(1,`rgba(255,170,0,${va})`);
-    ctx.fillStyle=vg2; ctx.fillRect(0,0,W,H);
-  }
-
-  // shake
-  let sx=0,sy=0;
-  if(shakeAmt>0){
-    sx=(Math.random()-.5)*shakeAmt; sy=(Math.random()-.5)*shakeAmt;
-    shakeAmt*=0.9; if(shakeAmt<0.4)shakeAmt=0;
-  }
-  ctx.save(); ctx.translate(sx,sy);
-
-  const tp=Math.sin(globalPulse)*3;
-
-  // Target rings — elegant concentric
-  // Outermost soft pulse ring
-  ctx.beginPath(); ctx.arc(CX,CY,110+tp,0,Math.PI*2);
-  ctx.strokeStyle='rgba(155,89,245,0.12)'; ctx.lineWidth=1.5; ctx.stroke();
-
-  // Good zone
-  ctx.beginPath(); ctx.arc(CX,CY,75+tp,0,Math.PI*2);
-  ctx.strokeStyle='rgba(0,200,232,0.35)'; ctx.lineWidth=1.5;
-  ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]);
-
-  // Perfect zone — gold solid
-  ctx.beginPath(); ctx.arc(CX,CY,35,0,Math.PI*2);
-  ctx.strokeStyle='rgba(212,168,67,0.7)'; ctx.lineWidth=1.5;
-  ctx.shadowBlur=12; ctx.shadowColor='rgba(212,168,67,0.5)';
-  ctx.stroke(); ctx.shadowBlur=0;
-
-  // Center glow
-  const cg=ctx.createRadialGradient(CX,CY,0,CX,CY,60);
-  cg.addColorStop(0,'rgba(212,168,67,0.1)');
-  cg.addColorStop(0.5,'rgba(0,200,232,0.06)');
-  cg.addColorStop(1,'transparent');
-  ctx.beginPath(); ctx.arc(CX,CY,60,0,Math.PI*2);
-  ctx.fillStyle=cg; ctx.fill();
-
-  // Center dot
-  ctx.beginPath(); ctx.arc(CX,CY,3,0,Math.PI*2);
-  ctx.fillStyle=`rgba(212,168,67,${0.5+0.3*Math.sin(globalPulse*2)})`;
-  ctx.shadowBlur=10; ctx.shadowColor='#d4a843'; ctx.fill(); ctx.shadowBlur=0;
-
-  // Spawn
-  const now=Date.now();
-  if(now-lastSpawn>spawnRate){ lastSpawn=now; orbs.push(new Orb()); }
-  const bi=8000+Math.random()*6000;
-  if(bonusOrbs.length===0&&now-lastBonusSpawn>bi){ lastBonusSpawn=now; bonusOrbs.push(new BonusOrb()); }
-
-  // Danger orbs — spawn every 15-25s, chance increases with level
-  const dangerInterval = Math.max(8000, 22000 - level * 1200);
-  if(dangerOrbs.length===0 && now-lastDangerSpawn > dangerInterval && level >= 2){
-    lastDangerSpawn=now; dangerOrbs.push(new DangerOrb());
-  }
-
-  // Draw danger orbs
-  dangerOrbs = dangerOrbs.filter(d => {
-    if (!d) return false;
-    const result = d.update();
-    if (result === 'exploded') {
-      // Apply penalty
-      const pen = Math.min(score, 30);
-      score = Math.max(0, score - pen);
-      scoreEl.textContent = score;
-      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 10;
-      playSound('miss');
-      showFB('-30 💥', 'miss');
-      // Reduced explosion effect to prevent lag
-      if (typeof S === "undefined" || S.particles !== false) {
-        // Limit particles for danger orb explosion
-        const limitedExplode = (x, y, color, type) => {
-          const cnt = type === 'bonus' ? 20 : 12;
-          for (let i = 0; i < cnt; i++) {
-            particles.push(new Particle(x, y, color, type));
-          }
-        };
-        limitedExplode(CX, CY, '#ff4400', 'good');
-      }
-      rings.push(new Ring('#ff4400', 35, 'good'));
-      scoreEl.classList.add('bump');
-      setTimeout(() => scoreEl.classList.remove('bump'), 300);
-      return false;
-    }
-    if (d.active) {
-      d.draw();
-      return true;
-    }
-    return false;
-  });
-
-  // Bonus orbs
-  bonusOrbs=bonusOrbs.filter(bo=>{
-    const r=bo.update();
-    if(r==='expired') return false;
-    if(bo.active){bo.draw();return true;}
-    return false;
-  });
-
-  // Normal orbs
-  orbs=orbs.filter(o=>{
-    const r=o.update();
-    if(r==='missed'){
-      perfectStreak=0; renderStreak();
-      if(shieldActive){
-        shieldLeft--;
-        if(shieldLeft<=0){shieldActive=false;shieldOverlay.classList.remove('active');shieldTimerEl.classList.remove('show');}
-        else shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft;
-      } else {
-        health--; renderHearts(); shakeAmt=typeof S !== "undefined"&&!S.shake?0:11; playSound('miss');
-        showFB('MISS!','miss'); combo=0; comboCont.classList.remove('show');
-        if(health<=0) setTimeout(gameOver,500);
-      }
-      return false;
-    }
-    if(o.active){o.draw();return true;}
-    return false;
-  });
-
-  updateHSBar();
-  // Limit particles to prevent memory issues
-  if(particles.length > 200) particles = particles.slice(-150);
-  particles=particles.filter(p=>{const a=p.update();if(a)p.draw();return a;});
-  rings=rings.filter(r=>{const a=r.update();if(a)r.draw();return a;});
-
-  ctx.restore();
-  requestAnimationFrame(loop);
-}
-
-/* ══════════════════════ INPUT ══════════════════════ */
-canvas.addEventListener('click', checkHit);
-canvas.addEventListener('touchstart', e=>{ e.preventDefault(); checkHit(); }, {passive:false});
-document.addEventListener('keydown', e=>{
-  if(e.code==='Space'){
-    e.preventDefault();
-    if(gameRunning&&!gamePaused) checkHit();
-    else if(startScreen.style.display!=='none') startGame();
-    else if(gameOverScreen.classList.contains('visible')) restartGame();
-  }
-});
-let lte=0;
-document.addEventListener('touchend',e=>{ const n=Date.now(); if(n-lte<=300)e.preventDefault(); lte=n; },false);
-
-
-/* ══════════════════════ MUSIC ENGINE ══════════════════════ */
-let musicNodes = {};
-let musicRunning = false;
-let musicTempo = 120; // BPM, scales with level
-
-function startMusic() {
-  if (typeof S !== 'undefined' && !S.music) return;
-  if (musicRunning) return;
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  musicRunning = true;
-  scheduleBeat();
-}
-
-function stopMusic() {
-  musicRunning = false;
-  if (musicNodes.gainMaster) {
-    try { musicNodes.gainMaster.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5); } catch(e){}
-  }
-}
-
-function updateTempo() {
-  // tempo speeds up per level: 110 + level*8, capped at 200
-  musicTempo = Math.min(200, 110 + level * 8);
-}
-
-let beatCount = 0;
-function scheduleBeat() {
-  if (!musicRunning || !gameRunning) return;
-  // Prevent multiple overlapping schedules
-  if (scheduleBeat.scheduled) return;
-  scheduleBeat.scheduled = true;
-  updateTempo();
-  const interval = 60 / musicTempo; // seconds per beat
-  const t = audioCtx.currentTime;
-
-  // ── Kick drum (every beat) ──
-  (function kick() {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.setValueAtTime(160, t);
-    o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
-    g.gain.setValueAtTime(0.55, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-    o.start(t); o.stop(t + 0.18);
-  })();
-
-  // ── Hi-hat (every half beat) ──
-  for (let i = 0; i < 2; i++) {
-    const ht = t + i * interval * 0.5;
-    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.04, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * (1 - j / d.length);
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    const hg = audioCtx.createGain();
-    const hf = audioCtx.createBiquadFilter();
-    hf.type = 'highpass'; hf.frequency.value = 7000;
-    src.connect(hf); hf.connect(hg); hg.connect(audioCtx.destination);
-    hg.gain.setValueAtTime(i === 0 ? 0.2 : 0.1, ht);
-    hg.gain.exponentialRampToValueAtTime(0.001, ht + 0.04);
-    src.start(ht); src.stop(ht + 0.04);
-  }
-
-  // ── Bass synth (every 2 beats) ──
-  if (beatCount % 2 === 0) {
-    const notes = [55, 55, 82, 73]; // A1 A1 E2 D2
-    const note = notes[(beatCount / 2) % notes.length];
-    const bo = audioCtx.createOscillator();
-    const bg = audioCtx.createGain();
-    const bf = audioCtx.createBiquadFilter();
-    bf.type = 'lowpass'; bf.frequency.value = 300;
-    bo.type = 'sawtooth';
-    bo.connect(bf); bf.connect(bg); bg.connect(audioCtx.destination);
-    bo.frequency.setValueAtTime(note, t);
-    bg.gain.setValueAtTime(0.3, t);
-    bg.gain.exponentialRampToValueAtTime(0.001, t + interval * 1.8);
-    bo.start(t); bo.stop(t + interval * 1.8);
-  }
-
-  // ── Ambient pad (every 4 beats) ──
-  if (beatCount % 4 === 0) {
-    const padFreqs = [220, 277, 330]; // A3 chord
-    padFreqs.forEach((freq, i) => {
-      const po = audioCtx.createOscillator();
-      const pg = audioCtx.createGain();
-      po.type = 'sine';
-      po.connect(pg); pg.connect(audioCtx.destination);
-      po.frequency.setValueAtTime(freq, t);
-      pg.gain.setValueAtTime(0, t);
-      pg.gain.linearRampToValueAtTime(0.06, t + 0.3);
-      pg.gain.linearRampToValueAtTime(0.04, t + interval * 3);
-      pg.gain.linearRampToValueAtTime(0, t + interval * 4);
-      po.start(t); po.stop(t + interval * 4);
-    });
-  }
-
-  beatCount++;
-  setTimeout(() => {
-    scheduleBeat.scheduled = false;
-    scheduleBeat();
-  }, interval * 1000 * 0.98);
-}
-
-/* ══════════════════════ BOOM ANIMATION ══════════════════════ */
-let boomAnimId = null;
-
-function triggerBoom() {
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
-  // Update level number in overlay
-  document.getElementById('boom-lvl-num').textContent = level;
-
-  const ov       = document.getElementById('boomOverlay');
-  const flashEl  = document.getElementById('boom-flash');
-  const textEl   = document.getElementById('boomText');
-  const tagEl    = document.getElementById('boom-level-tag');
-  const bc       = document.getElementById('boom-canvas');
-  bc.width  = ov.offsetWidth  || 400;
-  bc.height = ov.offsetHeight || 700;
-  const bctx = bc.getContext('2d');
-  const bCX = bc.width / 2, bCY = bc.height / 2;
-
-  // Cancel previous animation if any
-  if (boomAnimId) cancelAnimationFrame(boomAnimId);
-
-  // Particles for boom canvas
-  const boomParts = [];
-  const NUM = 120;
-  for (let i = 0; i < NUM; i++) {
-    const angle = (i / NUM) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
-    const spd   = 4 + Math.random() * 9;
-    const colors = ['#ffd700','#ffaa00','#ff6600','#ff3300','#ffffff','#ffe066','#ffcc33'];
-    boomParts.push({
-      x: bCX, y: bCY,
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd,
-      life: 1,
-      decay: 0.012 + Math.random() * 0.018,
-      size: 3 + Math.random() * 7,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      trail: []
-    });
-  }
-
-  // Ring waves
-  const boomRings = [
-    { r: 0, maxR: bc.width * 0.7, speed: 14, alpha: 1, color: '#ffd700', lw: 4 },
-    { r: 0, maxR: bc.width * 0.55, speed: 10, alpha: 0.8, color: '#ff8800', lw: 3 },
-    { r: 0, maxR: bc.width * 0.4,  speed: 7,  alpha: 0.6, color: '#ffffff', lw: 2 },
-  ];
-
-  let boomT = 0; // 0→1 progress
-
-  // Reset element states
-  ov.style.opacity = '1';
-  textEl.style.opacity = '0';
-  textEl.style.transform = 'scale(0.2)';
-  textEl.style.transition = 'none';
-  textEl.style.textShadow = '0 0 20px #fff, 0 0 60px #ffd700, 0 0 120px #ffd700';
-  tagEl.style.opacity = '0';
-  tagEl.style.transform = 'translateY(10px)';
-  tagEl.style.transition = 'none';
-  flashEl.style.background = 'radial-gradient(ellipse at center, rgba(255,240,180,0.95) 0%, rgba(255,180,0,0.5) 35%, transparent 70%)';
-  flashEl.style.opacity = '1';
-  flashEl.style.transition = 'none';
-
-  // Start flash fade immediately
-  requestAnimationFrame(() => {
-    flashEl.style.transition = 'opacity 0.35s ease-out';
-    flashEl.style.opacity = '0';
-  });
-
-  // Text pop in at t=80ms
-  setTimeout(() => {
-    textEl.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease-out';
-    textEl.style.transform = 'scale(1.15)';
-    textEl.style.opacity = '1';
-    setTimeout(() => {
-      textEl.style.transition = 'transform 0.2s ease-in-out';
-      textEl.style.transform = 'scale(1)';
-    }, 350);
-  }, 80);
-
-  // Level tag slides in at t=300ms
-  setTimeout(() => {
-    tagEl.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
-    tagEl.style.opacity = '1';
-    tagEl.style.transform = 'translateY(0)';
-  }, 300);
-
-  // Text shake
-  setTimeout(() => {
-    textEl.style.transition = 'transform 0.08s ease-in-out';
-    let shakes = 0;
-    const shakeInterval = setInterval(() => {
-      const sx = (Math.random()-0.5)*12;
-      const sy = (Math.random()-0.5)*6;
-      textEl.style.transform = `scale(1) translate(${sx}px,${sy}px)`;
-      if (++shakes > 5) {
-        clearInterval(shakeInterval);
-        textEl.style.transform = 'scale(1) translate(0,0)';
-      }
-    }, 80);
-  }, 400);
-
-  // Fade out everything at t=2200ms
-  setTimeout(() => {
-    ov.style.transition = 'opacity 0.5s ease-in';
-    ov.style.opacity = '0';
-    setTimeout(() => {
-      ov.style.transition = '';
-      ov.style.opacity = '0';
-      bctx.clearRect(0,0,bc.width,bc.height);
-      if (boomAnimId) cancelAnimationFrame(boomAnimId);
-    }, 520);
-  }, 2200);
-
-  // Particle animation loop
-  const startTime = performance.now();
-  function boomLoop(now) {
-    boomT = Math.min(1, (now - startTime) / 2200);
-    bctx.clearRect(0,0,bc.width,bc.height);
-
-    // Draw rings
-    boomRings.forEach(ring => {
-      if (ring.r < ring.maxR) {
-        ring.r += ring.speed;
-        ring.alpha = Math.max(0, 1 - ring.r / ring.maxR);
-        bctx.beginPath();
-        bctx.arc(bCX, bCY, ring.r, 0, Math.PI*2);
-        bctx.strokeStyle = ring.color;
-        bctx.globalAlpha = ring.alpha * 0.8;
-        bctx.lineWidth = ring.lw;
-        bctx.shadowBlur = 20;
-        bctx.shadowColor = ring.color;
-        bctx.stroke();
-        bctx.shadowBlur = 0;
-        bctx.globalAlpha = 1;
-      }
-    });
-
-    // Draw particles
-    boomParts.forEach(p => {
-      p.trail.push({ x: p.x, y: p.y, life: p.life });
-      if (p.trail.length > 6) p.trail.shift();
-
-      // Trail
-      p.trail.forEach((tr, ti) => {
-        const ta = (ti / p.trail.length) * p.life * 0.4;
-        bctx.beginPath();
-        bctx.arc(tr.x, tr.y, p.size * (ti/p.trail.length) * 0.6, 0, Math.PI*2);
-        bctx.fillStyle = p.color;
-        bctx.globalAlpha = ta;
-        bctx.fill();
-      });
-      bctx.globalAlpha = 1;
-
-      // Main dot
-      if (p.life > 0) {
-        const g = bctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
-        g.addColorStop(0,'#ffffff');
-        g.addColorStop(0.3, p.color);
-        g.addColorStop(1,'transparent');
-        bctx.beginPath();
-        bctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        bctx.fillStyle = g;
-        bctx.globalAlpha = p.life;
-        bctx.shadowBlur = 12;
-        bctx.shadowColor = p.color;
-        bctx.fill();
-        bctx.shadowBlur = 0;
-        bctx.globalAlpha = 1;
-
-        p.x += p.vx; p.y += p.vy;
-        p.vx *= 0.96; p.vy *= 0.96;
-        p.vy += 0.08; // slight gravity
-        p.life -= p.decay;
-        p.size *= 0.995;
-      }
-    });
-
-    if (boomT < 1) boomAnimId = requestAnimationFrame(boomLoop);
-  }
-  boomAnimId = requestAnimationFrame(boomLoop);
-
-  // ── BOOM sound ──
-  const t = audioCtx.currentTime;
-  // Explosion noise
-  const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.7, audioCtx.sampleRate);
-  const dArr = buf.getChannelData(0);
-  for (let i = 0; i < dArr.length; i++) dArr[i] = (Math.random()*2-1) * Math.pow(1 - i/dArr.length, 1.5);
-  const src = audioCtx.createBufferSource();
-  src.buffer = buf;
-  const bGain = audioCtx.createGain();
-  const bFilt = audioCtx.createBiquadFilter();
-  bFilt.type = 'lowpass'; bFilt.frequency.value = 220;
-  src.connect(bFilt); bFilt.connect(bGain); bGain.connect(audioCtx.destination);
-  bGain.gain.setValueAtTime(1.4, t);
-  bGain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
-  src.start(t); src.stop(t + 0.7);
-
-  // Rising whoosh
-  const wo = audioCtx.createOscillator();
-  const wGain = audioCtx.createGain();
-  wo.connect(wGain); wGain.connect(audioCtx.destination);
-  wo.frequency.setValueAtTime(60, t);
-  wo.frequency.exponentialRampToValueAtTime(1400, t + 0.55);
-  wGain.gain.setValueAtTime(0.5, t);
-  wGain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
-  wo.start(t); wo.stop(t + 0.55);
-
-  // High sparkle
-  const so = audioCtx.createOscillator();
-  const sGain = audioCtx.createGain();
-  so.connect(sGain); sGain.connect(audioCtx.destination);
-  so.frequency.setValueAtTime(1800, t + 0.1);
-  so.frequency.exponentialRampToValueAtTime(3000, t + 0.4);
-  sGain.gain.setValueAtTime(0.2, t + 0.1);
-  sGain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-  so.start(t + 0.1); so.stop(t + 0.45);
-}
-
 /* ══════════════════════ DANGER ORB ══════════════════════ */
-let dangerOrbs = [];
-let lastDangerSpawn = 0;
-
 class DangerOrb {
   constructor() {
     const angle = Math.random() * Math.PI * 2;
@@ -3400,7 +2627,818 @@ class DangerOrb {
   }
 }
 
-/* ══════════════════════ LEADERBOARD (shared) ══════════════════════ */
+/* ══════════════════════ PARTICLE / RING ══════════════════════ */
+class Particle {
+  constructor(x,y,color,type='normal'){
+    this.x=x; this.y=y;
+    const a=Math.random()*Math.PI*2;
+    const sp=type==='bonus'?Math.random()*9+4:type==='perfect'?Math.random()*6+3:Math.random()*4+2;
+    this.vx=Math.cos(a)*sp; this.vy=Math.sin(a)*sp;
+    this.life=1;
+    this.decay=type==='perfect'?Math.random()*.025+.015:Math.random()*.02+.01;
+    this.color=color;
+    this.size=type==='bonus'?Math.random()*7+3:type==='perfect'?Math.random()*5+3:Math.random()*4+2;
+  }
+  update(){ this.x+=this.vx; this.y+=this.vy; this.vx*=.97; this.vy*=.97; this.life-=this.decay; return this.life>0; }
+  draw(){
+    const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size);
+    g.addColorStop(0,this.color); g.addColorStop(1,'transparent');
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle=g; ctx.globalAlpha=this.life; ctx.fill(); ctx.globalAlpha=1;
+  }
+}
+
+class Ring {
+  constructor(color,radius,type='normal'){
+    this.r=radius; this.alpha=1;
+    this.decay=type==='bonus'?.014:type==='perfect'?.018:.022;
+    this.color=color;
+    this.lw=type==='bonus'?5:type==='perfect'?4:3;
+    this.type=type;
+  }
+  update(){ this.r+=this.type==='bonus'?4.5:this.type==='perfect'?3.5:2.8; this.alpha-=this.decay; this.lw*=.96; return this.alpha>0; }
+  draw(){
+    ctx.beginPath(); ctx.arc(CX,CY,this.r,0,Math.PI*2);
+    ctx.strokeStyle=this.color; ctx.globalAlpha=this.alpha*.7;
+    ctx.lineWidth=this.lw;
+    ctx.shadowBlur=this.type==='bonus'?45:this.type==='perfect'?30:20;
+    ctx.shadowColor=this.color;
+    ctx.stroke(); ctx.shadowBlur=0; ctx.globalAlpha=1;
+  }
+}
+
+function explode(x,y,color,type='normal'){
+  if(typeof S !== 'undefined' && !S.particles) return;
+  const cnt=type==='bonus'?45:type==='perfect'?28:16;
+  for(let i=0;i<cnt;i++) particles.push(new Particle(x,y,color,type));
+}
+
+/* ══════════════════════ PROGRESS ══════════════════════ */
+function updateProgress() {
+  progressFill.style.width = ((score%100)/100*100)+'%';
+}
+
+/* ══════════════════════ LEVEL UP ══════════════════════ */
+function checkLevel() {
+  const nl = Math.floor(score/100)+1;
+  if (nl > level) {
+    level=nl; levelNumEl.textContent=level;
+    speed+=0.25; spawnRate=Math.max(700,spawnRate-120); orbRadius=Math.max(14,orbRadius-0.8);
+    let bonus='';
+    if(level>=LEVEL_HEART_AT&&!levelHeartGiven){ levelHeartGiven=true; gainHeart(); bonus='🎁 '+t('lvl10Heart'); showTopNotif('💚', t('lvl10Heart'), 'heart'); }
+    document.getElementById('levelUpBonus').textContent=bonus;
+    playSound('levelup');
+    gamePaused=true;
+    document.getElementById('pauseBtn').classList.remove('visible');
+    document.getElementById('newLevel').textContent=level;
+    levelUpScreen.style.cssText='';
+    levelUpScreen.classList.add('visible');
+    setTimeout(triggerBoom, 80);
+  }
+}
+
+function continueGame() {
+  levelUpScreen.classList.remove('visible');
+  levelUpScreen.style.cssText = '';
+  document.getElementById('pauseBtn').classList.add('visible');
+  document.getElementById('pauseBtn').textContent = '⏸';
+  gamePaused = false;
+  lastSpawn = Date.now();
+  lastBonusSpawn = Date.now();
+  lastDangerSpawn = Date.now();
+  requestAnimationFrame(loop);
+}
+
+/* ══════════════════════ GAME FLOW ══════════════════════ */
+function setDifficulty(d, el) {
+  difficulty=d;
+  document.querySelectorAll('.diffBtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startGame() {
+  document.getElementById('helpBtn').style.display='none';
+  document.getElementById('pauseBtn').classList.add('visible');
+  document.getElementById('pauseBtn').textContent = '⏸';
+  startScreen.style.display='none';
+  gameOverScreen.classList.remove('visible');
+  gameOverScreen.style.cssText='';
+  levelUpScreen.classList.remove('visible');
+  levelUpScreen.style.cssText='';
+
+  gameRunning=true; gamePaused=false;
+  score=0; level=1; combo=0; maxCombo=0;
+  perfectStreak=0; shieldActive=false; shieldLeft=0;
+  doublePoints=false; doubleEnd=0; doubleNotified=false; levelHeartGiven=false;
+
+  const d=DIFF[difficulty];
+  health=d.hp; maxHealth=d.hp;
+  speed=d.speed; spawnRate=d.rate; orbRadius=d.orb;
+
+  orbs=[]; bonusOrbs=[]; dangerOrbs=[]; particles=[]; rings=[];
+  lastDangerSpawn=Date.now();
+  totalHits=0; totalAttempts=0;
+  shakeAmt=0; globalPulse=0;
+
+  shieldOverlay.classList.remove('active');
+  shieldTimerEl.classList.remove('show');
+
+  scoreEl.textContent='0';
+  levelNumEl.textContent='1';
+  progressFill.style.width='0%';
+  renderHearts(); renderStreak();
+  comboCont.classList.remove('show');
+  instructions.style.display='block'; instructions.textContent=t('tapHint');
+  setTimeout(()=>{ instructions.style.display='none'; },6000);
+
+  lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
+  beatCount = 0; startMusic();
+  loadLeaderboard();
+  requestAnimationFrame(loop);
+}
+
+function restartGame() {
+  // Hide game over screen completely
+  gameOverScreen.classList.remove('visible');
+  gameOverScreen.style.cssText = '';
+
+  document.getElementById('newRecordBadge').classList.remove('show');
+  document.getElementById('newRecordBadge').style.display = 'none';
+  document.getElementById('nameInputWrap').classList.remove('show');
+  document.getElementById('nameInputWrap').style.display = 'none';
+  document.getElementById('playerNameInput').value = '';
+  document.getElementById('submitScore').textContent = t('submitScore');
+  document.getElementById('submitScore').disabled = false;
+
+  // Stop any existing loop
+  gameRunning = false;
+  gamePaused = false;
+  stopMusic();
+
+  // Small delay so the previous loop definitely stops
+  setTimeout(() => {
+    gameRunning = true;
+    gamePaused = false;
+    score = 0; level = 1; combo = 0; maxCombo = 0;
+    perfectStreak = 0; shieldActive = false; shieldLeft = 0;
+    doublePoints = false; doubleEnd = 0; doubleNotified = false; levelHeartGiven = false;
+
+    const d = DIFF[difficulty];
+    health = d.hp; maxHealth = d.hp;
+    speed = d.speed; spawnRate = d.rate; orbRadius = d.orb;
+
+    orbs = []; bonusOrbs = []; dangerOrbs = []; particles = []; rings = [];
+    lastSpawn = Date.now(); lastBonusSpawn = Date.now(); lastDangerSpawn = Date.now();
+    totalHits = 0; totalAttempts = 0;
+    shakeAmt = 0; globalPulse = 0;
+
+    shieldOverlay.classList.remove('active');
+    shieldTimerEl.classList.remove('show');
+
+    scoreEl.textContent = '0';
+    levelNumEl.textContent = '1';
+    progressFill.style.width = '0%';
+    renderHearts(); renderStreak();
+    comboCont.classList.remove('show');
+
+    instructions.style.display = 'block';
+    setTimeout(() => { instructions.style.display = 'none'; }, 6000);
+
+    // Show pause button
+    document.getElementById('pauseBtn').classList.add('visible');
+
+    beatCount = 0;
+    startMusic();
+    requestAnimationFrame(loop);
+  }, 50);
+}
+
+/* ══ PAUSE SYSTEM ══ */
+function pauseGame() {
+  if (!gameRunning || gamePaused) return;
+  gamePaused = true;
+  stopMusic();
+  document.getElementById('pauseModal').classList.add('show');
+  document.getElementById('pauseBtn').textContent = '▶';
+}
+
+function resumeGame() {
+  if (!gameRunning || !gamePaused) return;
+  document.getElementById('pauseModal').classList.remove('show');
+  document.getElementById('pauseBtn').textContent = '⏸';
+  gamePaused = false;
+  lastSpawn = Date.now();
+  lastBonusSpawn = Date.now();
+  lastDangerSpawn = Date.now();
+  if (S.music) startMusic();
+  requestAnimationFrame(loop);
+}
+
+function exitToMenu() {
+  document.getElementById('pauseModal').classList.remove('show');
+  showMenu();
+}
+
+function showMenu() {
+  document.getElementById('helpBtn').style.display='flex';
+  document.getElementById('pauseBtn').classList.remove('visible');
+  document.getElementById('pauseBtn').textContent = '⏸';
+  document.getElementById('pauseModal').classList.remove('show');
+  stopMusic();
+  gameRunning=false; gamePaused=false;
+  startScreen.style.display='flex';
+  gameOverScreen.classList.remove('visible');
+  gameOverScreen.style.cssText = '';
+  levelUpScreen.classList.remove('visible');
+  levelUpScreen.style.cssText = '';
+  document.getElementById('newRecordBadge').classList.remove('show');
+  document.getElementById('newRecordBadge').style.display = 'none';
+  document.getElementById('nameInputWrap').classList.remove('show');
+  document.getElementById('nameInputWrap').style.display = 'none';
+  loadLeaderboard();
+}
+
+function gameOver() {
+  gameRunning=false;
+  gamePaused=false;
+  stopMusic();
+  document.getElementById('pauseBtn').classList.remove('visible');
+  document.getElementById('pauseModal').classList.remove('show');
+  checkNewRecord();
+  const acc = totalAttempts>0 ? Math.round(totalHits/totalAttempts*100) : 0;
+  document.getElementById('finalScore').textContent=score;
+  document.getElementById('maxCombo').textContent=maxCombo;
+  document.getElementById('finalLevel').textContent=level;
+  document.getElementById('accuracy').textContent=acc+'%';
+  gameOverScreen.style.cssText = '';
+  gameOverScreen.classList.add('visible');
+}
+
+/* ══════════════════════ HIT CHECK ══════════════════════ */
+function checkHit() {
+  if(!gameRunning||gamePaused) return;
+
+  // Danger orb check first
+  for (let i = dangerOrbs.length - 1; i >= 0; i--) {
+    const d = dangerOrbs[i];
+    if (!d || !d.active) continue;
+    const dist = Math.hypot(d.x - CX, d.y - CY);
+    if (dist < 45) {
+      dangerOrbs.splice(i, 1);
+      if (typeof S === "undefined" || S.particles !== false) {
+        for (let k = 0; k < 15; k++) {
+          particles.push(new Particle(d.x, d.y, '#ff4400', 'good'));
+        }
+      }
+      rings.push(new Ring('#ff4400', 35, 'good'));
+      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 6;
+      playSound('perfect');
+      showFB('💥 DESTROYED!', 'perfect');
+      score += 50;
+      scoreEl.textContent = score;
+      return;
+    }
+  }
+
+  // Bonus orb check
+  for(let i=bonusOrbs.length-1;i>=0;i--){
+    const bo=bonusOrbs[i];
+    if(!bo || !bo.active) continue;
+    const dist=Math.hypot(bo.x-CX,bo.y-CY);
+    if(dist<100){
+      bonusOrbs.splice(i,1);
+      if(bo.powerup && typeof bo.powerup.apply === 'function') {
+        bo.powerup.apply();
+      }
+      explode(bo.x,bo.y,'#d4a843','bonus');
+      rings.push(new Ring('#f5cc6a',40,'bonus'));
+      rings.push(new Ring('#d4a843',40,'bonus'));
+      rings.push(new Ring('#fff8e0',40,'bonus'));
+      shakeAmt=typeof S !== "undefined"&&!S.shake?0:5; playSound('bonus');
+      showFB('⭐ BONUS!','bonus');
+      showToast(bo.powerup);
+      return;
+    }
+  }
+
+  totalAttempts++;
+  let closest=null, closestD=Infinity;
+  orbs.forEach(o=>{ const d=Math.hypot(o.x-CX,o.y-CY); if(d<closestD){closestD=d;closest=o;} });
+  if(!closest) return;
+
+  const mult=doublePoints?2:1;
+
+  if(closestD<35){
+    closest.active=false; totalHits++;
+    perfectStreak++;
+    const pts=25*(1+Math.floor(combo/10))*mult;
+    score+=pts; scoreEl.textContent=score;
+    combo++; if(combo>maxCombo)maxCombo=combo;
+    if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
+    if(perfectStreak>=STREAK_NEED){ perfectStreak=0; gainHeart(); showTopNotif('❤️', t('streakHeart'), 'heart'); }
+    renderStreak();
+    explode(closest.x,closest.y,closest.col.main,'perfect');
+    rings.push(new Ring(closest.col.main,35,'perfect'));
+    rings.push(new Ring('#d4a843',35,'perfect'));
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:4; playSound('perfect');
+    showFB(mult===2?'PERFECT ×2':'PERFECT!','perfect');
+    scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
+    updateProgress(); checkLevel();
+
+  } else if(closestD<75){
+    closest.active=false; totalHits++;
+    perfectStreak=0; renderStreak();
+    const pts=12*(1+Math.floor(combo/10))*mult;
+    score+=pts; scoreEl.textContent=score;
+    combo++; if(combo>maxCombo)maxCombo=combo;
+    if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
+    explode(closest.x,closest.y,closest.col.main,'good');
+    rings.push(new Ring(closest.col.main,75,'good'));
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:2; playSound('good');
+    showFB(mult===2?'GOOD ×2':'GOOD!','good');
+    updateProgress(); checkLevel();
+
+  } else {
+    combo=0; perfectStreak=0;
+    comboCont.classList.remove('show'); renderStreak();
+    if(closestD>100){
+      if(shieldActive){
+        shieldLeft--;
+        shakeAmt=typeof S !== "undefined"&&!S.shake?0:3;
+        if(shieldLeft<=0){ shieldActive=false; shieldOverlay.classList.remove('active'); shieldTimerEl.classList.remove('show'); showTopNotif('🛡', t('shieldDone'), 'info'); }
+        else{ shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft; showFB('🛡 محمي!','good'); showTopNotif('🛡', t('shieldHit')+' ×'+shieldLeft, 'shield'); }
+        playSound('miss');
+      } else {
+        health--; renderHearts();
+        shakeAmt=typeof S !== "undefined"&&!S.shake?0:7; playSound('miss');
+        showFB('MISS!','miss');
+        if(health<=0){ setTimeout(gameOver,500); return; }
+      }
+    }
+  }
+}
+
+/* ══════════════════════ MAIN LOOP ══════════════════════ */
+function loop(ts) {
+  if(!gameRunning||gamePaused) return;
+
+  globalPulse+=0.05;
+
+  /* FIX 4: Correct doubleNotified logic — notify once when time expires */
+  if(doublePoints && Date.now() > doubleEnd) {
+    doublePoints = false;
+    if(!doubleNotified) {
+      doubleNotified = true;
+      showTopNotif('⚡', t('doubleDone'), 'double');
+    }
+  }
+
+  drawBG();
+
+  if(doublePoints){
+    const va=0.12+0.05*Math.sin(globalPulse*3);
+    const vg=ctx.createLinearGradient(0,0,W,0);
+    vg.addColorStop(0,`rgba(255,170,0,${va})`);
+    vg.addColorStop(0.1,'transparent'); vg.addColorStop(0.9,'transparent');
+    vg.addColorStop(1,`rgba(255,170,0,${va})`);
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+    const vg2=ctx.createLinearGradient(0,0,0,H);
+    vg2.addColorStop(0,`rgba(255,170,0,${va})`);
+    vg2.addColorStop(0.08,'transparent'); vg2.addColorStop(0.92,'transparent');
+    vg2.addColorStop(1,`rgba(255,170,0,${va})`);
+    ctx.fillStyle=vg2; ctx.fillRect(0,0,W,H);
+  }
+
+  let sx=0,sy=0;
+  if(shakeAmt>0){
+    sx=(Math.random()-.5)*shakeAmt; sy=(Math.random()-.5)*shakeAmt;
+    shakeAmt*=0.9; if(shakeAmt<0.4)shakeAmt=0;
+  }
+  ctx.save(); ctx.translate(sx,sy);
+
+  const tp=Math.sin(globalPulse)*3;
+
+  ctx.beginPath(); ctx.arc(CX,CY,110+tp,0,Math.PI*2);
+  ctx.strokeStyle='rgba(155,89,245,0.12)'; ctx.lineWidth=1.5; ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(CX,CY,75+tp,0,Math.PI*2);
+  ctx.strokeStyle='rgba(0,200,232,0.35)'; ctx.lineWidth=1.5;
+  ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]);
+
+  ctx.beginPath(); ctx.arc(CX,CY,35,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,168,67,0.7)'; ctx.lineWidth=1.5;
+  ctx.shadowBlur=12; ctx.shadowColor='rgba(212,168,67,0.5)';
+  ctx.stroke(); ctx.shadowBlur=0;
+
+  const cg=ctx.createRadialGradient(CX,CY,0,CX,CY,60);
+  cg.addColorStop(0,'rgba(212,168,67,0.1)');
+  cg.addColorStop(0.5,'rgba(0,200,232,0.06)');
+  cg.addColorStop(1,'transparent');
+  ctx.beginPath(); ctx.arc(CX,CY,60,0,Math.PI*2);
+  ctx.fillStyle=cg; ctx.fill();
+
+  ctx.beginPath(); ctx.arc(CX,CY,3,0,Math.PI*2);
+  ctx.fillStyle=`rgba(212,168,67,${0.5+0.3*Math.sin(globalPulse*2)})`;
+  ctx.shadowBlur=10; ctx.shadowColor='#d4a843'; ctx.fill(); ctx.shadowBlur=0;
+
+  const now=Date.now();
+  if(now-lastSpawn>spawnRate){ lastSpawn=now; orbs.push(new Orb()); }
+  const bi=8000+Math.random()*6000;
+  if(bonusOrbs.length===0&&now-lastBonusSpawn>bi){ lastBonusSpawn=now; bonusOrbs.push(new BonusOrb()); }
+
+  const dangerInterval = Math.max(8000, 22000 - level * 1200);
+  if(dangerOrbs.length===0 && now-lastDangerSpawn > dangerInterval && level >= 2){
+    lastDangerSpawn=now; dangerOrbs.push(new DangerOrb());
+  }
+
+  dangerOrbs = dangerOrbs.filter(d => {
+    if (!d) return false;
+    const result = d.update();
+    if (result === 'exploded') {
+      const pen = Math.min(score, 30);
+      score = Math.max(0, score - pen);
+      scoreEl.textContent = score;
+      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 10;
+      playSound('miss');
+      showFB('-30 💥', 'miss');
+      if (typeof S === "undefined" || S.particles !== false) {
+        for (let i = 0; i < 12; i++) {
+          particles.push(new Particle(CX, CY, '#ff4400', 'good'));
+        }
+      }
+      rings.push(new Ring('#ff4400', 35, 'good'));
+      scoreEl.classList.add('bump');
+      setTimeout(() => scoreEl.classList.remove('bump'), 300);
+      return false;
+    }
+    if (d.active) { d.draw(); return true; }
+    return false;
+  });
+
+  bonusOrbs=bonusOrbs.filter(bo=>{
+    const r=bo.update();
+    if(r==='expired') return false;
+    if(bo.active){bo.draw();return true;}
+    return false;
+  });
+
+  orbs=orbs.filter(o=>{
+    const r=o.update();
+    if(r==='missed'){
+      perfectStreak=0; renderStreak();
+      if(shieldActive){
+        shieldLeft--;
+        if(shieldLeft<=0){shieldActive=false;shieldOverlay.classList.remove('active');shieldTimerEl.classList.remove('show');}
+        else shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft;
+      } else {
+        health--; renderHearts(); shakeAmt=typeof S !== "undefined"&&!S.shake?0:11; playSound('miss');
+        showFB('MISS!','miss'); combo=0; comboCont.classList.remove('show');
+        if(health<=0) setTimeout(gameOver,500);
+      }
+      return false;
+    }
+    if(o.active){o.draw();return true;}
+    return false;
+  });
+
+  updateHSBar();
+  if(particles.length > 200) particles = particles.slice(-150);
+  particles=particles.filter(p=>{const a=p.update();if(a)p.draw();return a;});
+  rings=rings.filter(r=>{const a=r.update();if(a)r.draw();return a;});
+
+  ctx.restore();
+  requestAnimationFrame(loop);
+}
+
+/* ══════════════════════ INPUT ══════════════════════ */
+canvas.addEventListener('click', checkHit);
+canvas.addEventListener('touchstart', e=>{ e.preventDefault(); checkHit(); }, {passive:false});
+document.addEventListener('keydown', e=>{
+  if(e.code==='Space'){
+    e.preventDefault();
+    if(gameRunning && !gamePaused) checkHit();
+    else if(gameRunning && gamePaused) resumeGame();
+    else if(startScreen.style.display!=='none') startGame();
+    else if(gameOverScreen.classList.contains('visible')) restartGame();
+  }
+  if(e.code==='Escape'){
+    e.preventDefault();
+    if(gameRunning && !gamePaused) pauseGame();
+    else if(gameRunning && gamePaused) resumeGame();
+  }
+});
+let lte=0;
+document.addEventListener('touchend',e=>{ const n=Date.now(); if(n-lte<=300)e.preventDefault(); lte=n; },false);
+
+/* ══════════════════════ MUSIC ENGINE ══════════════════════ */
+let musicRunning = false;
+let musicTempo = 120;
+
+/* FIX 2: beatCount as proper module-level variable (single declaration) */
+let beatCount = 0;
+
+/* FIX 2: scheduleBeatActive flag as module-level var, not function property */
+let scheduleBeatActive = false;
+
+function startMusic() {
+  if (typeof S !== 'undefined' && !S.music) return;
+  if (musicRunning) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  musicRunning = true;
+  scheduleBeatActive = false;
+  scheduleBeat();
+}
+
+function stopMusic() {
+  musicRunning = false;
+  scheduleBeatActive = false;
+}
+
+function updateTempo() {
+  musicTempo = Math.min(200, 110 + level * 8);
+}
+
+function scheduleBeat() {
+  if (!musicRunning || !gameRunning) { scheduleBeatActive = false; return; }
+  /* FIX 2: Use module-level flag instead of function property */
+  if (scheduleBeatActive) return;
+  scheduleBeatActive = true;
+
+  updateTempo();
+  const interval = 60 / musicTempo;
+  const t2 = audioCtx.currentTime;
+
+  // Kick
+  (function kick() {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.setValueAtTime(160, t2);
+    o.frequency.exponentialRampToValueAtTime(40, t2 + 0.12);
+    g.gain.setValueAtTime(0.55, t2);
+    g.gain.exponentialRampToValueAtTime(0.001, t2 + 0.18);
+    o.start(t2); o.stop(t2 + 0.18);
+  })();
+
+  // Hi-hat
+  for (let i = 0; i < 2; i++) {
+    const ht = t2 + i * interval * 0.5;
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.04, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * (1 - j / d.length);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hg = audioCtx.createGain();
+    const hf = audioCtx.createBiquadFilter();
+    hf.type = 'highpass'; hf.frequency.value = 7000;
+    src.connect(hf); hf.connect(hg); hg.connect(audioCtx.destination);
+    hg.gain.setValueAtTime(i === 0 ? 0.2 : 0.1, ht);
+    hg.gain.exponentialRampToValueAtTime(0.001, ht + 0.04);
+    src.start(ht); src.stop(ht + 0.04);
+  }
+
+  // Bass
+  if (beatCount % 2 === 0) {
+    const notes = [55, 55, 82, 73];
+    const note = notes[(beatCount / 2) % notes.length];
+    const bo = audioCtx.createOscillator();
+    const bg = audioCtx.createGain();
+    const bf = audioCtx.createBiquadFilter();
+    bf.type = 'lowpass'; bf.frequency.value = 300;
+    bo.type = 'sawtooth';
+    bo.connect(bf); bf.connect(bg); bg.connect(audioCtx.destination);
+    bo.frequency.setValueAtTime(note, t2);
+    bg.gain.setValueAtTime(0.3, t2);
+    bg.gain.exponentialRampToValueAtTime(0.001, t2 + interval * 1.8);
+    bo.start(t2); bo.stop(t2 + interval * 1.8);
+  }
+
+  // Ambient pad
+  if (beatCount % 4 === 0) {
+    const padFreqs = [220, 277, 330];
+    padFreqs.forEach((freq) => {
+      const po = audioCtx.createOscillator();
+      const pg = audioCtx.createGain();
+      po.type = 'sine';
+      po.connect(pg); pg.connect(audioCtx.destination);
+      po.frequency.setValueAtTime(freq, t2);
+      pg.gain.setValueAtTime(0, t2);
+      pg.gain.linearRampToValueAtTime(0.06, t2 + 0.3);
+      pg.gain.linearRampToValueAtTime(0.04, t2 + interval * 3);
+      pg.gain.linearRampToValueAtTime(0, t2 + interval * 4);
+      po.start(t2); po.stop(t2 + interval * 4);
+    });
+  }
+
+  beatCount++;
+  setTimeout(() => {
+    scheduleBeatActive = false;
+    scheduleBeat();
+  }, interval * 1000 * 0.98);
+}
+
+/* ══════════════════════ BOOM ANIMATION ══════════════════════ */
+let boomAnimId = null;
+
+function triggerBoom() {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  document.getElementById('boom-lvl-num').textContent = level;
+
+  const ov      = document.getElementById('boomOverlay');
+  const flashEl = document.getElementById('boom-flash');
+  const textEl  = document.getElementById('boomText');
+  const tagEl   = document.getElementById('boom-level-tag');
+  const bc      = document.getElementById('boom-canvas');
+  bc.width  = ov.offsetWidth  || 400;
+  bc.height = ov.offsetHeight || 700;
+  const bctx = bc.getContext('2d');
+  const bCX = bc.width / 2, bCY = bc.height / 2;
+
+  if (boomAnimId) cancelAnimationFrame(boomAnimId);
+
+  const boomParts = [];
+  const NUM = 120;
+  for (let i = 0; i < NUM; i++) {
+    const angle = (i / NUM) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+    const spd   = 4 + Math.random() * 9;
+    const colors = ['#ffd700','#ffaa00','#ff6600','#ff3300','#ffffff','#ffe066','#ffcc33'];
+    boomParts.push({
+      x: bCX, y: bCY,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      life: 1,
+      decay: 0.012 + Math.random() * 0.018,
+      size: 3 + Math.random() * 7,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      trail: []
+    });
+  }
+
+  const boomRings = [
+    { r: 0, maxR: bc.width * 0.7, speed: 14, alpha: 1, color: '#ffd700', lw: 4 },
+    { r: 0, maxR: bc.width * 0.55, speed: 10, alpha: 0.8, color: '#ff8800', lw: 3 },
+    { r: 0, maxR: bc.width * 0.4,  speed: 7,  alpha: 0.6, color: '#ffffff', lw: 2 },
+  ];
+
+  let boomT = 0;
+
+  ov.style.opacity = '1';
+  textEl.style.opacity = '0';
+  textEl.style.transform = 'scale(0.2)';
+  textEl.style.transition = 'none';
+  textEl.style.textShadow = '0 0 20px #fff, 0 0 60px #ffd700, 0 0 120px #ffd700';
+  tagEl.style.opacity = '0';
+  tagEl.style.transform = 'translateY(10px)';
+  tagEl.style.transition = 'none';
+  flashEl.style.background = 'radial-gradient(ellipse at center, rgba(255,240,180,0.95) 0%, rgba(255,180,0,0.5) 35%, transparent 70%)';
+  flashEl.style.opacity = '1';
+  flashEl.style.transition = 'none';
+
+  requestAnimationFrame(() => {
+    flashEl.style.transition = 'opacity 0.35s ease-out';
+    flashEl.style.opacity = '0';
+  });
+
+  setTimeout(() => {
+    textEl.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease-out';
+    textEl.style.transform = 'scale(1.15)';
+    textEl.style.opacity = '1';
+    setTimeout(() => {
+      textEl.style.transition = 'transform 0.2s ease-in-out';
+      textEl.style.transform = 'scale(1)';
+    }, 350);
+  }, 80);
+
+  setTimeout(() => {
+    tagEl.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+    tagEl.style.opacity = '1';
+    tagEl.style.transform = 'translateY(0)';
+  }, 300);
+
+  setTimeout(() => {
+    textEl.style.transition = 'transform 0.08s ease-in-out';
+    let shakes = 0;
+    const shakeInterval = setInterval(() => {
+      const sx = (Math.random()-0.5)*12;
+      const sy = (Math.random()-0.5)*6;
+      textEl.style.transform = `scale(1) translate(${sx}px,${sy}px)`;
+      if (++shakes > 5) {
+        clearInterval(shakeInterval);
+        textEl.style.transform = 'scale(1) translate(0,0)';
+      }
+    }, 80);
+  }, 400);
+
+  setTimeout(() => {
+    ov.style.transition = 'opacity 0.5s ease-in';
+    ov.style.opacity = '0';
+    setTimeout(() => {
+      ov.style.transition = '';
+      ov.style.opacity = '0';
+      bctx.clearRect(0,0,bc.width,bc.height);
+      if (boomAnimId) cancelAnimationFrame(boomAnimId);
+    }, 520);
+  }, 2200);
+
+  const startTime = performance.now();
+  function boomLoop(now) {
+    boomT = Math.min(1, (now - startTime) / 2200);
+    bctx.clearRect(0,0,bc.width,bc.height);
+
+    boomRings.forEach(ring => {
+      if (ring.r < ring.maxR) {
+        ring.r += ring.speed;
+        ring.alpha = Math.max(0, 1 - ring.r / ring.maxR);
+        bctx.beginPath();
+        bctx.arc(bCX, bCY, ring.r, 0, Math.PI*2);
+        bctx.strokeStyle = ring.color;
+        bctx.globalAlpha = ring.alpha * 0.8;
+        bctx.lineWidth = ring.lw;
+        bctx.shadowBlur = 20;
+        bctx.shadowColor = ring.color;
+        bctx.stroke();
+        bctx.shadowBlur = 0;
+        bctx.globalAlpha = 1;
+      }
+    });
+
+    boomParts.forEach(p => {
+      p.trail.push({ x: p.x, y: p.y, life: p.life });
+      if (p.trail.length > 6) p.trail.shift();
+
+      p.trail.forEach((tr, ti) => {
+        const ta = (ti / p.trail.length) * p.life * 0.4;
+        bctx.beginPath();
+        bctx.arc(tr.x, tr.y, p.size * (ti/p.trail.length) * 0.6, 0, Math.PI*2);
+        bctx.fillStyle = p.color;
+        bctx.globalAlpha = ta;
+        bctx.fill();
+      });
+      bctx.globalAlpha = 1;
+
+      if (p.life > 0) {
+        const g = bctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+        g.addColorStop(0,'#ffffff');
+        g.addColorStop(0.3, p.color);
+        g.addColorStop(1,'transparent');
+        bctx.beginPath();
+        bctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        bctx.fillStyle = g;
+        bctx.globalAlpha = p.life;
+        bctx.shadowBlur = 12;
+        bctx.shadowColor = p.color;
+        bctx.fill();
+        bctx.shadowBlur = 0;
+        bctx.globalAlpha = 1;
+
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.96; p.vy *= 0.96;
+        p.vy += 0.08;
+        p.life -= p.decay;
+        p.size *= 0.995;
+      }
+    });
+
+    if (boomT < 1) boomAnimId = requestAnimationFrame(boomLoop);
+  }
+  boomAnimId = requestAnimationFrame(boomLoop);
+
+  // Boom sound
+  const t2 = audioCtx.currentTime;
+  const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.7, audioCtx.sampleRate);
+  const dArr = buf.getChannelData(0);
+  for (let i = 0; i < dArr.length; i++) dArr[i] = (Math.random()*2-1) * Math.pow(1 - i/dArr.length, 1.5);
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  const bGain = audioCtx.createGain();
+  const bFilt = audioCtx.createBiquadFilter();
+  bFilt.type = 'lowpass'; bFilt.frequency.value = 220;
+  src.connect(bFilt); bFilt.connect(bGain); bGain.connect(audioCtx.destination);
+  bGain.gain.setValueAtTime(1.4, t2);
+  bGain.gain.exponentialRampToValueAtTime(0.001, t2 + 0.7);
+  src.start(t2); src.stop(t2 + 0.7);
+
+  const wo = audioCtx.createOscillator();
+  const wGain = audioCtx.createGain();
+  wo.connect(wGain); wGain.connect(audioCtx.destination);
+  wo.frequency.setValueAtTime(60, t2);
+  wo.frequency.exponentialRampToValueAtTime(1400, t2 + 0.55);
+  wGain.gain.setValueAtTime(0.5, t2);
+  wGain.gain.exponentialRampToValueAtTime(0.001, t2 + 0.55);
+  wo.start(t2); wo.stop(t2 + 0.55);
+
+  const so = audioCtx.createOscillator();
+  const sGain = audioCtx.createGain();
+  so.connect(sGain); sGain.connect(audioCtx.destination);
+  so.frequency.setValueAtTime(1800, t2 + 0.1);
+  so.frequency.exponentialRampToValueAtTime(3000, t2 + 0.4);
+  sGain.gain.setValueAtTime(0.2, t2 + 0.1);
+  sGain.gain.exponentialRampToValueAtTime(0.001, t2 + 0.45);
+  so.start(t2 + 0.1); so.stop(t2 + 0.45);
+}
+
+/* ══════════════════════ LEADERBOARD ══════════════════════ */
 const LB_KEY = 'boom_leaderboard_v1';
 const LB_MAX = 8;
 let localHighScore = 0;
@@ -3427,10 +3465,7 @@ async function loadLeaderboard() {
     entries.sort((a,b) => b.score - a.score);
     const top = entries.slice(0, LB_MAX);
     renderLeaderboard(top);
-    if (top.length > 0) {
-      localHighScore = top[0].score;
-      updateHSBar();
-    }
+    if (top.length > 0) { localHighScore = top[0].score; updateHSBar(); }
   } catch(e) {
     document.getElementById('lb-list').innerHTML = '<div class="lb-empty">'+t('lbError')+'</div>';
   }
@@ -3438,10 +3473,7 @@ async function loadLeaderboard() {
 
 function renderLeaderboard(entries) {
   const list = document.getElementById('lb-list');
-  if (!entries.length) {
-    list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>';
-    return;
-  }
+  if (!entries.length) { list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>'; return; }
   const rankIcons = ['🥇','🥈','🥉'];
   const rankCls   = ['r1','r2','r3'];
   list.innerHTML = entries.map((e, i) => `
@@ -3457,34 +3489,26 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/* FIX 6: diffLabel uses current language */
 function diffLabel(d) {
-  return d==='hard'?'صعب':d==='normal'?'متوسط':'سهل';
+  return d==='hard' ? t('hard') : d==='normal' ? t('normal') : t('easy');
 }
 
-// toggleLB removed — leaderboard always visible
-
 async function submitToLeaderboard() {
-  if(!window.storage) {
-    showTopNotif('⚠️', 'Leaderboard not available', 'info');
-    return;
-  }
+  if(!window.storage) { showTopNotif('⚠️', 'Leaderboard not available', 'info'); return; }
   const nameEl = document.getElementById('playerNameInput');
-  const name = nameEl.value.trim() || 'مجهول';
+  const name = nameEl.value.trim() || t('namePlaceholder').replace('...','') || 'مجهول';
   const btn = document.getElementById('submitScore');
   btn.textContent = '...';
   btn.disabled = true;
-
   try {
     const key = LB_KEY + ':' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
-    await window.storage.set(key, JSON.stringify({
-      name, score, diff: difficulty, ts: Date.now()
-    }), true);
-    // Keep only top LB_MAX — load and trim
+    await window.storage.set(key, JSON.stringify({ name, score, diff: difficulty, ts: Date.now() }), true);
     await trimLeaderboard();
     document.getElementById('nameInputWrap').classList.remove('show');
     showTopNotif('🏆', t('scoreSubmitted'), 'double');
   } catch(e) {
-    btn.textContent = 'حاول مرة أخرى';
+    btn.textContent = t('retry');
     btn.disabled = false;
     return;
   }
@@ -3538,7 +3562,6 @@ function checkNewRecord() {
   }
 }
 
-
 /* ══════════════════════ i18n ══════════════════════ */
 const LANGS = {
   ar: {
@@ -3547,342 +3570,196 @@ const LANGS = {
     startBtn: 'ابدأ اللعب',
     easy: 'سهل', normal: 'متوسط', hard: 'صعب',
     bestPlayers: 'أفضل اللاعبين',
-    score: 'النقاط',
-    best: 'BEST',
+    score: 'النقاط', best: 'BEST',
     tapHint: 'اضغط حين تصل الكرة إلى الدائرة',
     shieldActive: '🛡 حماية نشطة',
     gameOver: 'GAME OVER',
     newRecord: '🏆 رقم قياسي جديد!',
     namePlaceholder: 'اكتب اسمك...',
     submitScore: 'سجّل النتيجة',
-    retry: 'حاول مجدداً',
-    menu: 'القائمة',
-    level: 'المستوى',
-    accuracy: 'الدقة',
-    reachedLevel: 'وصلت إلى',
-    newLevel: 'مستوى جديد 🚀',
-    levelSub: 'السرعة زادت · الكرات أصغر',
-    continueBtn: 'استمرار',
-    howToPlay: 'كيف تلعب',
-    taps: 'الضغطات',
-    rewards: 'المكافآت',
-    goldenOrb: 'الكرة الذهبية ⭐',
-    gotIt: 'فهمت!',
-    fivePerf: '٥ بريفكت متتالية',
-    freeHeart: 'قلب مجاني ❤️',
-    // notifications
-    shieldNotif: 'درع الحماية نشط ×٢',
-    heartNotif: 'قلب إضافي!',
+    retry: 'حاول مجدداً', menu: 'القائمة',
+    level: 'المستوى', accuracy: 'الدقة',
+    reachedLevel: 'وصلت إلى', newLevel: 'مستوى جديد 🚀',
+    levelSub: 'السرعة زادت · الكرات أصغر', continueBtn: 'استمرار',
+    howToPlay: 'كيف تلعب', taps: 'الضغطات', rewards: 'المكافآت',
+    goldenOrb: 'الكرة الذهبية ⭐', gotIt: 'فهمت!',
+    fivePerf: '٥ بريفكت متتالية', freeHeart: 'قلب مجاني ❤️',
+    shieldNotif: 'درع الحماية نشط ×٢', heartNotif: 'قلب إضافي!',
     doubleNotif: 'نقاط مضاعفة ×٢ — ١٠ ثواني',
     streakHeart: 'قلب مجاني! ٥ بريفكت متتالية',
     lvl10Heart: 'المستوى ١٠ — قلب مجاني!',
-    shieldDone: 'انتهت الحماية',
-    doubleDone: 'انتهت النقاط المضاعفة',
-    shieldHit: 'الحماية تحميك',
-    dangerWarn: 'دائرة خطر! اتجنبها!',
+    shieldDone: 'انتهت الحماية', doubleDone: 'انتهت النقاط المضاعفة',
+    shieldHit: 'الحماية تحميك', dangerWarn: 'دائرة خطر! اتجنبها!',
     scoreSubmitted: 'تم تسجيل نتيجتك!',
-    lbLoading: 'جاري التحميل...',
-    lbEmpty: 'لا يوجد لاعبون بعد — كن الأول!',
-    lbError: 'تعذّر تحميل القائمة',
-    // powerups
+    lbLoading: 'جاري التحميل...', lbEmpty: 'لا يوجد لاعبون بعد — كن الأول!', lbError: 'تعذّر تحميل القائمة',
     shieldTitle: 'درع الحماية', shieldDesc: 'محمي من الخسارة مرتين',
-    heartTitle: 'قلب إضافي',   heartDesc: '+١ قلب',
+    heartTitle: 'قلب إضافي', heartDesc: '+١ قلب',
     doubleTitle: 'نقاط مضاعفة', doubleDesc: 'النقاط ×٢ لمدة ١٠ ثواني',
-    // help rows
     perfectDesc: 'اضغط في القلب الذهبي = ٢٥ نقطة',
     goodDesc: 'اضغط في الدائرة الخارجية = ١٢ نقطة',
     missDesc: 'ضغطة خاطئة أو فوتت كرة = قلب',
-    shieldHelpDesc: 'تحميك من الخسارة مرتين',
-    heartHelpDesc: '+١ قلب فوراً',
-    doubleHelpDesc: '×٢ لمدة ١٠ ثواني',
-    lvl10Desc: 'قلب مجاني 💚',
-    level10Label: 'المستوى ١٠',
-    settMusic:'الموسيقى',settMusicDesc:'موسيقى الخلفية',settSfx:'المؤثرات',settSfxDesc:'أصوات اللعبة',settVolume:'مستوى الصوت',settShake:'اهتزاز الشاشة',settShakeDesc:'عند الإصابة',settParticles:'التأثيرات',settParticlesDesc:'الجسيمات والانفجارات',
+    shieldHelpDesc: 'تحميك من الخسارة مرتين', heartHelpDesc: '+١ قلب فوراً',
+    doubleHelpDesc: '×٢ لمدة ١٠ ثواني', lvl10Desc: 'قلب مجاني 💚', level10Label: 'المستوى ١٠',
+    settMusic:'الموسيقى', settMusicDesc:'موسيقى الخلفية', settSfx:'المؤثرات الصوتية',
+    settSfxDesc:'أصوات الضربات والمكافآت', settVolume:'مستوى الصوت',
+    settShake:'اهتزاز الشاشة', settShakeDesc:'عند الإصابة والإخفاق',
+    settParticles:'التأثيرات المرئية', settParticlesDesc:'الجسيمات والانفجارات',
+    paused:'PAUSED', pauseSub:'اللعبة متوقفة مؤقتاً', resume:'▶ استمرار', exitMenu:'✕ الخروج للقائمة',
   },
   en: {
-    dir: 'ltr',
-    subtitle: 'BOOM · SPACE',
-    startBtn: 'PLAY',
+    dir: 'ltr', subtitle: 'BOOM · SPACE', startBtn: 'PLAY',
     easy: 'Easy', normal: 'Normal', hard: 'Hard',
-    bestPlayers: 'Top Players',
-    score: 'SCORE',
-    best: 'BEST',
+    bestPlayers: 'Top Players', score: 'SCORE', best: 'BEST',
     tapHint: 'Tap when the orb reaches the ring',
-    shieldActive: '🛡 Shield Active',
-    gameOver: 'GAME OVER',
-    newRecord: '🏆 New Record!',
-    namePlaceholder: 'Enter your name...',
-    submitScore: 'Submit Score',
-    retry: 'Try Again',
-    menu: 'Menu',
-    level: 'Level',
-    accuracy: 'Accuracy',
-    reachedLevel: 'You reached',
-    newLevel: 'New Level 🚀',
-    levelSub: 'Faster · Smaller orbs',
-    continueBtn: 'Continue',
-    howToPlay: 'HOW TO PLAY',
-    taps: 'TAPS',
-    rewards: 'REWARDS',
-    goldenOrb: 'Golden Orb ⭐',
-    gotIt: 'Got it!',
-    fivePerf: '5 Perfects in a row',
-    freeHeart: 'Free heart ❤️',
-    shieldNotif: 'Shield active ×2',
-    heartNotif: 'Extra heart!',
-    doubleNotif: '×2 points — 10 seconds',
-    streakHeart: 'Free heart! 5 Perfects!',
-    lvl10Heart: 'Level 10 — free heart!',
-    shieldDone: 'Shield expired',
-    doubleDone: 'Double points ended',
-    shieldHit: 'Shield protected you',
-    dangerWarn: 'Danger orb! Avoid it!',
-    scoreSubmitted: 'Score submitted!',
-    lbLoading: 'Loading...',
-    lbEmpty: 'No players yet — be the first!',
-    lbError: 'Failed to load leaderboard',
+    shieldActive: '🛡 Shield Active', gameOver: 'GAME OVER',
+    newRecord: '🏆 New Record!', namePlaceholder: 'Enter your name...',
+    submitScore: 'Submit Score', retry: 'Try Again', menu: 'Menu',
+    level: 'Level', accuracy: 'Accuracy', reachedLevel: 'You reached',
+    newLevel: 'New Level 🚀', levelSub: 'Faster · Smaller orbs', continueBtn: 'Continue',
+    howToPlay: 'HOW TO PLAY', taps: 'TAPS', rewards: 'REWARDS',
+    goldenOrb: 'Golden Orb ⭐', gotIt: 'Got it!',
+    fivePerf: '5 Perfects in a row', freeHeart: 'Free heart ❤️',
+    shieldNotif: 'Shield active ×2', heartNotif: 'Extra heart!',
+    doubleNotif: '×2 points — 10 seconds', streakHeart: 'Free heart! 5 Perfects!',
+    lvl10Heart: 'Level 10 — free heart!', shieldDone: 'Shield expired',
+    doubleDone: 'Double points ended', shieldHit: 'Shield protected you',
+    dangerWarn: 'Danger orb! Avoid it!', scoreSubmitted: 'Score submitted!',
+    lbLoading: 'Loading...', lbEmpty: 'No players yet — be the first!', lbError: 'Failed to load leaderboard',
     shieldTitle: 'Shield', shieldDesc: 'Protected from 2 misses',
     heartTitle: 'Extra Heart', heartDesc: '+1 heart',
     doubleTitle: 'Double Points', doubleDesc: '×2 for 10 seconds',
-    perfectDesc: 'Tap the gold ring = 25 pts',
-    goodDesc: 'Tap the outer ring = 12 pts',
+    perfectDesc: 'Tap the gold ring = 25 pts', goodDesc: 'Tap the outer ring = 12 pts',
     missDesc: 'Miss or wrong tap = lose a heart',
-    shieldHelpDesc: 'Protects you from 2 misses',
-    heartHelpDesc: '+1 heart instantly',
-    doubleHelpDesc: '×2 points for 10 seconds',
-    lvl10Desc: 'Free heart 💚',
-    level10Label: 'Level 10',
-    settMusic: 'Music', settMusicDesc: 'Background music',
-    settSfx: 'Sound Effects', settSfxDesc: 'Hit and reward sounds',
-    settVolume: 'Volume', settShake: 'Screen Shake',
-    settShakeDesc: 'On hit and miss', settParticles: 'Visual Effects',
-    settParticlesDesc: 'Particles and explosions',
+    shieldHelpDesc: 'Protects you from 2 misses', heartHelpDesc: '+1 heart instantly',
+    doubleHelpDesc: '×2 points for 10 seconds', lvl10Desc: 'Free heart 💚', level10Label: 'Level 10',
+    settMusic: 'Music', settMusicDesc: 'Background music', settSfx: 'Sound Effects',
+    settSfxDesc: 'Hit and reward sounds', settVolume: 'Volume',
+    settShake: 'Screen Shake', settShakeDesc: 'On hit and miss',
+    settParticles: 'Visual Effects', settParticlesDesc: 'Particles and explosions',
+    paused:'PAUSED', pauseSub:'Game is paused', resume:'▶ Resume', exitMenu:'✕ Exit to Menu',
   },
   fr: {
-    dir: 'ltr',
-    subtitle: 'BOOM · ESPACE',
-    startBtn: 'JOUER',
+    dir: 'ltr', subtitle: 'BOOM · ESPACE', startBtn: 'JOUER',
     easy: 'Facile', normal: 'Moyen', hard: 'Difficile',
-    bestPlayers: 'Meilleurs joueurs',
-    score: 'SCORE',
-    best: 'BEST',
+    bestPlayers: 'Meilleurs joueurs', score: 'SCORE', best: 'BEST',
     tapHint: "Appuyez quand l'orbe atteint le cercle",
-    shieldActive: '🛡 Bouclier actif',
-    gameOver: 'GAME OVER',
-    newRecord: '🏆 Nouveau record!',
-    namePlaceholder: 'Votre nom...',
-    submitScore: 'Soumettre',
-    retry: 'Réessayer',
-    menu: 'Menu',
-    level: 'Niveau',
-    accuracy: 'Précision',
-    reachedLevel: 'Vous avez atteint',
-    newLevel: 'Nouveau niveau 🚀',
-    levelSub: 'Plus rapide · Orbes plus petits',
-    continueBtn: 'Continuer',
-    howToPlay: 'COMMENT JOUER',
-    taps: 'APPUIS',
-    rewards: 'RÉCOMPENSES',
-    goldenOrb: 'Orbe dorée ⭐',
-    gotIt: 'Compris!',
-    fivePerf: '5 Parfaits consécutifs',
-    freeHeart: 'Cœur gratuit ❤️',
-    shieldNotif: 'Bouclier actif ×2',
-    heartNotif: 'Cœur supplémentaire!',
-    doubleNotif: '×2 points — 10 secondes',
-    streakHeart: 'Cœur gratuit! 5 Parfaits!',
-    lvl10Heart: 'Niveau 10 — cœur gratuit!',
-    shieldDone: 'Bouclier expiré',
-    doubleDone: 'Points doubles terminés',
-    shieldHit: 'Bouclier vous a protégé',
-    dangerWarn: 'Orbe danger! Évitez!',
-    scoreSubmitted: 'Score soumis!',
-    lbLoading: 'Chargement...',
-    lbEmpty: "Aucun joueur — soyez le premier!",
-    lbError: 'Échec du chargement',
+    shieldActive: '🛡 Bouclier actif', gameOver: 'GAME OVER',
+    newRecord: '🏆 Nouveau record!', namePlaceholder: 'Votre nom...',
+    submitScore: 'Soumettre', retry: 'Réessayer', menu: 'Menu',
+    level: 'Niveau', accuracy: 'Précision', reachedLevel: 'Vous avez atteint',
+    newLevel: 'Nouveau niveau 🚀', levelSub: 'Plus rapide · Orbes plus petits', continueBtn: 'Continuer',
+    howToPlay: 'COMMENT JOUER', taps: 'APPUIS', rewards: 'RÉCOMPENSES',
+    goldenOrb: 'Orbe dorée ⭐', gotIt: 'Compris!',
+    fivePerf: '5 Parfaits consécutifs', freeHeart: 'Cœur gratuit ❤️',
+    shieldNotif: 'Bouclier actif ×2', heartNotif: 'Cœur supplémentaire!',
+    doubleNotif: '×2 points — 10 secondes', streakHeart: 'Cœur gratuit! 5 Parfaits!',
+    lvl10Heart: 'Niveau 10 — cœur gratuit!', shieldDone: 'Bouclier expiré',
+    doubleDone: 'Points doubles terminés', shieldHit: 'Bouclier vous a protégé',
+    dangerWarn: 'Orbe danger! Évitez!', scoreSubmitted: 'Score soumis!',
+    lbLoading: 'Chargement...', lbEmpty: "Aucun joueur — soyez le premier!", lbError: 'Échec du chargement',
     shieldTitle: 'Bouclier', shieldDesc: 'Protégé contre 2 ratés',
     heartTitle: 'Cœur extra', heartDesc: '+1 cœur',
     doubleTitle: 'Points ×2', doubleDesc: '×2 pendant 10 secondes',
-    perfectDesc: 'Touchez le cercle doré = 25 pts',
-    goodDesc: 'Touchez le cercle extérieur = 12 pts',
+    perfectDesc: 'Touchez le cercle doré = 25 pts', goodDesc: 'Touchez le cercle extérieur = 12 pts',
     missDesc: "Raté ou mauvais appui — cœur perdu",
-    shieldHelpDesc: 'Protège contre 2 ratés',
-    heartHelpDesc: "+1 cœur instantanément",
-    doubleHelpDesc: '×2 points pendant 10 secondes',
-    lvl10Desc: 'Cœur gratuit 💚',
-    level10Label: 'Niveau 10',
-    settMusic:'Musique',settMusicDesc:'Musique fond',settSfx:'Sons',settSfxDesc:'Sons du jeu',settVolume:'Volume',settShake:'Vibration',settShakeDesc:'Au toucher',settParticles:'Effets visuels',settParticlesDesc:'Particules',
+    shieldHelpDesc: 'Protège contre 2 ratés', heartHelpDesc: "+1 cœur instantanément",
+    doubleHelpDesc: '×2 points pendant 10 secondes', lvl10Desc: 'Cœur gratuit 💚', level10Label: 'Niveau 10',
+    settMusic:'Musique', settMusicDesc:'Musique fond', settSfx:'Sons', settSfxDesc:'Sons du jeu',
+    settVolume:'Volume', settShake:'Vibration', settShakeDesc:'Au toucher',
+    settParticles:'Effets visuels', settParticlesDesc:'Particules',
   },
   es: {
-    dir: 'ltr',
-    subtitle: 'BOOM · ESPACIO',
-    startBtn: 'JUGAR',
+    dir: 'ltr', subtitle: 'BOOM · ESPACIO', startBtn: 'JUGAR',
     easy: 'Fácil', normal: 'Normal', hard: 'Difícil',
-    bestPlayers: 'Mejores jugadores',
-    score: 'PUNTOS',
-    best: 'MEJOR',
+    bestPlayers: 'Mejores jugadores', score: 'PUNTOS', best: 'MEJOR',
     tapHint: 'Toca cuando el orbe llegue al círculo',
-    shieldActive: '🛡 Escudo activo',
-    gameOver: 'FIN DEL JUEGO',
-    newRecord: '🏆 ¡Nuevo récord!',
-    namePlaceholder: 'Tu nombre...',
-    submitScore: 'Enviar puntuación',
-    retry: 'Reintentar',
-    menu: 'Menú',
-    level: 'Nivel',
-    accuracy: 'Precisión',
-    reachedLevel: 'Llegaste al',
-    newLevel: 'Nuevo nivel 🚀',
-    levelSub: 'Más rápido · Orbes más pequeños',
-    continueBtn: 'Continuar',
-    howToPlay: 'CÓMO JUGAR',
-    taps: 'TOQUES',
-    rewards: 'RECOMPENSAS',
-    goldenOrb: 'Orbe dorado ⭐',
-    gotIt: '¡Entendido!',
-    fivePerf: '5 Perfectos seguidos',
-    freeHeart: 'Corazón gratis ❤️',
-    shieldNotif: 'Escudo activo ×2',
-    heartNotif: '¡Corazón extra!',
-    doubleNotif: '×2 puntos — 10 segundos',
-    streakHeart: '¡Corazón gratis! ¡5 perfectos!',
-    lvl10Heart: 'Nivel 10 — ¡corazón gratis!',
-    shieldDone: 'Escudo expirado',
-    doubleDone: 'Puntos dobles terminados',
-    shieldHit: 'El escudo te protegió',
-    dangerWarn: '¡Orbe peligroso! ¡Evítalo!',
-    scoreSubmitted: '¡Puntuación enviada!',
-    lbLoading: 'Cargando...',
-    lbEmpty: 'Sin jugadores — ¡sé el primero!',
-    lbError: 'Error al cargar',
+    shieldActive: '🛡 Escudo activo', gameOver: 'FIN DEL JUEGO',
+    newRecord: '🏆 ¡Nuevo récord!', namePlaceholder: 'Tu nombre...',
+    submitScore: 'Enviar puntuación', retry: 'Reintentar', menu: 'Menú',
+    level: 'Nivel', accuracy: 'Precisión', reachedLevel: 'Llegaste al',
+    newLevel: 'Nuevo nivel 🚀', levelSub: 'Más rápido · Orbes más pequeños', continueBtn: 'Continuar',
+    howToPlay: 'CÓMO JUGAR', taps: 'TOQUES', rewards: 'RECOMPENSAS',
+    goldenOrb: 'Orbe dorado ⭐', gotIt: '¡Entendido!',
+    fivePerf: '5 Perfectos seguidos', freeHeart: 'Corazón gratis ❤️',
+    shieldNotif: 'Escudo activo ×2', heartNotif: '¡Corazón extra!',
+    doubleNotif: '×2 puntos — 10 segundos', streakHeart: '¡Corazón gratis! ¡5 perfectos!',
+    lvl10Heart: 'Nivel 10 — ¡corazón gratis!', shieldDone: 'Escudo expirado',
+    doubleDone: 'Puntos dobles terminados', shieldHit: 'El escudo te protegió',
+    dangerWarn: '¡Orbe peligroso! ¡Evítalo!', scoreSubmitted: '¡Puntuación enviada!',
+    lbLoading: 'Cargando...', lbEmpty: 'Sin jugadores — ¡sé el primero!', lbError: 'Error al cargar',
     shieldTitle: 'Escudo', shieldDesc: 'Protegido de 2 fallos',
     heartTitle: 'Corazón extra', heartDesc: '+1 corazón',
     doubleTitle: 'Puntos ×2', doubleDesc: '×2 por 10 segundos',
-    perfectDesc: 'Toca el círculo dorado = 25 pts',
-    goodDesc: 'Toca el círculo exterior = 12 pts',
+    perfectDesc: 'Toca el círculo dorado = 25 pts', goodDesc: 'Toca el círculo exterior = 12 pts',
     missDesc: 'Fallo o toque incorrecto = corazón',
-    shieldHelpDesc: 'Protege contra 2 fallos',
-    heartHelpDesc: '+1 corazón al instante',
-    doubleHelpDesc: '×2 puntos por 10 segundos',
-    lvl10Desc: 'Corazón gratis 💚',
-    level10Label: 'Nivel 10',
-    settMusic: 'Música', settMusicDesc: 'Música de fondo',
-    settSfx: 'Efectos de sonido', settSfxDesc: 'Sonidos de golpe',
-    settVolume: 'Volumen', settShake: 'Vibración pantalla',
-    settShakeDesc: 'Al golpear', settParticles: 'Efectos visuales',
-    settParticlesDesc: 'Partículas y explosiones',
+    shieldHelpDesc: 'Protege contra 2 fallos', heartHelpDesc: '+1 corazón al instante',
+    doubleHelpDesc: '×2 puntos por 10 segundos', lvl10Desc: 'Corazón gratis 💚', level10Label: 'Nivel 10',
+    settMusic: 'Música', settMusicDesc: 'Música de fondo', settSfx: 'Efectos de sonido',
+    settSfxDesc: 'Sonidos de golpe', settVolume: 'Volumen',
+    settShake: 'Vibración pantalla', settShakeDesc: 'Al golpear',
+    settParticles: 'Efectos visuales', settParticlesDesc: 'Partículas y explosiones',
   },
   zh: {
-    dir: 'ltr',
-    subtitle: 'BOOM · 太空',
-    startBtn: '开始游戏',
+    dir: 'ltr', subtitle: 'BOOM · 太空', startBtn: '开始游戏',
     easy: '简单', normal: '普通', hard: '困难',
-    bestPlayers: '最佳玩家',
-    score: '分数',
-    best: '最高',
-    tapHint: '当球到达圆圈时点击',
-    shieldActive: '🛡 护盾激活',
-    gameOver: '游戏结束',
-    newRecord: '🏆 新纪录！',
-    namePlaceholder: '输入你的名字...',
-    submitScore: '提交分数',
-    retry: '再试一次',
-    menu: '菜单',
-    level: '关卡',
-    accuracy: '准确率',
-    reachedLevel: '你到达了',
-    newLevel: '新关卡 🚀',
-    levelSub: '速度更快 · 球更小',
-    continueBtn: '继续',
-    howToPlay: '如何游玩',
-    taps: '点击',
-    rewards: '奖励',
-    goldenOrb: '黄金球 ⭐',
-    gotIt: '明白了！',
-    fivePerf: '连续5次完美',
-    freeHeart: '免费生命 ❤️',
-    shieldNotif: '护盾激活 ×2',
-    heartNotif: '额外生命！',
-    doubleNotif: '双倍分数 ×2 — 10秒',
-    streakHeart: '免费生命！连续5次完美！',
-    lvl10Heart: '第10关 — 免费生命！',
-    shieldDone: '护盾已过期',
-    doubleDone: '双倍分数结束',
-    shieldHit: '护盾保护了你',
-    dangerWarn: '危险球！躲开！',
-    scoreSubmitted: '分数已提交！',
-    lbLoading: '加载中...',
-    lbEmpty: '暂无玩家 — 成为第一个！',
-    lbError: '加载失败',
+    bestPlayers: '最佳玩家', score: '分数', best: '最高',
+    tapHint: '当球到达圆圈时点击', shieldActive: '🛡 护盾激活',
+    gameOver: '游戏结束', newRecord: '🏆 新纪录！',
+    namePlaceholder: '输入你的名字...', submitScore: '提交分数',
+    retry: '再试一次', menu: '菜单', level: '关卡', accuracy: '准确率',
+    reachedLevel: '你到达了', newLevel: '新关卡 🚀',
+    levelSub: '速度更快 · 球更小', continueBtn: '继续',
+    howToPlay: '如何游玩', taps: '点击', rewards: '奖励',
+    goldenOrb: '黄金球 ⭐', gotIt: '明白了！',
+    fivePerf: '连续5次完美', freeHeart: '免费生命 ❤️',
+    shieldNotif: '护盾激活 ×2', heartNotif: '额外生命！',
+    doubleNotif: '双倍分数 ×2 — 10秒', streakHeart: '免费生命！连续5次完美！',
+    lvl10Heart: '第10关 — 免费生命！', shieldDone: '护盾已过期',
+    doubleDone: '双倍分数结束', shieldHit: '护盾保护了你',
+    dangerWarn: '危险球！躲开！', scoreSubmitted: '分数已提交！',
+    lbLoading: '加载中...', lbEmpty: '暂无玩家 — 成为第一个！', lbError: '加载失败',
     shieldTitle: '护盾', shieldDesc: '防止2次失误',
     heartTitle: '额外生命', heartDesc: '+1 生命',
     doubleTitle: '双倍分数', doubleDesc: '×2 持续10秒',
-    perfectDesc: '点击金色圆圈 = 25分',
-    goodDesc: '点击外圈 = 12分',
+    perfectDesc: '点击金色圆圈 = 25分', goodDesc: '点击外圈 = 12分',
     missDesc: '失误或错误点击 = 失去生命',
-    shieldHelpDesc: '防止2次失误',
-    heartHelpDesc: '立即 +1 生命',
-    doubleHelpDesc: '×2 分数持续10秒',
-    lvl10Desc: '免费生命 💚',
-    level10Label: '第10关',
-    settMusic: '音乐', settMusicDesc: '背景音乐',
-    settSfx: '音效', settSfxDesc: '击打和奖励音效',
-    settVolume: '音量', settShake: '屏幕震动',
-    settShakeDesc: '击中时震动', settParticles: '视觉效果',
-    settParticlesDesc: '粒子和爆炸效果',
+    shieldHelpDesc: '防止2次失误', heartHelpDesc: '立即 +1 生命',
+    doubleHelpDesc: '×2 分数持续10秒', lvl10Desc: '免费生命 💚', level10Label: '第10关',
+    settMusic: '音乐', settMusicDesc: '背景音乐', settSfx: '音效',
+    settSfxDesc: '击打和奖励音效', settVolume: '音量',
+    settShake: '屏幕震动', settShakeDesc: '击中时震动',
+    settParticles: '视觉效果', settParticlesDesc: '粒子和爆炸效果',
   },
   de: {
-    dir: 'ltr',
-    subtitle: 'BOOM · WELTRAUM',
-    startBtn: 'SPIELEN',
+    dir: 'ltr', subtitle: 'BOOM · WELTRAUM', startBtn: 'SPIELEN',
     easy: 'Leicht', normal: 'Mittel', hard: 'Schwer',
-    bestPlayers: 'Top Spieler',
-    score: 'PUNKTE',
-    best: 'BEST',
+    bestPlayers: 'Top Spieler', score: 'PUNKTE', best: 'BEST',
     tapHint: 'Tippe wenn der Orb den Ring erreicht',
-    shieldActive: '🛡 Schild aktiv',
-    gameOver: 'GAME OVER',
-    newRecord: '🏆 Neuer Rekord!',
-    namePlaceholder: 'Dein Name...',
-    submitScore: 'Eintragen',
-    retry: 'Nochmal',
-    menu: 'Menü',
-    level: 'Level',
-    accuracy: 'Genauigkeit',
-    reachedLevel: 'Du hast erreicht',
-    newLevel: 'Neues Level 🚀',
-    levelSub: 'Schneller · Kleinere Orbs',
-    continueBtn: 'Weiter',
-    howToPlay: 'WIE MAN SPIELT',
-    taps: 'TIPPEN',
-    rewards: 'BELOHNUNGEN',
-    goldenOrb: 'Goldener Orb ⭐',
-    gotIt: 'Verstanden!',
-    fivePerf: '5 Perfekte hintereinander',
-    freeHeart: 'Kostenloses Herz ❤️',
-    shieldNotif: 'Schild aktiv ×2',
-    heartNotif: 'Extra Herz!',
-    doubleNotif: '×2 Punkte — 10 Sekunden',
-    streakHeart: 'Kostenloses Herz! 5 Perfekte!',
-    lvl10Heart: 'Level 10 — kostenloses Herz!',
-    shieldDone: 'Schild abgelaufen',
-    doubleDone: 'Doppelte Punkte beendet',
-    shieldHit: 'Schild hat dich geschützt',
-    dangerWarn: 'Gefahren-Orb! Ausweichen!',
-    scoreSubmitted: 'Punktzahl eingetragen!',
-    lbLoading: 'Laden...',
-    lbEmpty: 'Keine Spieler — sei der Erste!',
-    lbError: 'Fehler beim Laden',
+    shieldActive: '🛡 Schild aktiv', gameOver: 'GAME OVER',
+    newRecord: '🏆 Neuer Rekord!', namePlaceholder: 'Dein Name...',
+    submitScore: 'Eintragen', retry: 'Nochmal', menu: 'Menü',
+    level: 'Level', accuracy: 'Genauigkeit', reachedLevel: 'Du hast erreicht',
+    newLevel: 'Neues Level 🚀', levelSub: 'Schneller · Kleinere Orbs', continueBtn: 'Weiter',
+    howToPlay: 'WIE MAN SPIELT', taps: 'TIPPEN', rewards: 'BELOHNUNGEN',
+    goldenOrb: 'Goldener Orb ⭐', gotIt: 'Verstanden!',
+    fivePerf: '5 Perfekte hintereinander', freeHeart: 'Kostenloses Herz ❤️',
+    shieldNotif: 'Schild aktiv ×2', heartNotif: 'Extra Herz!',
+    doubleNotif: '×2 Punkte — 10 Sekunden', streakHeart: 'Kostenloses Herz! 5 Perfekte!',
+    lvl10Heart: 'Level 10 — kostenloses Herz!', shieldDone: 'Schild abgelaufen',
+    doubleDone: 'Doppelte Punkte beendet', shieldHit: 'Schild hat dich geschützt',
+    dangerWarn: 'Gefahren-Orb! Ausweichen!', scoreSubmitted: 'Punktzahl eingetragen!',
+    lbLoading: 'Laden...', lbEmpty: 'Keine Spieler — sei der Erste!', lbError: 'Fehler beim Laden',
     shieldTitle: 'Schild', shieldDesc: 'Geschützt vor 2 Fehlern',
     heartTitle: 'Extra Herz', heartDesc: '+1 Herz',
     doubleTitle: 'Doppelte Punkte', doubleDesc: '×2 für 10 Sekunden',
-    perfectDesc: 'Goldenen Ring tippen = 25 Pkt',
-    goodDesc: 'Äußeren Ring tippen = 12 Pkt',
+    perfectDesc: 'Goldenen Ring tippen = 25 Pkt', goodDesc: 'Äußeren Ring tippen = 12 Pkt',
     missDesc: 'Verfehlt oder falsches Tippen = Herz',
-    shieldHelpDesc: 'Schützt vor 2 Fehlern',
-    heartHelpDesc: '+1 Herz sofort',
-    doubleHelpDesc: '×2 Punkte für 10 Sekunden',
-    lvl10Desc: 'Kostenloses Herz 💚',
+    shieldHelpDesc: 'Schützt vor 2 Fehlern', heartHelpDesc: '+1 Herz sofort',
+    doubleHelpDesc: '×2 Punkte für 10 Sekunden', lvl10Desc: 'Kostenloses Herz 💚', level10Label: 'Level 10',
+    settMusic:'Musik', settMusicDesc:'Hintergrundmusik', settSfx:'Soundeffekte',
+    settSfxDesc:'Treffer- und Belohnungstöne', settVolume:'Lautstärke',
+    settShake:'Bildschirmzittern', settShakeDesc:'Bei Treffer und Fehler',
+    settParticles:'Visuelle Effekte', settParticlesDesc:'Partikel und Explosionen',
   }
 };
 
@@ -3902,73 +3779,55 @@ function t(key) {
   return (LANGS[currentLang] && LANGS[currentLang][key]) || LANGS['en'][key] || key;
 }
 
-function setLang(lang,btn){ pickLang(lang); }
-
 const LANG_META = {
-  ar: { label: 'عربي',    flag: '🇸🇦' },
+  ar: { label: 'عربي', flag: '🇸🇦' },
   en: { label: 'English', flag: '🇬🇧' },
-  fr: { label: 'FR',      flag: '🇫🇷' },
-  es: { label: 'ES',      flag: '🇪🇸' },
-  zh: { label: '中文',    flag: '🇨🇳' },
-  de: { label: 'DE',      flag: '🇩🇪' },
+  fr: { label: 'FR', flag: '🇫🇷' },
+  es: { label: 'ES', flag: '🇪🇸' },
+  zh: { label: '中文', flag: '🇨🇳' },
+  de: { label: 'DE', flag: '🇩🇪' },
 };
 
 function applyLang() {
   const L = LANGS[currentLang];
-  // Direction
   document.documentElement.dir = L.dir;
   document.documentElement.lang = currentLang;
 
-  // Update picker button label
   const meta = LANG_META[currentLang] || LANG_META['en'];
   const lbl = document.getElementById('langPickerLabel');
   if (lbl) lbl.textContent = meta.label;
 
-  // Update dropdown active state
   document.querySelectorAll('.lang-option').forEach(opt => {
     opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
   });
 
-  // data-i18n text
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t(key)) el.textContent = t(key);
+    const val = t(key);
+    if (val) el.textContent = val;
   });
 
-  // data-i18n-ph placeholders
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     const key = el.getAttribute('data-i18n-ph');
-    if (t(key)) el.placeholder = t(key);
+    const val = t(key);
+    if (val) el.placeholder = val;
   });
 
-  // Update powerups titles/descs dynamically
   if (typeof POWERUPS !== 'undefined') {
     POWERUPS[0].title = t('shieldTitle'); POWERUPS[0].desc = t('shieldDesc');
     POWERUPS[1].title = t('heartTitle');  POWERUPS[1].desc = t('heartDesc');
     POWERUPS[2].title = t('doubleTitle'); POWERUPS[2].desc = t('doubleDesc');
   }
 
-  // help modal uses data-i18n — handled by querySelectorAll above
-
-  // Font adjustment for non-Arabic
-  const isAr = currentLang === 'ar';
-  document.querySelectorAll('.hm-text strong, .hm-text span, .card p, .diff-name, .btn-main, .stat-label')
-    .forEach(el => { el.style.fontFamily = isAr ? "'Tajawal', sans-serif" : "'Tajawal', sans-serif"; });
-
-  // Leaderboard loading text
   const lbLoading = document.getElementById('lb-loading');
   if (lbLoading) lbLoading.textContent = t('lbLoading');
 }
-
 
 /* ══ SETTINGS ══ */
 const S = { music:true, sfx:true, volume:0.8, shake:true, particles:true };
 
 function openSettings() {
-  if (gameRunning && !gamePaused) {
-    gamePaused = true;
-    stopMusic();
-  }
+  if (gameRunning && !gamePaused) { gamePaused = true; stopMusic(); }
   syncSUI();
   document.getElementById('settingsModal').classList.add('show');
 }
@@ -4006,25 +3865,20 @@ function toggleMusicSetting() {
     else if (!S.music) stopMusic();
   }, 10);
 }
-function toggleSFXSetting() {
-  setTimeout(() => { S.sfx = document.getElementById('chkSFX').checked; }, 10);
-}
+function toggleSFXSetting() { setTimeout(() => { S.sfx = document.getElementById('chkSFX').checked; }, 10); }
 function setVolumeSetting(v) {
   S.volume = v/100;
   document.getElementById('volDisplay').textContent = v + '%';
   updVolBg(v);
 }
-function toggleShakeSetting() {
-  setTimeout(() => { S.shake = document.getElementById('chkShake').checked; }, 10);
-}
-function toggleParticlesSetting() {
-  setTimeout(() => { S.particles = document.getElementById('chkParticles').checked; }, 10);
-}
+function toggleShakeSetting() { setTimeout(() => { S.shake = document.getElementById('chkShake').checked; }, 10); }
+function toggleParticlesSetting() { setTimeout(() => { S.particles = document.getElementById('chkParticles').checked; }, 10); }
 
 /* ══ HELP MODAL ══ */
-function openHelp() { document.getElementById("helpModal").classList.add("show"); }
+function openHelp()  { document.getElementById("helpModal").classList.add("show"); }
 function closeHelp() { document.getElementById("helpModal").classList.remove("show"); }
 
+/* ══ INIT ══ */
 currentLang = detectLang();
 applyLang();
 resize();

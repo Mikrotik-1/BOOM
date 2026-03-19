@@ -1767,6 +1767,72 @@ input[type=range].vslider::-webkit-slider-thumb {
   background:rgba(224,54,110,0.18);
   box-shadow:0 0 30px rgba(224,54,110,0.3);
 }
+
+
+/* ── RESTART button — big prominent ── */
+.btn-restart {
+  font-size: 20px !important;
+  padding: 20px 80px !important;
+  border-color: rgba(0,200,232,0.8) !important;
+  box-shadow: 0 0 40px rgba(0,200,232,0.3), inset 0 0 30px rgba(0,200,232,0.08) !important;
+  letter-spacing: 3px !important;
+  margin-bottom: 4px !important;
+}
+.btn-restart:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 0 60px rgba(0,200,232,0.5) !important;
+}
+/* ── small secondary button ── */
+.btn-secondary-small {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-dim);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 10px 40px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin: 2px;
+}
+.btn-secondary-small:hover {
+  border-color: rgba(255,255,255,0.28);
+  color: var(--text-primary);
+}
+
+/* ── HIT FLASH ── */
+#hitFlash {
+  position: absolute;
+  top:0; left:0; width:100%; height:100%;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+  border-radius: 0;
+  transition: opacity 0.06s ease-out;
+}
+/* ── DEATH FLASH ── */
+#deathFlash {
+  position: absolute;
+  top:0; left:0; width:100%; height:100%;
+  pointer-events: none;
+  z-index: 62;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 0.05s ease-out;
+}
+/* ── SLOWMO vignette ── */
+#slowmoOverlay {
+  position: absolute;
+  top:0; left:0; width:100%; height:100%;
+  pointer-events: none;
+  z-index: 7;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+  transition: opacity 0.2s;
+}
+#slowmoOverlay.active { opacity: 1; }
 </style>
 
 <script>
@@ -1801,6 +1867,9 @@ document.addEventListener('click',function(e){
   <div id="shieldTimer" data-i18n="shieldActive">🛡 حماية نشطة</div>
   <div id="freezeOverlay"></div>
   <div id="freezeTimer">🧊 تجميد نشط</div>
+  <div id="hitFlash"></div>
+  <div id="deathFlash"></div>
+  <div id="slowmoOverlay"></div>
 
   <div id="ui">
     <div id="hud-top">
@@ -2206,8 +2275,8 @@ document.addEventListener('click',function(e){
         <span class="stat-value" id="accuracy">0%</span>
       </div>
     </div>
-    <button class="btn-main" onclick="restartGame()" data-i18n="retry">حاول مجدداً</button>
-    <button class="btn-main btn-danger" onclick="showMenu()" data-i18n="menu">القائمة</button>
+    <button class="btn-main btn-restart" onclick="restartGame()" data-i18n="retry">↺ حاول مجدداً</button>
+    <button class="btn-secondary-small" onclick="showMenu()" data-i18n="menu">القائمة</button>
   </div>
 
   <!-- LEVEL UP SCREEN -->
@@ -2383,7 +2452,6 @@ function playSound(type) {
     g.gain.exponentialRampToValueAtTime(0.01, t2+0.3);
     o.start(t2); o.stop(t2+0.3);
   } else if (type === 'freeze') {
-    /* icy descending shimmer */
     o.type = 'sine';
     o.frequency.setValueAtTime(1400, t2);
     o.frequency.exponentialRampToValueAtTime(300, t2+0.5);
@@ -2391,16 +2459,105 @@ function playSound(type) {
     g.gain.linearRampToValueAtTime(0.18*_vol, t2+0.25);
     g.gain.exponentialRampToValueAtTime(0.01, t2+0.55);
     o.start(t2); o.stop(t2+0.55);
-    /* second high sparkle layer */
-    const o2 = audioCtx.createOscillator();
-    const g2 = audioCtx.createGain();
-    o2.type = 'sine';
-    o2.connect(g2); g2.connect(audioCtx.destination);
-    o2.frequency.setValueAtTime(2200, t2);
-    o2.frequency.exponentialRampToValueAtTime(800, t2+0.4);
-    g2.gain.setValueAtTime(0.15*_vol, t2);
-    g2.gain.exponentialRampToValueAtTime(0.01, t2+0.4);
+    const o2=audioCtx.createOscillator(),g2=audioCtx.createGain();
+    o2.type='sine'; o2.connect(g2); g2.connect(audioCtx.destination);
+    o2.frequency.setValueAtTime(2200,t2); o2.frequency.exponentialRampToValueAtTime(800,t2+0.4);
+    g2.gain.setValueAtTime(0.15*_vol,t2); g2.gain.exponentialRampToValueAtTime(0.01,t2+0.4);
     o2.start(t2); o2.stop(t2+0.4);
+
+  } else if (type === 'score') {
+    /* crisp coin-like ding */
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(880, t2);
+    o.frequency.exponentialRampToValueAtTime(1320, t2+0.08);
+    g.gain.setValueAtTime(0.22*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.12);
+    o.start(t2); o.stop(t2+0.12);
+
+  } else if (type === 'danger') {
+    /* low pulsing alarm */
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(120, t2);
+    o.frequency.setValueAtTime(80, t2+0.08);
+    o.frequency.setValueAtTime(120, t2+0.16);
+    g.gain.setValueAtTime(0.32*_vol, t2);
+    g.gain.exponentialRampToValueAtTime(0.01, t2+0.28);
+    o.start(t2); o.stop(t2+0.28);
+
+  } else if (type === 'death') {
+    /* heavy impact + low rumble */
+    /* Impact thud */
+    const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.5,audioCtx.sampleRate);
+    const dArr=buf.getChannelData(0);
+    for(let i=0;i<dArr.length;i++) dArr[i]=(Math.random()*2-1)*Math.pow(1-i/dArr.length,1.2);
+    const src=audioCtx.createBufferSource();
+    src.buffer=buf;
+    const bFilt=audioCtx.createBiquadFilter(); bFilt.type='lowpass'; bFilt.frequency.value=180;
+    const bGain=audioCtx.createGain();
+    src.connect(bFilt); bFilt.connect(bGain); bGain.connect(audioCtx.destination);
+    bGain.gain.setValueAtTime(1.2*_vol,t2); bGain.gain.exponentialRampToValueAtTime(0.001,t2+0.5);
+    src.start(t2); src.stop(t2+0.5);
+    /* Descending tone */
+    o.type='sine';
+    o.frequency.setValueAtTime(320,t2); o.frequency.exponentialRampToValueAtTime(40,t2+0.7);
+    g.gain.setValueAtTime(0.5*_vol,t2); g.gain.exponentialRampToValueAtTime(0.001,t2+0.7);
+    o.start(t2); o.stop(t2+0.7);
+  }
+}
+
+/* ══════════════════════ FLASH & GAME FEEL ══════════════════════ */
+let _flashTimer = null;
+function flashHit(color='rgba(255,255,255,0.22)') {
+  if(typeof S !== 'undefined' && !S.shake) return;
+  const el = document.getElementById('hitFlash');
+  if(!el) return;
+  el.style.background = color;
+  el.style.opacity = '1';
+  clearTimeout(_flashTimer);
+  _flashTimer = setTimeout(() => { el.style.opacity = '0'; }, 80);
+}
+
+let _deathFlashTimer = null;
+let _slowmoActive = false;
+function triggerDeathEffect() {
+  /* 1. White flash */
+  const df = document.getElementById('deathFlash');
+  if(df) {
+    df.style.opacity = '1';
+    setTimeout(() => { df.style.opacity = '0'; }, 120);
+  }
+  /* 2. Slowmo overlay */
+  const sm = document.getElementById('slowmoOverlay');
+  if(sm) {
+    sm.classList.add('active');
+    _slowmoActive = true;
+    setTimeout(() => { sm.classList.remove('active'); _slowmoActive = false; }, 600);
+  }
+  /* 3. Strong shake */
+  shakeAmt = (typeof S !== 'undefined' && !S.shake) ? 0 : 22;
+  /* 4. Death sound */
+  playSound('death');
+}
+
+/* ══════════════════════ TIME-BASED DIFFICULTY ══════════════════════ */
+let _gameStartTime = 0;
+let _lastDiffTick = 0;
+const DIFF_TICK_MS = 12000; // every 12s add pressure
+
+function tickDifficulty() {
+  if(!gameRunning || gamePaused) return;
+  const elapsed = Date.now() - _gameStartTime;
+  const tick = Math.floor(elapsed / DIFF_TICK_MS);
+  if(tick > _lastDiffTick) {
+    _lastDiffTick = tick;
+    /* Increase speed noticeably */
+    speed = Math.min(speed + 0.3, 12);
+    spawnRate = Math.max(600, spawnRate - 100);
+    /* Flash + notify */
+    scoreEl.classList.add('bump');
+    setTimeout(() => scoreEl.classList.remove('bump'), 400);
+    flashHit('rgba(255,100,0,0.15)');
+    if(tick % 2 === 0) showTopNotif('⚡', t('speedUp'), 'double');
   }
 }
 
@@ -2620,7 +2777,7 @@ function drawBG() {
     const py = (CY-H/2)*(s.layer+1)*0.008;
     ctx.beginPath(); ctx.arc(s.x+px,s.y+py,s.size,0,Math.PI*2);
     ctx.fillStyle = `rgba(255,255,255,${a})`;
-    if (s.layer===2) { ctx.shadowBlur=4; ctx.shadowColor='rgba(200,200,255,0.8)'; }
+    if (s.layer===2 && typeof S !== "undefined" && S.particles) { ctx.shadowBlur=3; ctx.shadowColor='rgba(200,200,255,0.7)'; }
     ctx.fill(); ctx.shadowBlur=0;
   });
 
@@ -2707,7 +2864,7 @@ class Orb {
     sg.addColorStop(1,'#000');
     ctx.beginPath(); ctx.arc(this.x,this.y,r,0,Math.PI*2);
     ctx.fillStyle=sg;
-    ctx.shadowBlur=28; ctx.shadowColor=this.col.glow;
+    ctx.shadowBlur=15; ctx.shadowColor=this.col.glow;
     ctx.fill(); ctx.shadowBlur=0;
 
     ctx.beginPath();
@@ -3050,7 +3207,7 @@ function _resetState() {
   speed=d.speed; spawnRate=d.rate; orbRadius=d.orb;
   orbs=[]; bonusOrbs=[]; dangerOrbs=[]; particles=[]; rings=[];
   lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
-  totalHits=0; totalAttempts=0; shakeAmt=0; globalPulse=0;
+  totalHits=0; totalAttempts=0; shakeAmt=0; globalPulse=0; _gameStartTime=Date.now(); _lastDiffTick=0;
   shieldOverlay.classList.remove('active');
   shieldTimerEl.classList.remove('show');
   document.getElementById('freezeOverlay').classList.remove('active');
@@ -3079,7 +3236,7 @@ function startGame() {
   document.getElementById('pauseBtn').classList.add('visible');
   document.getElementById('pauseBtn').textContent='⏸';
   _resetState();
-  beatCount=0; startMusic();
+  beatCount=0; updateHSBar(); startMusic();
   loadLeaderboard();
   requestAnimationFrame(loop);
 }
@@ -3141,17 +3298,24 @@ function showMenu() {
 }
 
 function gameOver() {
+  if(!gameRunning) return; // guard double calls
   gameRunning=false; gamePaused=false;
   stopMusic();
   document.getElementById('pauseBtn').classList.remove('visible');
   document.getElementById('pauseModal').classList.remove('show');
-  checkNewRecord();
-  const acc=totalAttempts>0?Math.round(totalHits/totalAttempts*100):0;
-  document.getElementById('finalScore').textContent=score.toLocaleString('en-US');
-  document.getElementById('maxCombo').textContent=maxCombo;
-  document.getElementById('finalLevel').textContent=level;
-  document.getElementById('accuracy').textContent=acc+'%';
-  gameOverScreen.classList.add('visible');
+
+  /* Death effect — flash + shake + slowmo, then show screen after 650ms */
+  triggerDeathEffect();
+
+  setTimeout(() => {
+    checkNewRecord();
+    const acc=totalAttempts>0?Math.round(totalHits/totalAttempts*100):0;
+    document.getElementById('finalScore').textContent=score.toLocaleString('en-US');
+    document.getElementById('maxCombo').textContent=maxCombo;
+    document.getElementById('finalLevel').textContent=level;
+    document.getElementById('accuracy').textContent=acc+'%';
+    gameOverScreen.classList.add('visible');
+  }, 650);
 }
 
 /* ══════════════════════ HIT CHECK ══════════════════════ */
@@ -3210,6 +3374,8 @@ function checkHit() {
     rings.push(new Ring(closest.col.main,35,'perfect'));
     rings.push(new Ring('#d4a843',35,'perfect'));
     shakeAmt=typeof S !== "undefined"&&!S.shake?0:4; playSound('perfect');
+    flashHit('rgba(212,168,67,0.28)');
+    playSound('score');
     showFB(mult===2?'PERFECT ×2':'PERFECT!','perfect');
     scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
     updateProgress(); checkLevel();
@@ -3224,6 +3390,7 @@ function checkHit() {
     explode(closest.x,closest.y,closest.col.main,'good');
     rings.push(new Ring(closest.col.main,75,'good'));
     shakeAmt=typeof S !== "undefined"&&!S.shake?0:2; playSound('good');
+    flashHit('rgba(0,200,232,0.18)');
     showFB(mult===2?'GOOD ×2':'GOOD!','good');
     updateProgress(); checkLevel();
 
@@ -3240,8 +3407,9 @@ function checkHit() {
       } else {
         health--; renderHearts();
         shakeAmt=typeof S !== "undefined"&&!S.shake?0:7; playSound('miss');
+        flashHit('rgba(224,54,110,0.35)');
         showFB('MISS!','miss');
-        if(health<=0){ setTimeout(gameOver,500); return; }
+        if(health<=0){ gameOver(); return; }
       }
     }
   }
@@ -3252,6 +3420,7 @@ function loop(ts) {
   if(!gameRunning||gamePaused) return;
 
   globalPulse+=0.05;
+  tickDifficulty();
 
   /* FIX 4: Correct doubleNotified logic — notify once when time expires */
   if(doublePoints && Date.now() > doubleEnd) {
@@ -3416,8 +3585,9 @@ function loop(ts) {
       const pen = Math.min(score, 100);
       score = Math.max(0, score - pen);
       scoreEl.textContent = score.toLocaleString('en-US');
-      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 12;
-      playSound('miss');
+      shakeAmt = (typeof S !== "undefined" && !S.shake) ? 0 : 14;
+      playSound('danger'); playSound('miss');
+      flashHit('rgba(255,60,0,0.4)');
       showFB('💀 -100', 'miss');
       if (typeof S === "undefined" || S.particles !== false) {
         for (let i = 0; i < 16; i++) {
@@ -3451,8 +3621,9 @@ function loop(ts) {
         else shieldTimerEl.textContent='🛡 '+t('shieldActive').replace('🛡 ','')+' ×'+shieldLeft;
       } else {
         health--; renderHearts(); shakeAmt=typeof S !== "undefined"&&!S.shake?0:11; playSound('miss');
+        flashHit('rgba(224,54,110,0.35)');
         showFB('MISS!','miss'); combo=0; comboCont.classList.remove('show');
-        if(health<=0) setTimeout(gameOver,500);
+        if(health<=0) { gameOver(); }
       }
       return false;
     }
@@ -3461,7 +3632,7 @@ function loop(ts) {
   });
 
   updateHSBar();
-  if(particles.length > 200) particles = particles.slice(-150);
+  if(particles.length > 120) particles = particles.slice(-100);
   particles=particles.filter(p=>{const a=p.update();if(a)p.draw();return a;});
   rings=rings.filter(r=>{const a=r.update();if(a)r.draw();return a;});
 
@@ -3914,13 +4085,20 @@ async function trimLeaderboard() {
 function updateHSBar() {
   const el = document.getElementById('hsVal');
   if (!el) return;
-  /* Always display numbers in English (LTR) regardless of language */
+  /* Sync with localStorage high score */
+  const stored = parseInt(localStorage.getItem('boom_hs_' + difficulty) || '0');
+  if (stored > localHighScore) localHighScore = stored;
   if (localHighScore > 0) el.textContent = localHighScore.toLocaleString('en-US');
+  else el.textContent = '—';
   if (gameRunning && score > localHighScore && localHighScore > 0) {
     el.classList.add('beating');
   } else {
     el.classList.remove('beating');
   }
+}
+
+function saveHighScore() {
+  try { localStorage.setItem('boom_hs_' + difficulty, String(localHighScore)); } catch(e) {}
 }
 
 function checkNewRecord() {
@@ -3929,6 +4107,7 @@ function checkNewRecord() {
     document.getElementById('newRecordBadge').classList.add('show');
     document.getElementById('nameInputWrap').classList.add('show');
     localHighScore = score;
+    saveHighScore();
     updateHSBar();
   } else {
     document.getElementById('newRecordBadge').classList.remove('show');
@@ -3964,6 +4143,7 @@ const LANGS = {
     lvl10Heart: 'المستوى ١٠ — قلب مجاني!',
     shieldDone: 'انتهت الحماية', doubleDone: 'انتهت النقاط المضاعفة',
     shieldHit: 'الحماية تحميك', dangerWarn: 'دائرة خطر! اتجنبها!',
+    speedUp: '🔥 السرعة زادت!',
     freezeNotif: 'تجميد! الكرات أبطأ ٥ ثواني 🧊',
     freezeActive: 'تجميد نشط',
     freezeDone: 'انتهى التجميد',
@@ -4002,7 +4182,8 @@ const LANGS = {
     doubleNotif: '×2 points — 10 seconds', streakHeart: 'Free heart! 5 Perfects!',
     lvl10Heart: 'Level 10 — free heart!', shieldDone: 'Shield expired',
     doubleDone: 'Double points ended', shieldHit: 'Shield protected you',
-    dangerWarn: 'Danger orb! Avoid it!', scoreSubmitted: 'Score submitted!',
+    dangerWarn: 'Danger orb! Avoid it!',
+    speedUp: '🔥 Speed up!', scoreSubmitted: 'Score submitted!',
     freezeNotif: 'Freeze! Orbs slowed for 5s 🧊',
     freezeActive: 'Freeze active', freezeDone: 'Freeze ended',
     freezeTitle: 'Freeze', freezeDesc: 'Slows all orbs for 5 seconds',
@@ -4038,7 +4219,8 @@ const LANGS = {
     doubleNotif: '×2 points — 10 secondes', streakHeart: 'Cœur gratuit! 5 Parfaits!',
     lvl10Heart: 'Niveau 10 — cœur gratuit!', shieldDone: 'Bouclier expiré',
     doubleDone: 'Points doubles terminés', shieldHit: 'Bouclier vous a protégé',
-    dangerWarn: 'Orbe danger! Évitez!', scoreSubmitted: 'Score soumis!',
+    dangerWarn: 'Orbe danger! Évitez!',
+    speedUp: '🔥 Vitesse!', scoreSubmitted: 'Score soumis!',
     freezeNotif: 'Gel! Orbes ralentis 5s 🧊', freezeActive: 'Gel actif', freezeDone: 'Gel terminé',
     freezeTitle: 'Gel', freezeDesc: 'Ralentit toutes les orbes 5 secondes', freezeHelpDesc: 'Ralentit toutes les orbes 5 secondes',
     lbLoading: 'Chargement...', lbEmpty: "Aucun joueur — soyez le premier!", lbError: 'Échec du chargement',
@@ -4070,7 +4252,8 @@ const LANGS = {
     doubleNotif: '×2 puntos — 10 segundos', streakHeart: '¡Corazón gratis! ¡5 perfectos!',
     lvl10Heart: 'Nivel 10 — ¡corazón gratis!', shieldDone: 'Escudo expirado',
     doubleDone: 'Puntos dobles terminados', shieldHit: 'El escudo te protegió',
-    dangerWarn: '¡Orbe peligroso! ¡Evítalo!', scoreSubmitted: '¡Puntuación enviada!',
+    dangerWarn: '¡Orbe peligroso! ¡Evítalo!',
+    speedUp: '🔥 ¡Más rápido!', scoreSubmitted: '¡Puntuación enviada!',
     freezeNotif: '¡Congelado! Orbes lentos 5s 🧊', freezeActive: 'Congelado activo', freezeDone: 'Congelado terminado',
     freezeTitle: 'Congelar', freezeDesc: 'Ralentiza todos los orbes 5 segundos', freezeHelpDesc: 'Ralentiza todos los orbes 5 segundos',
     lbLoading: 'Cargando...', lbEmpty: 'Sin jugadores — ¡sé el primero!', lbError: 'Error al cargar',
@@ -4103,7 +4286,8 @@ const LANGS = {
     doubleNotif: '双倍分数 ×2 — 10秒', streakHeart: '免费生命！连续5次完美！',
     lvl10Heart: '第10关 — 免费生命！', shieldDone: '护盾已过期',
     doubleDone: '双倍分数结束', shieldHit: '护盾保护了你',
-    dangerWarn: '危险球！躲开！', scoreSubmitted: '分数已提交！',
+    dangerWarn: '危险球！躲开！',
+    speedUp: '🔥 加速!', scoreSubmitted: '分数已提交！',
     freezeNotif: '冻结！球减速5秒 🧊', freezeActive: '冻结激活', freezeDone: '冻结结束',
     freezeTitle: '冻结', freezeDesc: '所有球减速5秒', freezeHelpDesc: '所有球减速5秒',
     lbLoading: '加载中...', lbEmpty: '暂无玩家 — 成为第一个！', lbError: '加载失败',
@@ -4136,7 +4320,8 @@ const LANGS = {
     doubleNotif: '×2 Punkte — 10 Sekunden', streakHeart: 'Kostenloses Herz! 5 Perfekte!',
     lvl10Heart: 'Level 10 — kostenloses Herz!', shieldDone: 'Schild abgelaufen',
     doubleDone: 'Doppelte Punkte beendet', shieldHit: 'Schild hat dich geschützt',
-    dangerWarn: 'Gefahren-Orb! Ausweichen!', scoreSubmitted: 'Punktzahl eingetragen!',
+    dangerWarn: 'Gefahren-Orb! Ausweichen!',
+    speedUp: '🔥 Schneller!', scoreSubmitted: 'Punktzahl eingetragen!',
     freezeNotif: 'Eingefroren! Orbs langsamer 5s 🧊', freezeActive: 'Einfrieren aktiv', freezeDone: 'Einfrieren beendet',
     freezeTitle: 'Einfrieren', freezeDesc: 'Verlangsamt alle Orbs 5 Sekunden', freezeHelpDesc: 'Verlangsamt alle Orbs 5 Sekunden',
     lbLoading: 'Laden...', lbEmpty: 'Keine Spieler — sei der Erste!', lbError: 'Fehler beim Laden',

@@ -581,35 +581,35 @@ body {
   box-shadow: 0 0 30px rgba(0,200,232,0.2), inset 0 0 30px rgba(0,200,232,0.05);
 }
 
-/* زرار ابدأ اللعب — أكبر وأوضح */
+/* زرار ابدأ اللعب — أنيق ومناسب */
 #startScreen .btn-main[onclick="startGame()"] {
-  padding: 20px 80px;
-  font-size: 20px;
-  letter-spacing: 6px;
-  border-width: 2px;
-  border-color: var(--cyan);
-  background: rgba(0,200,232,0.1);
-  box-shadow: 0 0 50px rgba(0,200,232,0.4), inset 0 0 40px rgba(0,200,232,0.08);
-  animation: startBtnPulse 2s ease-in-out infinite;
-  margin-top: 8px;
+  padding: 16px 55px;
+  font-size: 17px;
+  letter-spacing: 5px;
+  border-width: 1.5px;
+  border-color: rgba(0,200,232,0.8);
+  background: rgba(0,200,232,0.08);
+  box-shadow: 0 0 35px rgba(0,200,232,0.35), inset 0 0 25px rgba(0,200,232,0.06);
+  animation: startBtnPulse 2.5s ease-in-out infinite;
+  margin-top: 4px;
 }
 
 @keyframes startBtnPulse {
   0%,100% {
-    box-shadow: 0 0 50px rgba(0,200,232,0.4), inset 0 0 40px rgba(0,200,232,0.08);
-    border-color: rgba(0,200,232,0.8);
+    box-shadow: 0 0 35px rgba(0,200,232,0.3), inset 0 0 25px rgba(0,200,232,0.06);
+    border-color: rgba(0,200,232,0.7);
   }
   50% {
-    box-shadow: 0 0 80px rgba(0,200,232,0.7), inset 0 0 60px rgba(0,200,232,0.15);
+    box-shadow: 0 0 55px rgba(0,200,232,0.55), inset 0 0 35px rgba(0,200,232,0.12);
     border-color: var(--cyan);
   }
 }
 
 #startScreen .btn-main[onclick="startGame()"]:hover {
-  background: rgba(0,200,232,0.22);
-  transform: translateY(-3px) scale(1.03);
+  background: rgba(0,200,232,0.18);
+  transform: translateY(-2px) scale(1.02);
   animation: none;
-  box-shadow: 0 0 90px rgba(0,200,232,0.8), inset 0 0 60px rgba(0,200,232,0.2);
+  box-shadow: 0 0 65px rgba(0,200,232,0.65), inset 0 0 40px rgba(0,200,232,0.15);
 }
 
 .btn-main::before {

@@ -153,7 +153,8 @@ body {
 .heart {
   font-size: 16px;
   line-height: 1;
-  filter: drop-shadow(0 0 8px rgba(224,54,110,0.9));
+  color: #ff2244;
+  filter: drop-shadow(0 0 8px rgba(255,30,60,0.95));
   transition: all 0.3s;
   display: inline-block;
 }
@@ -3149,8 +3150,10 @@ canvas.addEventListener('touchend', e=>{
 document.addEventListener('touchstart', e=>{
   const tag = e.target.tagName;
   const isUI = e.target.closest('#gameOverScreen, #pauseModal, #settingsModal, #helpModal, #startScreen, #levelUpScreen, #nameInputWrap, #helpBtn, #pauseBtn, #settingsBtn');
-  if(isUI || tag === 'INPUT' || tag === 'BUTTON') return; // let it through
+  if(isUI || tag === 'INPUT' || tag === 'BUTTON') return;
 }, {passive:true});
+
+document.addEventListener('keydown', e=>{
   if(e.code==='Space'){
     e.preventDefault();
     if(gameRunning && !gamePaused) checkHit();

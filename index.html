@@ -2539,43 +2539,43 @@ function renderStreak() {
   }
 }
 
-/* ══════════════════════ TOP NOTIF ══════════════════════ */
+/* ══════════════════════ TOP NOTIF — إشعار واحد بس ══════════════════════ */
 let _notifTimer = null;
-let _currentNotif = null;
-let _lastNotifText = '';
+let _notifEl = null;
+let _lastNotifKey = '';
 let _lastNotifTime = 0;
 
 function showTopNotif(icon, text, cls) {
   const now = Date.now();
+  const key = text;
 
-  /* منع التكرار — نفس النص في أقل من 3 ثوان */
-  if (text === _lastNotifText && now - _lastNotifTime < 3000) return;
-  _lastNotifText = text;
+  /* تجاهل نفس الإشعار لو جه في أقل من 2.5 ثانية */
+  if (key === _lastNotifKey && now - _lastNotifTime < 2500) return;
+  _lastNotifKey = key;
   _lastNotifTime = now;
 
-  const container = document.getElementById('topNotifs');
-
-  /* إشعار واحد بس في كل وقت — امسح القديم فوراً */
-  container.innerHTML = '';
-  _currentNotif = null;
+  /* إلغاء أي إشعار شغال */
   clearTimeout(_notifTimer);
+  if (_notifEl) {
+    _notifEl.remove();
+    _notifEl = null;
+  }
+
+  const container = document.getElementById('topNotifs');
+  container.innerHTML = '';
 
   const el = document.createElement('div');
   el.className = 'top-notif ' + cls;
   el.innerHTML = `<span class="notif-icon">${icon}</span><span class="notif-text">${text}</span>`;
   container.appendChild(el);
-  _currentNotif = el;
+  _notifEl = el;
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => el.classList.add('show'));
-  });
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
 
   _notifTimer = setTimeout(() => {
     el.classList.remove('show');
     el.classList.add('hide');
-    setTimeout(() => {
-      if (_currentNotif === el) { el.remove(); _currentNotif = null; }
-    }, 300);
+    setTimeout(() => { el.remove(); _notifEl = null; }, 280);
   }, 2200);
 }
 

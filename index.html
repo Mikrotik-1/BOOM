@@ -353,46 +353,7 @@ body {
   box-shadow: inset 0 0 80px rgba(0,255,150,0.08);
 }
 
-#shieldTimer {
-  position: absolute;
-  top: 16px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #00ff96;
-  text-shadow: 0 0 15px #00ff96;
-  background: rgba(0,255,150,0.08);
-  border: 1px solid rgba(0,255,150,0.25);
-  border-radius: 20px;
-  padding: 5px 14px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  z-index: 15;
-}
 
-#shieldTimer.show { opacity: 1; }
-
-#freezeTimer {
-  position: absolute;
-  top: 44px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #88eeff;
-  text-shadow: 0 0 15px #88eeff;
-  background: rgba(100,220,255,0.08);
-  border: 1px solid rgba(100,220,255,0.3);
-  border-radius: 20px;
-  padding: 5px 14px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  z-index: 15;
-}
-#freezeTimer.show { opacity: 1; }
 
 /* Freeze vignette overlay */
 #freezeOverlay {
@@ -440,6 +401,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px;
+  padding-top: 60px; /* space for langSwitcher */
 }
 
 .screen-bg {
@@ -640,6 +602,9 @@ body {
   box-shadow: 0 0 35px rgba(0,200,232,0.35), inset 0 0 25px rgba(0,200,232,0.06);
   animation: startBtnPulse 2.5s ease-in-out infinite;
   margin-top: 4px;
+  position: relative;
+  z-index: 35; /* فوق الـ langSwitcher */
+  pointer-events: auto;
 }
 
 @keyframes startBtnPulse {
@@ -1116,7 +1081,7 @@ body {
   border: 1px solid rgba(212,168,67,0.12);
   border-top: none;
   border-radius: 0 0 12px 12px;
-  max-height: 260px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -1445,8 +1410,6 @@ body {
 .lang-option.active .lang-check { opacity: 1; }
 
 #settingsBtn {
-  position: absolute;
-  bottom: 28px; right: 22px;
   width: 46px; height: 46px;
   border-radius: 50%;
   background: rgba(155,89,245,0.08);
@@ -1455,13 +1418,26 @@ body {
   cursor: pointer; display: flex;
   align-items: center; justify-content: center;
   transition: all 0.3s;
-  pointer-events: auto; z-index: 50;
+  pointer-events: auto;
   box-shadow: 0 0 15px rgba(155,89,245,0.2);
+  flex-shrink: 0;
 }
 #settingsBtn:hover {
   transform: rotate(60deg) scale(1.1);
   background: rgba(155,89,245,0.2);
   box-shadow: 0 0 35px rgba(155,89,245,0.5);
+}
+
+/* ── bottom-right buttons container ── */
+#bottomRightBtns {
+  position: absolute;
+  bottom: 22px; right: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  z-index: 50;
+  pointer-events: auto;
 }
 
 #settingsModal {
@@ -1607,28 +1583,29 @@ input[type=range].vslider::-webkit-slider-thumb {
 /* ══ PAUSE BUTTON ══ */
 #pauseBtn {
   position: absolute;
-  bottom: 28px;
-  right: 80px;
+  bottom: 22px; left: 22px;
   width: 44px; height: 44px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1.5px solid rgba(255,255,255,0.18);
-  color: var(--text-primary);
-  font-size: 16px;
+  background: rgba(0,200,232,0.07);
+  border: 1.5px solid rgba(0,200,232,0.35);
+  color: var(--cyan);
+  font-size: 14px;
   cursor: pointer;
   display: none;
   align-items: center;
   justify-content: center;
   transition: all 0.25s;
   pointer-events: auto;
-  z-index: 30;
-  box-shadow: 0 0 15px rgba(255,255,255,0.08);
+  z-index: 50;
+  box-shadow: 0 0 18px rgba(0,200,232,0.15), inset 0 0 12px rgba(0,200,232,0.04);
 }
 #pauseBtn:hover {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.4);
+  background: rgba(0,200,232,0.18);
+  border-color: var(--cyan);
+  box-shadow: 0 0 30px rgba(0,200,232,0.45);
   transform: scale(1.1);
 }
+#pauseBtn:active { transform: scale(0.94); }
 #pauseBtn.visible { display: flex; }
 
 /* ══ PAUSE MODAL ══ */
@@ -1809,9 +1786,7 @@ document.addEventListener('click',function(e){
   <canvas id="canvas"></canvas>
 
   <div id="shieldOverlay"></div>
-  <div id="shieldTimer" data-i18n="shieldActive">🛡 حماية نشطة</div>
   <div id="freezeOverlay"></div>
-  <div id="freezeTimer">🧊 تجميد نشط</div>
   <div id="hitFlash"></div>
   <div id="deathFlash"></div>
   <div id="slowmoOverlay"></div>
@@ -1933,7 +1908,10 @@ document.addEventListener('click',function(e){
 
   <div id="topNotifs"></div>
 
-  <button id="settingsBtn" onclick="openSettings()">&#9881;</button>
+  <div id="bottomRightBtns">
+    <button id="settingsBtn" onclick="openSettings()">&#9881;</button>
+  </div>
+  <button id="pauseBtn" onclick="pauseGame()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg></button>
 
   <div id="settingsModal">
     <div id="settingsModal-backdrop" onclick="closeSettings()"></div>
@@ -2011,9 +1989,6 @@ document.addEventListener('click',function(e){
   </div>
 
   <button id="helpBtn" onclick="openHelp()">?</button>
-
-  <!-- Pause Button (in-game) -->
-  <button id="pauseBtn" onclick="pauseGame()">⏸</button>
 
   <!-- Pause Modal -->
   <div id="pauseModal">
@@ -2262,7 +2237,7 @@ const bonusFBEl = document.getElementById('bonusFeedback');
 const healthBarEl= document.getElementById('healthBar');
 const streakBarEl= document.getElementById('streakBar');
 const shieldOverlay= document.getElementById('shieldOverlay');
-const shieldTimerEl= document.getElementById('shieldTimer');
+const shieldTimerEl = { classList: { add:()=>{}, remove:()=>{} }, textContent: '' };
 const startScreen  = document.getElementById('startScreen');
 const gameOverScreen= document.getElementById('gameOverScreen');
 const levelUpScreen = document.getElementById('levelUpScreen');
@@ -2334,8 +2309,8 @@ const POWERUPS = [
     apply() {
       freezeActive=true; freezeEnd=Date.now()+5000; freezeNotified=false;
       document.getElementById('freezeOverlay').classList.add('active');
-      document.getElementById('freezeTimer').classList.add('show');
-      document.getElementById('freezeTimer').textContent='🧊 '+t('freezeActive');
+      /* freezeTimer removed */
+      /* freezeTimer removed */
       playSound('freeze');
       showTopNotif('🧊', t('freezeNotif'), 'info');
     }
@@ -3122,13 +3097,13 @@ function checkLevel() {
 function continueGame() {
   levelUpScreen.classList.remove('visible');
   document.getElementById('pauseBtn').classList.add('visible');
-  document.getElementById('pauseBtn').textContent = '⏸';
+  document.getElementById('pauseBtn').innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
   gamePaused = false;
   /* Reset freeze on level-up so it doesn't carry over */
   if (freezeActive) {
     freezeActive = false; freezeEnd = 0; freezeNotified = false;
     document.getElementById('freezeOverlay').classList.remove('active');
-    document.getElementById('freezeTimer').classList.remove('show');
+    /* freezeTimer removed */
   }
   lastSpawn = Date.now();
   lastBonusSpawn = Date.now();
@@ -3166,7 +3141,7 @@ function _resetState() {
   shieldOverlay.classList.remove('active');
   shieldTimerEl.classList.remove('show');
   document.getElementById('freezeOverlay').classList.remove('active');
-  document.getElementById('freezeTimer').classList.remove('show');
+  /* freezeTimer removed */
   scoreEl.textContent='0'; levelNumEl.textContent='1';
   progressFill.style.width='0%';
   renderHearts(); renderStreak();
@@ -3186,10 +3161,13 @@ function _hideAllScreens() {
 }
 
 function startGame() {
+  /* Close lang dropdown if open */
+  document.getElementById('langPickerBtn')?.classList.remove('open');
+  document.getElementById('langDropdown')?.classList.remove('open');
   _hideAllScreens();
   document.getElementById('helpBtn').style.display='none';
   document.getElementById('pauseBtn').classList.add('visible');
-  document.getElementById('pauseBtn').textContent='⏸';
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
   _resetState();
   beatCount=0; updateHSBar(); startMusic();
   loadLeaderboard();
@@ -3207,7 +3185,7 @@ function restartGame() {
   document.getElementById('submitScore').textContent=t('submitScore');
   document.getElementById('submitScore').disabled=false;
   document.getElementById('pauseBtn').classList.add('visible');
-  document.getElementById('pauseBtn').textContent='⏸';
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
 
   // نفس الـ frame — مش setTimeout عشان متبقاش فجوة
   _resetState();
@@ -3222,13 +3200,13 @@ function pauseGame() {
   gamePaused=true;
   stopMusic();
   document.getElementById('pauseModal').classList.add('show');
-  document.getElementById('pauseBtn').textContent='▶';
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L12 7L3 12V2Z" fill="currentColor"/></svg>';
 }
 
 function resumeGame() {
   if (!gameRunning || !gamePaused) return;
   document.getElementById('pauseModal').classList.remove('show');
-  document.getElementById('pauseBtn').textContent='⏸';
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
   gamePaused=false;
   lastSpawn=Date.now(); lastBonusSpawn=Date.now(); lastDangerSpawn=Date.now();
   if (S.music) startMusic();
@@ -3246,7 +3224,7 @@ function showMenu() {
   _hideAllScreens();
   document.getElementById('helpBtn').style.display='flex';
   document.getElementById('pauseBtn').classList.remove('visible');
-  document.getElementById('pauseBtn').textContent='⏸';
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
   document.getElementById('pauseModal').classList.remove('show');
   startScreen.style.display='flex';
   loadLeaderboard();
@@ -3390,7 +3368,7 @@ function loop(ts) {
   if(freezeActive && Date.now() > freezeEnd) {
     freezeActive = false;
     document.getElementById('freezeOverlay').classList.remove('active');
-    document.getElementById('freezeTimer').classList.remove('show');
+    /* freezeTimer removed */
     if(!freezeNotified) {
       freezeNotified = true;
       showTopNotif('🧊', t('freezeDone'), 'info');
@@ -3399,7 +3377,7 @@ function loop(ts) {
   /* Update freeze timer text while active */
   if(freezeActive) {
     const secsLeft = Math.ceil((freezeEnd - Date.now()) / 1000);
-    document.getElementById('freezeTimer').textContent = '🧊 ' + t('freezeActive') + ' ' + secsLeft + 's';
+    /* freezeTimer removed */
   }
 
   drawBG();

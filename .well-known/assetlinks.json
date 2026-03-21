@@ -1,1 +1,9 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.boomgame.space",
+        "sha256_cert_fingerprints": ["DB:74:C1:EE:8E:9D:F7:CE:EF:04:6B:42:37:53:81:5F:2D:A2:D0:67:E0:C5:95:F8:E1:39:EF:E1:94:BB:F3:FE"]
+      }
+    }]
 

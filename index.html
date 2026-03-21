@@ -2625,7 +2625,7 @@ function buildBG() {
     ['rgba(220,20,100,0.1)', 'rgba(160,10,70,0.06)','rgba(0,0,0,0)'],
     ['rgba(0,180,230,0.09)', 'rgba(0,100,160,0.05)','rgba(0,0,0,0)'],
   ];
-  for (let i=0; i<5; i++) {
+  for (let i=0; i<3; i++) {
     nebulae.push({
       x: Math.random()*W, y: Math.random()*H,
       r: 130+Math.random()*180,
@@ -2649,7 +2649,7 @@ function buildBG() {
     });
   }
 
-  for (let i=0; i<60; i++) {
+  for (let i=0; i<30; i++) {
     dustParts.push({
       x:Math.random()*W, y:Math.random()*H,
       size:0.4+Math.random()*0.8,
@@ -2674,10 +2674,14 @@ function drawBG() {
     if (n.x > W+n.r) n.x = -n.r;
     if (n.y < -n.r) n.y = H+n.r;
     if (n.y > H+n.r) n.y = -n.r;
-    const g = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
-    n.cols.forEach((c,i) => g.addColorStop(i/(n.cols.length-1),c));
+    /* Use cached gradient — only rebuild if position changed significantly */
+    if (!n._grad || Math.abs(n.x - n._gx) > 8 || Math.abs(n.y - n._gy) > 8) {
+      n._grad = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
+      n.cols.forEach((c,i) => n._grad.addColorStop(i/(n.cols.length-1),c));
+      n._gx = n.x; n._gy = n.y;
+    }
     ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    ctx.fillStyle=g; ctx.fill();
+    ctx.fillStyle=n._grad; ctx.fill();
   });
 
   planets.forEach(p => {
@@ -2753,7 +2757,7 @@ class Orb {
     this.pulse += 0.09; this.rot += 0.025;
     const r = this.br + Math.sin(this.pulse)*2;
     this.trail.push({x:this.x,y:this.y,alpha:1,r:r,col:this.col});
-    if(this.trail.length>14) this.trail.shift();
+    if(this.trail.length>10) this.trail.shift();
     this.trail.forEach((t,i)=>{ t.alpha=(i/this.trail.length)*0.45; });
     /* FREEZE: slow down movement when freeze active */
     const speedMult = freezeActive ? 0.25 : 1;
@@ -2766,10 +2770,10 @@ class Orb {
   draw() {
     const r = this.br + Math.sin(this.pulse)*2;
 
-    const og = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,r*2.8);
-    og.addColorStop(0,this.col.glow); og.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(this.x,this.y,r*2.8,0,Math.PI*2);
-    ctx.fillStyle=og; ctx.globalAlpha=0.35; ctx.fill(); ctx.globalAlpha=1;
+    /* Outer glow — simplified, no gradient obj */
+    ctx.beginPath(); ctx.arc(this.x,this.y,r*2.2,0,Math.PI*2);
+    ctx.fillStyle=this.col.glow.replace('0.9)','0.08)');
+    ctx.fill();
 
     this.trail.forEach((t,i)=>{
       const tr=t.r*(0.35+(i/this.trail.length)*0.65);
@@ -2840,7 +2844,7 @@ class BonusOrb {
     this.starA += 0.05;
     this.currentR = this.br + Math.sin(this.pulse) * 3;
     this.trail.push({ x: this.x, y: this.y, alpha: 1, r: this.currentR });
-    if (this.trail.length > 16) this.trail.shift();
+    if (this.trail.length > 8) this.trail.shift();
     this.trail.forEach((t, i) => { t.alpha = (i / this.trail.length) * 0.55; });
     const speedMult = freezeActive ? 0.25 : 1;
     this.x += this.vx * speedMult;
@@ -2859,7 +2863,7 @@ class BonusOrb {
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.starA);
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 5; i++) {
       const a = (i / 8) * Math.PI * 2;
       const len = r * 2.0 + Math.sin(this.pulse * 2 + i * 1.3) * r * 0.5;
       ctx.beginPath();
@@ -2881,7 +2885,7 @@ class BonusOrb {
     ctx.beginPath();
     ctx.arc(this.x, this.y, r * 3.5, 0, Math.PI * 2);
     ctx.fillStyle = og;
-    ctx.globalAlpha = 0.65 + 0.25 * Math.sin(this.pulse);
+    ctx.globalAlpha = 0.6;
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -2917,7 +2921,7 @@ class BonusOrb {
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
     ctx.fill();
 
-    ctx.font = `${r * 0.95}px serif`;
+    ctx.font = Math.round(r * 0.95) + 'px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.globalAlpha = 0.9;
@@ -2949,7 +2953,7 @@ class DangerOrb {
   update() {
     this.pulse += 0.1;
     this.currentR = this.r + Math.sin(this.pulse) * 2.5;
-    if (this.trail.length > 10) this.trail.shift();
+    if (this.trail.length > 8) this.trail.shift();
     this.trail.push({ x: this.x, y: this.y, alpha: 1, r: this.currentR });
     this.trail.forEach((t, i) => { t.alpha = (i / this.trail.length) * 0.5; });
     const speedMult = freezeActive ? 0.25 : 1;
@@ -3000,7 +3004,7 @@ class DangerOrb {
     ctx.shadowColor = '#ff4400';
     ctx.fill(); ctx.shadowBlur = 0;
 
-    ctx.font = `${r * 0.95}px serif`;
+    ctx.font = Math.round(r * 0.95) + 'px serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.globalAlpha = 0.9;
     ctx.fillText('💀', this.x, this.y);

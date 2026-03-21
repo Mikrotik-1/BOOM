@@ -2277,19 +2277,30 @@ const DIFF = {
 };
 
 const PALETTE = [
-  { main: '#00c8e8', dark: '#005f6e', glow: 'rgba(0,200,232,0.9)' },
-  { main: '#e0366e', dark: '#6e1535', glow: 'rgba(224,54,110,0.9)' },
-  { main: '#d4a843', dark: '#8a6a20', glow: 'rgba(212,168,67,0.9)' },
-  { main: '#9b59f5', dark: '#4a1a8a', glow: 'rgba(155,89,245,0.9)' },
-  { main: '#3de08a', dark: '#1a6a40', glow: 'rgba(61,224,138,0.9)' },
-  { main: '#ff6b35', dark: '#8a2a00', glow: 'rgba(255,107,53,0.9)' },
-  { main: '#ff3cac', dark: '#7a005a', glow: 'rgba(255,60,172,0.9)' },
-  { main: '#f7ff00', dark: '#7a7a00', glow: 'rgba(247,255,0,0.9)'  },
-  { main: '#00ffcc', dark: '#006655', glow: 'rgba(0,255,204,0.9)'  },
-  { main: '#ff4444', dark: '#7a0000', glow: 'rgba(255,68,68,0.9)'  },
-  { main: '#a855f7', dark: '#4a1a7a', glow: 'rgba(168,85,247,0.9)' },
-  { main: '#f97316', dark: '#7a3200', glow: 'rgba(249,115,22,0.9)' },
+  { main: '#00c8e8', dark: '#005f6e', glow: 'rgba(0,200,232,0.9)'   },
+  { main: '#e0366e', dark: '#6e1535', glow: 'rgba(224,54,110,0.9)'  },
+  { main: '#d4a843', dark: '#8a6a20', glow: 'rgba(212,168,67,0.9)'  },
+  { main: '#9b59f5', dark: '#4a1a8a', glow: 'rgba(155,89,245,0.9)'  },
+  { main: '#3de08a', dark: '#1a6a40', glow: 'rgba(61,224,138,0.9)'  },
+  { main: '#ff6b35', dark: '#8a2a00', glow: 'rgba(255,107,53,0.9)'  },
+  { main: '#ff3cac', dark: '#7a005a', glow: 'rgba(255,60,172,0.9)'  },
+  { main: '#f7ff00', dark: '#7a7a00', glow: 'rgba(247,255,0,0.9)'   },
+  { main: '#00ffcc', dark: '#006655', glow: 'rgba(0,255,204,0.9)'   },
+  { main: '#ff4444', dark: '#7a0000', glow: 'rgba(255,68,68,0.9)'   },
+  { main: '#a855f7', dark: '#4a1a7a', glow: 'rgba(168,85,247,0.9)'  },
+  { main: '#f97316', dark: '#7a3200', glow: 'rgba(249,115,22,0.9)'  },
+  { main: '#06b6d4', dark: '#0e4a5a', glow: 'rgba(6,182,212,0.9)'   },
+  { main: '#84cc16', dark: '#3a5c00', glow: 'rgba(132,204,22,0.9)'  },
+  { main: '#f43f5e', dark: '#7a0020', glow: 'rgba(244,63,94,0.9)'   },
+  { main: '#8b5cf6', dark: '#3b1a7a', glow: 'rgba(139,92,246,0.9)'  },
+  { main: '#22d3ee', dark: '#0a5a6a', glow: 'rgba(34,211,238,0.9)'  },
+  { main: '#fb923c', dark: '#7a3800', glow: 'rgba(251,146,60,0.9)'  },
+  { main: '#4ade80', dark: '#1a6a30', glow: 'rgba(74,222,128,0.9)'  },
+  { main: '#e879f9', dark: '#7a0080', glow: 'rgba(232,121,249,0.9)' },
 ];
+
+/* آخر لونين استُخدموا — لمنع التكرار */
+let _lastOrbColors = [];
 
 const POWERUPS = [
   {
@@ -2745,7 +2756,16 @@ class Orb {
     this.y = CY + Math.sin(angle)*dist;
     this.vx = (CX-this.x)/dist*speed;
     this.vy = (CY-this.y)/dist*speed;
-    this.col = PALETTE[Math.floor(Math.random()*PALETTE.length)];
+    /* اختار لون مختلف عن آخر لونين */
+    let colIdx;
+    let tries = 0;
+    do {
+      colIdx = Math.floor(Math.random() * PALETTE.length);
+      tries++;
+    } while (_lastOrbColors.includes(colIdx) && tries < 10);
+    this.col = PALETTE[colIdx];
+    _lastOrbColors.push(colIdx);
+    if (_lastOrbColors.length > 2) _lastOrbColors.shift();
     this.br  = orbRadius;
     this.pulse = Math.random()*Math.PI*2;
     this.active = true;

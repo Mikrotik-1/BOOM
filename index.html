@@ -391,7 +391,7 @@ body {
 
 @keyframes instructPulse {
   0%,100% { opacity: 0.6; transform: scale(1); }
-  50%      { opacity: 1;   transform: scale(1.04); }
+  50%      { opacity: 1; transform: scale(1.04); }
 }
 
 .screen {
@@ -1787,16 +1787,44 @@ document.addEventListener('click',function(e){
 </script>
 </head>
 <body>
-<!-- SPLASH SCREEN -->
-<div id="splashScreen">
-  <div class="splash-orb"></div>
-  <div class="splash-title">BOOM</div>
-  <div class="splash-sub">SPACE · REFLEX</div>
-  <div class="splash-loader">
-    <div class="splash-loader-fill" id="splashFill"></div>
-  </div>
-</div>
 
+<!-- ========== FIREBASE INITIALIZATION ========== -->
+<script type="module">
+  // Import Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, set, push, get, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyADszVuV7FlIRKwsOfnQEfmodDixeed7Us",
+    authDomain: "boom-d4aec.firebaseapp.com",
+    databaseURL: "https://boom-d4aec-default-rtdb.firebaseio.com",
+    projectId: "boom-d4aec",
+    storageBucket: "boom-d4aec.firebasestorage.app",
+    messagingSenderId: "1043458375633",
+    appId: "1:1043458375633:web:4c728628252988e4f46af0",
+    measurementId: "G-JNK9KWNXJG"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+
+  // Make Firebase available globally for the game code
+  window.firebaseDB = database;
+  window.firebaseRef = ref;
+  window.firebasePush = push;
+  window.firebaseGet = get;
+  window.firebaseQuery = query;
+  window.firebaseOrderByChild = orderByChild;
+  window.firebaseLimitToLast = limitToLast;
+
+  console.log("✅ Firebase initialized successfully!");
+</script>
+
+<!-- باقي كود اللعبة (الأوراق، الـ divs، الـ canvas، إلخ) -->
 <div id="gameContainer">
   <canvas id="canvas"></canvas>
 
@@ -2340,7 +2368,6 @@ const POWERUPS = [
     apply() {
       freezeActive=true; freezeEnd=Date.now()+5000; freezeNotified=false;
       document.getElementById('freezeOverlay').classList.add('active');
-      /* freezeTimer removed */
       /* freezeTimer removed */
       playSound('freeze');
       showTopNotif('🧊', t('freezeNotif'), 'info');

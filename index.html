@@ -630,45 +630,6 @@ body {
   box-shadow: 0 0 65px rgba(0,200,232,0.65), inset 0 0 40px rgba(0,200,232,0.15);
 }
 
-#startBtnMain.starting {
-  pointer-events: none;
-  opacity: 0.82;
-  transform: none !important;
-  animation: none !important;
-  box-shadow: 0 0 28px rgba(0,200,232,0.28), inset 0 0 24px rgba(0,200,232,0.08);
-}
-
-#startBtnMain.starting::after {
-  content: '...';
-  margin-inline-start: 10px;
-  letter-spacing: 2px;
-}
-
-#lb-subtitle {
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-inline-start: auto;
-  letter-spacing: 0.5px;
-}
-
-.lb-name-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-}
-
-.lb-meta {
-  font-size: 10px;
-  color: var(--text-dim);
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
 .btn-main::before {
   content: '';
   position: absolute;
@@ -1799,6 +1760,47 @@ input[type=range].vslider::-webkit-slider-thumb {
   transition: opacity 0.2s;
 }
 #slowmoOverlay.active { opacity: 1; }
+
+/* ── GAME OVER EXTRAS ── */
+#gameOverExtras{
+  width:100%;
+  max-width:320px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin:-4px 0 18px;
+}
+#finalRankBadge{
+  align-self:center;
+  min-width:92px;
+  padding:8px 18px;
+  border-radius:999px;
+  background:rgba(0,200,232,0.1);
+  border:1px solid rgba(0,200,232,0.35);
+  color:var(--cyan);
+  font-family:'Cinzel',serif;
+  font-size:20px;
+  letter-spacing:3px;
+  text-align:center;
+  box-shadow:0 0 24px rgba(0,200,232,0.16);
+}
+#bestScoreLine,#almostWinMsg{
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.7;
+}
+#bestScoreLine{ color:var(--text-dim); }
+#almostWinMsg{
+  min-height:24px;
+  color:#ffd36e;
+  text-shadow:0 0 18px rgba(212,168,67,0.22);
+}
+#almostWinMsg.show{
+  color:var(--gold-bright);
+  text-shadow:0 0 24px rgba(212,168,67,0.42);
+}
+
 </style>
 
 <script>
@@ -2215,13 +2217,13 @@ document.addEventListener('click',function(e){
     <div id="leaderboard-wrap">
       <div id="lb-header">
         <span class="lb-icon">🏆</span>
-        <span data-i18n="bestPlayers">أفضل اللاعبين</span><span id="lb-subtitle">Top unique</span>
+        <span data-i18n="bestPlayers">أفضل اللاعبين</span>
       </div>
       <div id="lb-panel" class="open">
         <div id="lb-list"><div id="lb-loading">جاري التحميل...</div></div>
       </div>
     </div>
-    <button id="startBtnMain" class="btn-main" onclick="startGame()" data-i18n="startBtn">ابدأ اللعب</button>
+    <button class="btn-main" onclick="startGame()" data-i18n="startBtn">ابدأ اللعب</button>
     <div class="diff-row">
       <button class="diffBtn easy-btn active" onclick="setDifficulty('easy',this)">
         <span class="diff-icon">🌱</span>
@@ -2276,6 +2278,11 @@ document.addEventListener('click',function(e){
         <span class="stat-label" data-i18n="accuracy">الدقة</span>
         <span class="stat-value" id="accuracy">0%</span>
       </div>
+    </div>
+    <div id="gameOverExtras">
+      <div id="finalRankBadge">C</div>
+      <div id="bestScoreLine"></div>
+      <div id="almostWinMsg"></div>
     </div>
     <button class="btn-main btn-restart" onclick="restartGame()" data-i18n="retry">↺ حاول مجدداً</button>
     <button class="btn-secondary-small" onclick="showMenu()" data-i18n="menu">القائمة</button>
@@ -2536,6 +2543,58 @@ function flashHit(color='rgba(255,255,255,0.22)') {
 
 let _deathFlashTimer = null;
 let _slowmoActive = false;
+let nearMissEnd = 0;
+let nearMissCooldownUntil = 0;
+let bestOrbDistance = Infinity;
+
+function vibratePattern(pattern){
+  try{
+    if(typeof navigator !== 'undefined' && navigator.vibrate && (!S || S.shake)) navigator.vibrate(pattern);
+  }catch(e){}
+}
+
+function triggerNearMiss(){
+  const now = Date.now();
+  if(now < nearMissCooldownUntil || now < nearMissEnd) return;
+  nearMissEnd = now + 220;
+  nearMissCooldownUntil = now + 1100;
+  const sm = document.getElementById('slowmoOverlay');
+  if(sm){ sm.classList.add('active'); setTimeout(()=>sm.classList.remove('active'), 220); }
+  showFB(t('nearMiss'),'good');
+  flashHit('rgba(255,255,255,0.12)');
+  vibratePattern(20);
+  if(typeof S === 'undefined' || S.sfx) playSound('good');
+}
+
+function getPerformanceRank(acc, scoreValue, comboValue){
+  if(scoreValue >= 1200 || (acc >= 92 && comboValue >= 18)) return 'S';
+  if(scoreValue >= 800  || (acc >= 85 && comboValue >= 12)) return 'A';
+  if(scoreValue >= 450  || (acc >= 72 && comboValue >= 8))  return 'B';
+  if(scoreValue >= 200  || acc >= 55) return 'C';
+  return 'D';
+}
+
+function updateGameOverExtras(bestBefore, acc){
+  const rank = getPerformanceRank(acc, score, maxCombo);
+  const rankEl = document.getElementById('finalRankBadge');
+  const bestEl = document.getElementById('bestScoreLine');
+  const almostEl = document.getElementById('almostWinMsg');
+  if(rankEl) rankEl.textContent = (t('rankLabel') || 'RANK') + ' ' + rank;
+  if(bestEl) bestEl.textContent = (t('bestResult') || 'Best') + ': ' + Number(bestBefore || 0).toLocaleString('en-US');
+  if(almostEl){
+    const gap = Math.max(0, Number(bestBefore || 0) - Number(score || 0));
+    if(!isNewRecord && bestBefore > 0 && gap > 0 && gap <= 25){
+      almostEl.textContent = (t('almostWin') || 'Almost!') + ' ' + gap + ' ' + (t('pointsAway') || 'pts');
+      almostEl.classList.add('show');
+    }else if(isNewRecord){
+      almostEl.textContent = t('newRecord');
+      almostEl.classList.add('show');
+    }else{
+      almostEl.textContent = '';
+      almostEl.classList.remove('show');
+    }
+  }
+}
 function triggerDeathEffect() {
   /* 1. White flash */
   const df = document.getElementById('deathFlash');
@@ -2554,12 +2613,13 @@ function triggerDeathEffect() {
   shakeAmt = (typeof S !== 'undefined' && !S.shake) ? 0 : 22;
   /* 4. Death sound */
   playSound('death');
+  vibratePattern([60,40,90]);
 }
 
 /* ══════════════════════ TIME-BASED DIFFICULTY ══════════════════════ */
 let _gameStartTime = 0;
 let _lastDiffTick = 0;
-const DIFF_TICK_MS = 12000; // every 12s add pressure
+const DIFF_TICK_MS = 20000; // every 20s add pressure
 
 function tickDifficulty() {
   if(!gameRunning || gamePaused) return;
@@ -2568,8 +2628,8 @@ function tickDifficulty() {
   if(tick > _lastDiffTick) {
     _lastDiffTick = tick;
     /* Increase speed noticeably */
-    speed = Math.min(speed + 0.3, 12);
-    spawnRate = Math.max(600, spawnRate - 100);
+    speed = Math.min(speed + 0.38, 12);
+    spawnRate = Math.max(560, spawnRate - 120);
     /* Flash + notify */
     scoreEl.classList.add('bump');
     setTimeout(() => scoreEl.classList.remove('bump'), 400);
@@ -3487,29 +3547,17 @@ function _hideAllScreens() {
 }
 
 function startGame() {
-  if (isStartingGame || gameRunning) return;
-  isStartingGame = true;
-  setStartButtonBusy(true);
-
-  try {
-    document.getElementById('langPickerBtn')?.classList.remove('open');
-    document.getElementById('langDropdown')?.classList.remove('open');
-    _hideAllScreens();
-    document.getElementById('helpBtn').style.display='none';
-    document.getElementById('pauseBtn').classList.add('visible');
-    document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
-    _resetState();
-    beatCount=0;
-    updateHSBar();
-    startMusic();
-    requestWakeLock();
-    requestAnimationFrame(loop);
-  } finally {
-    setTimeout(() => {
-      isStartingGame = false;
-      setStartButtonBusy(false);
-    }, 450);
-  }
+  /* Close lang dropdown if open */
+  document.getElementById('langPickerBtn')?.classList.remove('open');
+  document.getElementById('langDropdown')?.classList.remove('open');
+  _hideAllScreens();
+  document.getElementById('helpBtn').style.display='none';
+  document.getElementById('pauseBtn').classList.add('visible');
+  document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
+  _resetState();
+  beatCount=0; updateHSBar(); startMusic(); requestWakeLock();
+  loadLeaderboard();
+  requestAnimationFrame(loop);
 }
 
 function restartGame() {
@@ -3565,12 +3613,13 @@ function showMenu() {
   document.getElementById('pauseBtn').innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/><rect x="8.5" y="1.5" width="3.5" height="11" rx="1.5" fill="currentColor"/></svg>';
   document.getElementById('pauseModal').classList.remove('show');
   startScreen.style.display='flex';
-  loadLeaderboard(true);
+  loadLeaderboard();
 }
 
 function gameOver() {
   if(!gameRunning) return; // guard double calls
   gameRunning=false; gamePaused=false;
+  const bestBefore = localHighScore;
   stopMusic(); releaseWakeLock();
   document.getElementById('pauseBtn').classList.remove('visible');
   document.getElementById('pauseModal').classList.remove('show');
@@ -3585,6 +3634,7 @@ function gameOver() {
     document.getElementById('maxCombo').textContent=maxCombo;
     document.getElementById('finalLevel').textContent=level;
     document.getElementById('accuracy').textContent=acc+'%';
+    updateGameOverExtras(bestBefore, acc);
     gameOverScreen.classList.add('visible');
   }, 650);
 }
@@ -3652,8 +3702,9 @@ function checkHit() {
       if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
       explode(fo.x,fo.y,'#ffcc00','perfect');
       rings.push(new Ring('#ffee00',35,'perfect'));
-      shakeAmt=typeof S!=='undefined'&&!S.shake?0:4; playSound('perfect'); playSound('score');
-      flashHit('rgba(255,200,0,0.3)');
+      shakeAmt=typeof S!=='undefined'&&!S.shake?0:6; playSound('perfect'); playSound('score');
+      vibratePattern(16);
+      flashHit('rgba(255,200,0,0.38)');
       showFB('⚡ +'+pts,'perfect');
       scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
       updateProgress(); checkLevel();
@@ -3664,8 +3715,9 @@ function checkHit() {
       score+=pts; scoreEl.textContent=score.toLocaleString('en-US');
       explode(fo.x,fo.y,'#ffcc00','good');
       rings.push(new Ring('#ffee00',75,'good'));
-      shakeAmt=typeof S!=='undefined'&&!S.shake?0:2; playSound('good');
-      flashHit('rgba(255,200,0,0.2)');
+      shakeAmt=typeof S!=='undefined'&&!S.shake?0:3; playSound('good');
+      vibratePattern(10);
+      flashHit('rgba(255,200,0,0.28)');
       showFB('⚡ +'+pts,'good');
       updateProgress(); checkLevel();
       return;
@@ -3685,8 +3737,9 @@ function checkHit() {
       if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
       explode(zo.x,zo.y,'#a855f7','perfect');
       rings.push(new Ring('#a855f7',35,'perfect'));
-      shakeAmt=typeof S!=='undefined'&&!S.shake?0:4; playSound('perfect'); playSound('score');
-      flashHit('rgba(160,80,255,0.3)');
+      shakeAmt=typeof S!=='undefined'&&!S.shake?0:6; playSound('perfect'); playSound('score');
+      vibratePattern(16);
+      flashHit('rgba(160,80,255,0.38)');
       showFB('🌀 +'+pts,'perfect');
       scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
       updateProgress(); checkLevel();
@@ -3697,8 +3750,9 @@ function checkHit() {
       score+=pts; scoreEl.textContent=score.toLocaleString('en-US');
       explode(zo.x,zo.y,'#a855f7','good');
       rings.push(new Ring('#a855f7',75,'good'));
-      shakeAmt=typeof S!=='undefined'&&!S.shake?0:2; playSound('good');
-      flashHit('rgba(160,80,255,0.2)');
+      shakeAmt=typeof S!=='undefined'&&!S.shake?0:3; playSound('good');
+      vibratePattern(10);
+      flashHit('rgba(160,80,255,0.28)');
       showFB('🌀 +'+pts,'good');
       updateProgress(); checkLevel();
       return;
@@ -3747,8 +3801,9 @@ function checkHit() {
     explode(closest.x,closest.y,closest.col.main,'perfect');
     rings.push(new Ring(closest.col.main,35,'perfect'));
     rings.push(new Ring('#d4a843',35,'perfect'));
-    shakeAmt=typeof S !== "undefined"&&!S.shake?0:4; playSound('perfect');
-    flashHit('rgba(212,168,67,0.28)');
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:6; playSound('perfect');
+    vibratePattern(18);
+    flashHit('rgba(212,168,67,0.38)');
     playSound('score');
     showFB(mult===2?'PERFECT ×2':'PERFECT!','perfect');
     scoreEl.classList.add('bump'); setTimeout(()=>scoreEl.classList.remove('bump'),300);
@@ -3763,8 +3818,9 @@ function checkHit() {
     if(combo>1){comboEl.textContent='×'+combo; comboCont.classList.add('show');}
     explode(closest.x,closest.y,closest.col.main,'good');
     rings.push(new Ring(closest.col.main,75,'good'));
-    shakeAmt=typeof S !== "undefined"&&!S.shake?0:2; playSound('good');
-    flashHit('rgba(0,200,232,0.18)');
+    shakeAmt=typeof S !== "undefined"&&!S.shake?0:3; playSound('good');
+    vibratePattern(12);
+    flashHit('rgba(0,200,232,0.28)');
     showFB(mult===2?'GOOD ×2':'GOOD!','good');
     updateProgress(); checkLevel();
 
@@ -4436,63 +4492,6 @@ const LB_MAX  = 10;
 let localHighScore = 0;
 let isNewRecord = false;
 
-let isStartingGame = false;
-let leaderboardBusy = false;
-let leaderboardEntries = [];
-let leaderboardRequestId = 0;
-let lastLeaderboardLoadedAt = 0;
-
-function normalizePlayerName(name) {
-  return String(name || '')
-    .trim()
-    .replace(/\s+/g, ' ')
-    .slice(0, 16)
-    .toLowerCase();
-}
-
-function prettifyPlayerName(name) {
-  const clean = String(name || '').trim().replace(/\s+/g, ' ').slice(0, 16);
-  return clean || 'مجهول';
-}
-
-function setStartButtonBusy(busy) {
-  const btn = document.getElementById('startBtnMain');
-  if (!btn) return;
-  btn.classList.toggle('starting', !!busy);
-  btn.disabled = !!busy;
-}
-
-function dedupeLeaderboardEntries(entries) {
-  const bestByName = new Map();
-  (entries || []).forEach((entry) => {
-    const key = normalizePlayerName(entry && entry.name ? entry.name : 'مجهول');
-    const normalizedEntry = {
-      ...entry,
-      name: prettifyPlayerName(entry && entry.name ? entry.name : 'مجهول'),
-      score: Number(entry && entry.score ? entry.score : 0) || 0,
-      ts: Number(entry && entry.ts ? entry.ts : 0) || 0,
-      diff: entry && entry.diff ? entry.diff : 'easy'
-    };
-    const existing = bestByName.get(key);
-    if (!existing || normalizedEntry.score > existing.score || (normalizedEntry.score === existing.score && normalizedEntry.ts > existing.ts)) {
-      bestByName.set(key, normalizedEntry);
-    }
-  });
-  return Array.from(bestByName.values()).sort((a, b) => (b.score - a.score) || (b.ts - a.ts));
-}
-
-async function fetchJSONWithTimeout(url, options = {}, timeoutMs = 7000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { ...options, signal: controller.signal, cache: 'no-store' });
-    return res;
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-
 /* ── helpers ── */
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -4502,128 +4501,72 @@ function diffLabel(d) {
 }
 
 /* ── LOAD ── */
-async function loadLeaderboard(force = false) {
+async function loadLeaderboard() {
   const list = document.getElementById('lb-list');
-  if (!list) return;
-
-  const now = Date.now();
-  if (!force && leaderboardEntries.length && now - lastLeaderboardLoadedAt < 12000) {
-    renderLeaderboard(leaderboardEntries);
-    return;
-  }
-
-  const requestId = ++leaderboardRequestId;
-  leaderboardBusy = true;
   list.innerHTML = '<div class="lb-loading">'+t('lbLoading')+'</div>';
-
   try {
-    const url = FB_PATH + '.json?orderBy=%22score%22&limitToLast=40';
-    const res = await fetchJSONWithTimeout(url, {}, 7000);
+    /* Firebase REST: orderBy score descending, top LB_MAX */
+    const url = FB_PATH + '.json?orderBy=%22score%22&limitToLast=' + LB_MAX;
+    const res  = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
+    if (!data) { list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>'; return; }
 
-    if (requestId !== leaderboardRequestId) return;
+    /* Convert object → array, sort descending */
+    const entries = Object.values(data).sort((a, b) => b.score - a.score);
+    renderLeaderboard(entries);
 
-    const rawEntries = data ? Object.values(data) : [];
-    const uniqueEntries = dedupeLeaderboardEntries(rawEntries).slice(0, LB_MAX);
-
-    leaderboardEntries = uniqueEntries;
-    lastLeaderboardLoadedAt = Date.now();
-
-    renderLeaderboard(uniqueEntries);
-
-    if (uniqueEntries.length > 0) {
-      localHighScore = Math.max(localHighScore, uniqueEntries[0].score);
+    /* Update global high score */
+    if (entries.length > 0) {
+      localHighScore = Math.max(localHighScore, entries[0].score);
       updateHSBar();
-    } else {
-      list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>';
     }
   } catch(e) {
-    if (!leaderboardEntries.length) {
-      list.innerHTML = '<div class="lb-empty">'+t('lbError')+'</div>';
-    } else {
-      renderLeaderboard(leaderboardEntries);
-    }
-  } finally {
-    leaderboardBusy = false;
+    list.innerHTML = '<div class="lb-empty">'+t('lbError')+'</div>';
   }
 }
 
 /* ── RENDER ── */
 function renderLeaderboard(entries) {
   const list = document.getElementById('lb-list');
-  if (!list) return;
-  if (!entries || !entries.length) {
-    list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>';
-    return;
-  }
-
+  if (!entries.length) { list.innerHTML = '<div class="lb-empty">'+t('lbEmpty')+'</div>'; return; }
   const rankIcons = ['🥇','🥈','🥉'];
   const rankCls   = ['r1','r2','r3'];
-
-  list.innerHTML = entries.slice(0, LB_MAX).map((e, i) => {
-    const score = Number(e.score || 0).toLocaleString('en-US');
-    const diff = diffLabel(e.diff || 'easy');
-    const meta = score + ' • ' + diff;
-    return `
-      <div class="lb-row" style="animation-delay:${i*0.06}s">
-        <span class="lb-rank ${rankCls[i]||'rn'}">${rankIcons[i]||i+1}</span>
-        <span class="lb-name-wrap">
-          <span class="lb-name">${escHtml(prettifyPlayerName(e.name || '—'))}</span>
-          <span class="lb-meta">${meta}</span>
-        </span>
-        <span class="lb-diff ${e.diff||'easy'}">${diff}</span>
-      </div>`;
-  }).join('');
+  list.innerHTML = entries.slice(0, LB_MAX).map((e, i) => `
+    <div class="lb-row" style="animation-delay:${i*0.06}s">
+      <span class="lb-rank ${rankCls[i]||'rn'}">${rankIcons[i]||i+1}</span>
+      <span class="lb-name">${escHtml(e.name||'—')}</span>
+      <span class="lb-diff ${e.diff||'easy'}">${diffLabel(e.diff)}</span>
+      <span class="lb-score">${Number(e.score).toLocaleString('en-US')}</span>
+    </div>`).join('');
 }
 
 /* ── SUBMIT ── */
 async function submitToLeaderboard() {
   const nameEl = document.getElementById('playerNameInput');
+  const name   = escHtml(nameEl.value.trim().slice(0,16)) || 'مجهول';
   const btn    = document.getElementById('submitScore');
-  if (!nameEl || !btn || btn.disabled) return;
+  btn.textContent = '...'; btn.disabled = true;
 
-  const prettyName = prettifyPlayerName(nameEl.value);
-  const normalized = normalizePlayerName(prettyName);
-  nameEl.value = prettyName;
-
-  btn.textContent = '...';
-  btn.disabled = true;
-
-  const recentSubmitKey = 'boom_last_submit_' + difficulty;
-  const recentSubmit = localStorage.getItem(recentSubmitKey);
-  if (recentSubmit) {
-    try {
-      const parsed = JSON.parse(recentSubmit);
-      if (parsed && parsed.name === normalized && parsed.score === score && Date.now() - parsed.ts < 20000) {
-        document.getElementById('nameInputWrap').classList.remove('show');
-        btn.textContent = '✓';
-        showTopNotif('🏆', t('scoreSubmitted'), 'double');
-        return;
-      }
-    } catch(e) {}
-  }
-
-  const entry = { name: prettyName, score, diff: difficulty, ts: Date.now() };
+  const entry = { name, score, diff: difficulty, ts: Date.now() };
 
   try {
-    const res = await fetchJSONWithTimeout(FB_PATH + '.json', {
+    /* Firebase REST POST — creates unique key automatically */
+    const res = await fetch(FB_PATH + '.json', {
       method : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body   : JSON.stringify(entry)
-    }, 7000);
-
+    });
     if (!res.ok) throw new Error('post failed');
 
-    try {
-      localStorage.setItem(recentSubmitKey, JSON.stringify({ name: normalized, score, ts: Date.now() }));
-    } catch(e) {}
-
+    /* Keep only top LB_MAX — run cleanup quietly */
     trimLeaderboard();
+
     document.getElementById('nameInputWrap').classList.remove('show');
     showTopNotif('🏆', t('scoreSubmitted'), 'double');
     btn.textContent = '✓';
-    await loadLeaderboard(true);
+    /* Refresh leaderboard */
+    await loadLeaderboard();
 
   } catch(e) {
     btn.textContent = t('retry');
@@ -4635,25 +4578,20 @@ async function submitToLeaderboard() {
 /* ── TRIM (keep top LB_MAX) ── */
 async function trimLeaderboard() {
   try {
-    const url  = FB_PATH + '.json?orderBy=%22score%22&limitToLast=120';
-    const res  = await fetchJSONWithTimeout(url, {}, 7000);
+    const url  = FB_PATH + '.json?orderBy=%22score%22&limitToFirst=1000';
+    const res  = await fetch(url, { cache: 'no-store' });
     if (!res.ok) return;
     const data = await res.json();
     if (!data) return;
 
-    const entries = Object.entries(data).map(([k,v]) => ({
-      key:k,
-      score:Number(v && v.score ? v.score : 0) || 0,
-      ts:Number(v && v.ts ? v.ts : 0) || 0
-    }));
+    const entries = Object.entries(data).map(([k,v]) => ({ key:k, score:v.score||0 }));
+    if (entries.length <= LB_MAX) return;
 
-    if (entries.length <= 60) return;
-
-    entries.sort((a,b) => (b.score - a.score) || (b.ts - a.ts));
-    const toDelete = entries.slice(60);
-
-    await Promise.allSettled(toDelete.map(e =>
-      fetchJSONWithTimeout(FB_PATH + '/' + e.key + '.json', { method: 'DELETE' }, 7000)
+    /* Delete lowest entries beyond LB_MAX */
+    entries.sort((a,b) => b.score - a.score);
+    const toDelete = entries.slice(LB_MAX);
+    await Promise.all(toDelete.map(e =>
+      fetch(FB_PATH + '/' + e.key + '.json', { method: 'DELETE' })
     ));
   } catch(e) { /* silent */ }
 }
@@ -4661,6 +4599,7 @@ async function trimLeaderboard() {
 function updateHSBar() {
   const el = document.getElementById('hsVal');
   if (!el) return;
+  /* Sync with localStorage high score */
   const stored = parseInt(localStorage.getItem('boom_hs_' + difficulty) || '0');
   if (stored > localHighScore) localHighScore = stored;
   if (localHighScore > 0) el.textContent = localHighScore.toLocaleString('en-US');
@@ -4678,25 +4617,18 @@ function saveHighScore() {
 
 function checkNewRecord() {
   isNewRecord = score > localHighScore;
-  const badge = document.getElementById('newRecordBadge');
-  const wrap = document.getElementById('nameInputWrap');
-  const btn = document.getElementById('submitScore');
-  const input = document.getElementById('playerNameInput');
-
   if (isNewRecord) {
-    badge.classList.add('show');
-    wrap.classList.add('show');
-    input.value = '';
-    btn.textContent = t('submitScore');
-    btn.disabled = false;
+    document.getElementById('newRecordBadge').classList.add('show');
+    document.getElementById('nameInputWrap').classList.add('show');
+    document.getElementById('playerNameInput').value = '';
+    document.getElementById('submitScore').textContent = t('submitScore');
+    document.getElementById('submitScore').disabled = false;
     localHighScore = score;
     saveHighScore();
     updateHSBar();
   } else {
-    badge.classList.remove('show');
-    wrap.classList.remove('show');
-    btn.textContent = t('submitScore');
-    btn.disabled = false;
+    document.getElementById('newRecordBadge').classList.remove('show');
+    document.getElementById('nameInputWrap').classList.remove('show');
   }
 }
 
@@ -4729,6 +4661,7 @@ const LANGS = {
     shieldDone: 'انتهت الحماية', doubleDone: 'انتهت النقاط المضاعفة',
     shieldHit: 'الحماية تحميك', dangerWarn: 'دائرة خطر! اتجنبها!',
     speedUp: '🔥 السرعة زادت!',
+    nearMiss: 'قريبة جدًا!', almostWin: 'كنت قريب تكسر رقمك بـ', pointsAway: 'نقطة فقط', rankLabel: 'التقييم', bestResult: 'أفضل نتيجة',
     freezeNotif: 'تجميد! الكرات أبطأ ٥ ثواني 🧊',
     freezeActive: 'تجميد نشط',
     freezeDone: 'انتهى التجميد',
@@ -4768,7 +4701,7 @@ const LANGS = {
     lvl10Heart: 'Level 10 — free heart!', shieldDone: 'Shield expired',
     doubleDone: 'Double points ended', shieldHit: 'Shield protected you',
     dangerWarn: 'Danger orb! Avoid it!',
-    speedUp: '🔥 Speed up!', scoreSubmitted: 'Score submitted!',
+    speedUp: '🔥 Speed up!', nearMiss: 'So close!', almostWin: 'You were only', pointsAway: 'pts away', rankLabel: 'RANK', bestResult: 'Best score', scoreSubmitted: 'Score submitted!',
     freezeNotif: 'Freeze! Orbs slowed for 5s 🧊',
     freezeActive: 'Freeze active', freezeDone: 'Freeze ended',
     freezeTitle: 'Freeze', freezeDesc: 'Slows all orbs for 5 seconds',
@@ -4983,8 +4916,6 @@ function applyLang() {
 
   const lbLoading = document.getElementById('lb-loading');
   if (lbLoading) lbLoading.textContent = t('lbLoading');
-  const lbSubtitle = document.getElementById('lb-subtitle');
-  if (lbSubtitle) lbSubtitle.textContent = currentLang === 'ar' ? 'أفضل نتيجة لكل اسم' : currentLang === 'fr' ? 'Meilleur score par nom' : currentLang === 'es' ? 'Mejor puntuación por nombre' : currentLang === 'de' ? 'Bester Score pro Name' : currentLang === 'zh' ? '每个名字仅显示最佳分数' : 'Best score per name';
 }
 
 /* ══ SETTINGS ══ */

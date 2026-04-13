@@ -1898,6 +1898,48 @@ input[type=range].vslider::-webkit-slider-thumb {
   margin-bottom:22px;
   text-transform:uppercase;
 }
+
+.splash-welcome{
+  font-size:13px;
+  letter-spacing:2px;
+  color:rgba(255,255,255,.82);
+  margin-bottom:14px;
+  text-shadow:0 0 16px rgba(0,200,232,.18);
+  animation:splashWelcomeIn 1.1s ease both;
+}
+.splash-percent{
+  margin-top:10px;
+  font-family:'Cinzel', serif;
+  font-size:22px;
+  letter-spacing:3px;
+  color:var(--gold-bright);
+  text-shadow:0 0 18px rgba(212,168,67,.35);
+}
+.splash-cinematic .splash-title{
+  animation:splashTitleIn 1.25s cubic-bezier(.22,1,.36,1) both;
+}
+.splash-cinematic .splash-sub{
+  animation:splashSubIn 1.25s ease .2s both;
+}
+.splash-cinematic .splash-loader,
+.splash-cinematic .splash-loading-text,
+.splash-cinematic .splash-percent{
+  animation:splashSubIn 1.1s ease .35s both;
+}
+@keyframes splashTitleIn{
+  0%{ opacity:0; transform:scale(.72) translateY(18px); letter-spacing:20px; filter:blur(8px); }
+  60%{ opacity:1; transform:scale(1.04) translateY(0); filter:blur(0); }
+  100%{ opacity:1; transform:scale(1); letter-spacing:10px; filter:blur(0); }
+}
+@keyframes splashSubIn{
+  0%{ opacity:0; transform:translateY(16px); }
+  100%{ opacity:1; transform:translateY(0); }
+}
+@keyframes splashWelcomeIn{
+  0%{ opacity:0; transform:translateY(14px) scale(.96); }
+  100%{ opacity:1; transform:translateY(0) scale(1); }
+}
+
 .splash-loader{
   width:100%;
   height:10px;
@@ -1973,7 +2015,7 @@ document.addEventListener('click',function(e){
 
 
 <div id="splashScreen" aria-hidden="true">
-  <div class="splash-box">
+  <div class="splash-box splash-cinematic">
     <div class="splash-orb">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
         <defs>
@@ -2028,8 +2070,10 @@ document.addEventListener('click',function(e){
     </div>
     <div class="splash-title">BOOM</div>
     <div class="splash-sub">SPACE REFLEX EXPERIENCE</div>
+    <div class="splash-welcome">Welcome to BOOM</div>
     <div class="splash-loader"><div id="splashFill"></div></div>
-    <div class="splash-loading-text">LOADING<span class="dots">...</span></div>
+    <div class="splash-percent" id="splashPercent">0%</div>
+    <div class="splash-loading-text" id="splashLoadingText">LOADING<span class="dots">...</span></div>
   </div>
 </div>
 
@@ -5244,23 +5288,70 @@ document.addEventListener('visibilitychange', async () => {
 (function showSplash() {
   const fill = document.getElementById('splashFill');
   const splash = document.getElementById('splashScreen');
+  const percentEl = document.getElementById('splashPercent');
+  const loadingText = document.getElementById('splashLoadingText');
   if (!fill || !splash) return;
 
+  function playSplashSound() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      const now = ctx.currentTime + 0.02;
+
+      const o1 = ctx.createOscillator();
+      const g1 = ctx.createGain();
+      o1.type = 'sine';
+      o1.frequency.setValueAtTime(392, now);
+      o1.frequency.exponentialRampToValueAtTime(523.25, now + 0.32);
+      g1.gain.setValueAtTime(0.0001, now);
+      g1.gain.linearRampToValueAtTime(0.03, now + 0.05);
+      g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+      o1.connect(g1); g1.connect(ctx.destination);
+      o1.start(now); o1.stop(now + 0.42);
+
+      const o2 = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      o2.type = 'triangle';
+      o2.frequency.setValueAtTime(659.25, now + 0.08);
+      o2.frequency.exponentialRampToValueAtTime(783.99, now + 0.42);
+      g2.gain.setValueAtTime(0.0001, now + 0.08);
+      g2.gain.linearRampToValueAtTime(0.02, now + 0.12);
+      g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+      o2.connect(g2); g2.connect(ctx.destination);
+      o2.start(now + 0.08); o2.stop(now + 0.5);
+
+      setTimeout(() => { try { ctx.close(); } catch(e) {} }, 900);
+    } catch(e) {}
+  }
+
+  playSplashSound();
+
+  const loadingSteps = ['BOOTING SYSTEM', 'SYNCING STARS', 'LOADING ORBITS', 'READY'];
   let progress = 0;
+  let stepIndex = 0;
+
   const interval = setInterval(() => {
-    progress += Math.random() * 18 + 8;
+    progress += Math.random() * 14 + 6;
+    if (progress > 100) progress = 100;
+
+    fill.style.width = progress + '%';
+    if (percentEl) percentEl.textContent = Math.round(progress) + '%';
+
+    if (loadingText && progress > (stepIndex + 1) * 25 && stepIndex < loadingSteps.length - 1) {
+      stepIndex++;
+      loadingText.innerHTML = loadingSteps[stepIndex] + '<span class="dots">...</span>';
+    }
+
     if (progress >= 100) {
-      progress = 100;
-      fill.style.width = '100%';
       clearInterval(interval);
+      if (loadingText) loadingText.innerHTML = 'WELCOME TO BOOM';
       setTimeout(() => {
         splash.classList.add('fade-out');
         setTimeout(() => { splash.style.display = 'none'; }, 650);
-      }, 300);
-    } else {
-      fill.style.width = progress + '%';
+      }, 550);
     }
-  }, 80);
+  }, 90);
 })();
 </script>
 </body>
